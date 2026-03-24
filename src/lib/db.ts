@@ -1,23 +1,21 @@
 import { PrismaClient } from "@prisma/client";
 import { createTursoPrisma } from "./turso";
 
-const globalForPrisma = globalThis as unknown as {
-  _prisma: PrismaClient | undefined;
-};
+let _prisma: PrismaClient | null = null;
 
 function getPrismaClient(): PrismaClient {
-  if (globalForPrisma._prisma) return globalForPrisma._prisma;
+  if (_prisma) return _prisma;
 
   const tursoUrl = process.env.TURSO_DATABASE_URL?.trim();
   const tursoToken = process.env.TURSO_AUTH_TOKEN?.trim();
 
   if (tursoUrl && tursoToken) {
-    globalForPrisma._prisma = createTursoPrisma(tursoUrl, tursoToken);
+    _prisma = createTursoPrisma(tursoUrl, tursoToken);
   } else {
-    globalForPrisma._prisma = new PrismaClient();
+    _prisma = new PrismaClient();
   }
 
-  return globalForPrisma._prisma;
+  return _prisma;
 }
 
 export const prisma = new Proxy({} as PrismaClient, {

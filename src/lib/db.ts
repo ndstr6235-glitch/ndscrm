@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { createTursoPrisma } from "./turso";
 
 const globalForPrisma = globalThis as unknown as {
   _prisma: PrismaClient | undefined;
@@ -11,9 +12,7 @@ function getPrismaClient(): PrismaClient {
   const tursoToken = process.env.TURSO_AUTH_TOKEN?.trim();
 
   if (tursoUrl && tursoToken) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { createTursoPrisma } = require("@/lib/turso");
-    globalForPrisma._prisma = createTursoPrisma(tursoUrl, tursoToken) as PrismaClient;
+    globalForPrisma._prisma = createTursoPrisma(tursoUrl, tursoToken);
   } else {
     globalForPrisma._prisma = new PrismaClient();
   }

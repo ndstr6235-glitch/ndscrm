@@ -9,10 +9,11 @@ function createPrismaClient(): PrismaClient {
   const tursoToken = process.env.TURSO_AUTH_TOKEN?.trim();
 
   if (tursoUrl && tursoToken) {
+    // Dynamic require to prevent Turbopack from evaluating at build time
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const libsqlClient = require("@libsql/client");
+    const libsqlClient = require(/* webpackIgnore: true */ "@libsql/client");
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const prismaLibsql = require("@prisma/adapter-libsql");
+    const prismaLibsql = require(/* webpackIgnore: true */ "@prisma/adapter-libsql");
 
     const libsql = libsqlClient.createClient({
       url: tursoUrl,
@@ -25,8 +26,12 @@ function createPrismaClient(): PrismaClient {
   return new PrismaClient();
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+// Lazy proxy: create client on first property access, not at import time
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop) {
+    if (!globalForPrisma.prisma) {
+      globalForPrisma.prisma = createPrismaClient();
+    }
+    return Reflect.get(globalForPrisma.prisma, prop);
+  },
+});

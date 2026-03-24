@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
 
 export async function GET() {
-  // Read all relevant env vars
-  const envs = {
-    DATABASE_URL: process.env.DATABASE_URL?.substring(0, 30),
-    TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL?.substring(0, 30),
-    TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN?.substring(0, 20),
-    NODE_ENV: process.env.NODE_ENV,
-  };
-
-  return NextResponse.json(envs);
+  try {
+    const count = await prisma.user.count();
+    return NextResponse.json({ status: "ok", userCount: count });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ status: "error", error: msg }, { status: 500 });
+  }
 }

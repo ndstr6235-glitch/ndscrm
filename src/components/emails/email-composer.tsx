@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { X, Send, Pencil, AlertTriangle, FileText } from "lucide-react";
+import { useState, useEffect, useMemo, useTransition } from "react";
+import { X, Send, Pencil, AlertTriangle, FileText, Sparkles, Loader2, Wand2 } from "lucide-react";
+import { generateSalutation, generateEmailDraft, improveEmailText } from "@/app/actions/ai";
 import { cn, fmtCZK } from "@/lib/utils";
 import { getCurrentUserSignature, updateSignature } from "@/app/actions/emails";
 import { useToast } from "@/components/ui/toast";
@@ -201,11 +202,22 @@ export default function EmailComposer({
             </div>
           </div>
 
-          {/* Salutation — golden frame */}
+          {/* Salutation — golden frame + AI */}
           <div className="rounded-[10px] border-2 border-gold-border bg-gold-pale p-3">
-            <label className="block text-xs font-medium text-gold mb-1">
-              Oslovení
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs font-medium text-gold">
+                Oslovení
+              </label>
+              <AIButton
+                label="Navrhnout"
+                icon={<Sparkles size={12} />}
+                onClick={async () => {
+                  const res = await generateSalutation(clientName);
+                  if (res.result) setSalutation(res.result);
+                  if (res.error) toast(res.error, "error");
+                }}
+              />
+            </div>
             <input
               type="text"
               value={salutation}
@@ -246,11 +258,45 @@ export default function EmailComposer({
             </div>
           )}
 
-          {/* Email body */}
+          {/* Email body + AI */}
           <div>
-            <label className="block text-xs font-medium text-text-mid mb-1">
-              Text emailu
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs font-medium text-text-mid">
+                Text emailu
+              </label>
+              <div className="flex gap-1.5">
+                <AIButton
+                  label="Napsat AI"
+                  icon={<Wand2 size={12} />}
+                  onClick={async () => {
+                    const res = await generateEmailDraft({
+                      clientName,
+                      clientNote,
+                      totalDeposit,
+                      templateLabel: selectedTemplate?.label,
+                      templateBody: selectedTemplate?.body,
+                      brokerName,
+                    });
+                    if (res.result) {
+                      if (res.result.salutation) setSalutation(res.result.salutation);
+                      setBodyOverride(res.result.body);
+                    }
+                    if (res.error) toast(res.error, "error");
+                  }}
+                />
+                <AIButton
+                  label="Vylepšit"
+                  icon={<Sparkles size={12} />}
+                  onClick={async () => {
+                    const textToImprove = bodyOverride || selectedTemplate?.body || "";
+                    if (!textToImprove) return;
+                    const res = await improveEmailText(textToImprove);
+                    if (res.result) setBodyOverride(res.result);
+                    if (res.error) toast(res.error, "error");
+                  }}
+                />
+              </div>
+            </div>
             <textarea
               value={finalBody}
               onChange={(e) => setBodyOverride(e.target.value)}
@@ -310,5 +356,31 @@ export default function EmailComposer({
         </div>
       </div>
     </div>
+  );
+}
+
+// AI action button component
+function AIButton({ label, icon, onClick }: { label: string; icon: React.ReactNode; onClick: () => Promise<void> }) {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      await onClick();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      disabled={loading}
+      className="flex items-center gap-1 px-2 py-1 rounded-[6px] bg-sapphire/10 text-sapphire text-[11px] font-medium hover:bg-sapphire/20 transition-colors disabled:opacity-50"
+    >
+      {loading ? <Loader2 size={12} className="animate-spin" /> : icon}
+      {label}
+    </button>
   );
 }

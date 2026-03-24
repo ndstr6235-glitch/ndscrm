@@ -3,37 +3,11 @@
 import { useActionState, useState } from "react";
 import { login } from "@/app/actions/auth";
 
-const DEMO_ACCOUNTS = [
-  {
-    label: "Administrator",
-    email: "admin@buildfund.cz",
-    password: "admin123",
-    color: "bg-ruby/10 text-ruby border-ruby/20",
-  },
-  {
-    label: "Supervisor",
-    email: "supervisor@buildfund.cz",
-    password: "super123",
-    color: "bg-gold/10 text-gold border-gold/20",
-  },
-  {
-    label: "Broker",
-    email: "broker1@buildfund.cz",
-    password: "broker123",
-    color: "bg-sapphire/10 text-sapphire border-sapphire/20",
-  },
-];
-
 export default function LoginForm() {
   const [state, action, pending] = useActionState(login, undefined);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  function fillDemo(demo: (typeof DEMO_ACCOUNTS)[number]) {
-    setEmail(demo.email);
-    setPassword(demo.password);
-  }
 
   return (
     <div className="min-h-dvh flex items-center justify-center px-4 py-8 bg-gradient-to-br from-sidebar to-[#1a1f2e]">
@@ -128,24 +102,10 @@ export default function LoginForm() {
           </form>
         </div>
 
-        {/* Demo accounts */}
-        <div className="mt-6">
-          <p className="text-center text-xs text-white/30 uppercase tracking-wider mb-3 font-medium">
-            Demo přístupy
-          </p>
-          <div className="flex gap-2 justify-center flex-wrap">
-            {DEMO_ACCOUNTS.map((demo) => (
-              <button
-                key={demo.email}
-                type="button"
-                onClick={() => fillDemo(demo)}
-                className={`px-3.5 py-2.5 min-h-[44px] rounded-[20px] text-xs font-semibold border transition-all hover:scale-105 ${demo.color}`}
-              >
-                {demo.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* Footer */}
+        <p className="mt-8 text-center text-xs text-white/20">
+          Build Fund CRM &copy; {new Date().getFullYear()}
+        </p>
       </div>
     </div>
   );

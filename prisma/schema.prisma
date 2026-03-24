@@ -149,3 +149,8 @@ model AuditLog {
 
   user User @relation("AuditLogs", fields: [userId], references: [id])
 }
+
+model SystemSetting {
+  key   String @id
+  value String
+}

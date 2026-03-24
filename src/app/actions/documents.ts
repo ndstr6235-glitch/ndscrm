@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { writeFile, unlink, mkdir } from "fs/promises";
 import { join } from "path";
 import { randomUUID } from "crypto";
+import { logAudit } from "./audit";
 
 const ALLOWED_TYPES = [
   "application/pdf",
@@ -110,6 +111,8 @@ export async function uploadDocument(
     },
   });
 
+  await logAudit(session.id, "CREATE", "document", clientId, name || file.name);
+
   revalidatePath("/clients");
   return { success: true };
 }
@@ -131,6 +134,7 @@ export async function deleteDocument(
   }
 
   await prisma.document.delete({ where: { id: documentId } });
+  await logAudit(session.id, "DELETE", "document", documentId, doc.name);
 
   revalidatePath("/clients");
   return { success: true };

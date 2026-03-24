@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { logActivity } from "./activity";
 import { calculateScore } from "@/lib/scoring";
 import { createAssignmentNotification } from "./notifications";
+import { logAudit } from "./audit";
 import type { ClientScore, ClientStage } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
@@ -176,6 +177,8 @@ export async function createClient(data: {
     `Klient vytvořen operátorem ${session.firstName} ${session.lastName}`
   );
 
+  await logAudit(session.id, "CREATE", "client", client.id, `${data.firstName} ${data.lastName}`);
+
   revalidatePath("/clients");
   revalidatePath("/dashboard");
   return { success: true, id: client.id };
@@ -260,6 +263,7 @@ export async function updateClient(
     );
   }
   await logActivity(clientId, session.id, "CLIENT_UPDATED", "Klient upraven");
+  await logAudit(session.id, "UPDATE", "client", clientId, `${data.firstName} ${data.lastName}`);
 
   revalidatePath("/clients");
   revalidatePath("/dashboard");
@@ -285,6 +289,7 @@ export async function deleteClient(
   }
 
   await prisma.client.delete({ where: { id: clientId } });
+  await logAudit(session.id, "DELETE", "client", clientId, `${existing.firstName} ${existing.lastName}`);
 
   revalidatePath("/clients");
   revalidatePath("/dashboard");

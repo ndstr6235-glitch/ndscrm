@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { createSession, deleteSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth";
+import { logAudit } from "./audit";
 import type { Role } from "@/lib/types";
 
 const ROLE_MAP: Record<string, Role> = {
@@ -42,10 +44,16 @@ export async function login(
     role: ROLE_MAP[user.role] || "broker",
   });
 
+  await logAudit(user.id, "LOGIN", "user", user.id, `${user.firstName} ${user.lastName}`);
+
   redirect("/dashboard");
 }
 
 export async function logout() {
+  const session = await getSession();
+  if (session) {
+    await logAudit(session.id, "LOGOUT", "user", session.id, `${session.firstName} ${session.lastName}`);
+  }
   await deleteSession();
   redirect("/login");
 }

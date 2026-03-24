@@ -9,11 +9,10 @@ function createPrismaClient(): PrismaClient {
   const tursoToken = process.env.TURSO_AUTH_TOKEN?.trim();
 
   if (tursoUrl && tursoToken) {
-    // Dynamic require to prevent Turbopack from evaluating at build time
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const libsqlClient = require(/* webpackIgnore: true */ "@libsql/client");
+    const libsqlClient = require("@libsql/client");
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const prismaLibsql = require(/* webpackIgnore: true */ "@prisma/adapter-libsql");
+    const prismaLibsql = require("@prisma/adapter-libsql");
 
     const libsql = libsqlClient.createClient({
       url: tursoUrl,

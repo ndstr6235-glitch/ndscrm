@@ -1,4 +1,4 @@
-const CACHE_NAME = "bf-crm-v1";
+const CACHE_NAME = "bf-crm-v2";
 const OFFLINE_URL = "/offline";
 const OFFLINE_FALLBACK = "/offline.html";
 

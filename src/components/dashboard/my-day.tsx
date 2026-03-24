@@ -137,7 +137,7 @@ export default function MyDay({ tasks: initialTasks, followUps, isCompanyView }:
         </div>
         <div>
           <h2 className="font-display text-base md:text-lg font-bold text-text">
-            {isCompanyView ? "Dnes ve firme" : "Muj den"}
+            {isCompanyView ? "Dnes ve firmě" : "Můj den"}
           </h2>
           {totalCount > 0 && (
             <p className="text-xs text-text-mid">

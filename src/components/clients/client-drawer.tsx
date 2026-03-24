@@ -10,6 +10,8 @@ import DrawerTabOverview from "./drawer-tab-overview";
 import DrawerTabPayments from "./drawer-tab-payments";
 import DrawerTabEvents from "./drawer-tab-events";
 import DrawerTabEmail from "./drawer-tab-email";
+import DrawerTabHistory from "./drawer-tab-history";
+import DrawerTabDocuments from "./drawer-tab-documents";
 import DrawerFooter from "./drawer-footer";
 import ClientForm from "./client-form";
 import PaymentForm from "./payment-form";
@@ -23,7 +25,7 @@ interface ClientDrawerProps {
   userRole: "administrator" | "supervisor" | "broker";
 }
 
-type Tab = "overview" | "payments" | "events" | "email";
+type Tab = "overview" | "payments" | "events" | "email" | "history" | "documents";
 
 export default function ClientDrawer({
   clientId,
@@ -150,6 +152,7 @@ export default function ClientDrawer({
               onTabChange={setActiveTab}
               paymentCount={client.payments.length}
               eventCount={client.events.length}
+              showDocuments={userRole !== "broker"}
             />
 
             <div className="flex-1 overflow-y-auto">
@@ -171,6 +174,12 @@ export default function ClientDrawer({
               )}
               {activeTab === "email" && (
                 <DrawerTabEmail client={client} userRole={userRole} />
+              )}
+              {activeTab === "documents" && userRole !== "broker" && (
+                <DrawerTabDocuments clientId={client.id} />
+              )}
+              {activeTab === "history" && (
+                <DrawerTabHistory clientId={client.id} />
               )}
             </div>
 

@@ -2,6 +2,7 @@
 
 import { X, Landmark, TrendingUp, Percent } from "lucide-react";
 import { fmtCZK } from "@/lib/utils";
+import { SCORE_META } from "@/lib/constants";
 import ClientStatusBadge from "./client-status-badge";
 import type { ClientDetail } from "@/app/actions/clients";
 
@@ -25,6 +26,17 @@ export default function DrawerHeader({ client, onClose }: DrawerHeaderProps) {
             {client.firstName} {client.lastName}
           </h2>
           <div className="flex items-center gap-2 mt-1">
+            {SCORE_META[client.score] && (
+              <span
+                className="text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                style={{
+                  backgroundColor: SCORE_META[client.score].pale,
+                  color: SCORE_META[client.score].color,
+                }}
+              >
+                {client.score}
+              </span>
+            )}
             <ClientStatusBadge isInvestor={client.isInvestor} />
             <span className="text-xs text-white/50">{client.brokerName}</span>
           </div>

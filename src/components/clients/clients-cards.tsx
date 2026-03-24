@@ -1,7 +1,9 @@
 "use client";
 
-import { Phone, Mail, ChevronRight } from "lucide-react";
-import { fmtCZK } from "@/lib/utils";
+import { useRef, useCallback } from "react";
+import { Phone, Mail, ChevronRight, Check } from "lucide-react";
+import { fmtCZK, cn } from "@/lib/utils";
+import { SCORE_META } from "@/lib/constants";
 import ClientStatusBadge from "./client-status-badge";
 import type { ClientRow } from "./clients-page-client";
 
@@ -9,23 +11,88 @@ interface ClientsCardsProps {
   clients: ClientRow[];
   isBroker: boolean;
   onClientClick: (id: string) => void;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (id: string) => void;
+  selectMode?: boolean;
+  onEnterSelectMode?: (id: string) => void;
+  showCheckboxes?: boolean;
 }
 
 export default function ClientsCards({
   clients,
   isBroker,
   onClientClick,
+  selectedIds,
+  onToggleSelect,
+  selectMode = false,
+  onEnterSelectMode,
+  showCheckboxes = false,
 }: ClientsCardsProps) {
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressTriggered = useRef(false);
+
+  const handleTouchStart = useCallback(
+    (id: string) => {
+      if (!showCheckboxes || selectMode) return;
+      longPressTriggered.current = false;
+      longPressTimer.current = setTimeout(() => {
+        longPressTriggered.current = true;
+        onEnterSelectMode?.(id);
+      }, 500);
+    },
+    [showCheckboxes, selectMode, onEnterSelectMode]
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }, []);
+
+  function handleCardClick(id: string) {
+    if (longPressTriggered.current) {
+      longPressTriggered.current = false;
+      return;
+    }
+    if (selectMode) {
+      onToggleSelect?.(id);
+    } else {
+      onClientClick(id);
+    }
+  }
+
   return (
     <div className="md:hidden space-y-3">
       {clients.map((client) => {
         const initials = `${client.firstName[0]}${client.lastName[0]}`;
+        const isSelected = selectedIds?.has(client.id) ?? false;
         return (
           <div
             key={client.id}
-            onClick={() => onClientClick(client.id)}
-            className="bg-surface rounded-[16px] border border-border shadow-card p-4 active:bg-surface-hover transition-colors cursor-pointer"
+            onClick={() => handleCardClick(client.id)}
+            onTouchStart={() => handleTouchStart(client.id)}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+            className={cn(
+              "bg-surface rounded-[16px] border border-border shadow-card p-4 active:bg-surface-hover transition-colors cursor-pointer relative",
+              isSelected && "border-gold bg-gold-pale/20"
+            )}
           >
+            {/* Selection indicator */}
+            {selectMode && (
+              <div
+                className={cn(
+                  "absolute top-3 right-3 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
+                  isSelected
+                    ? "bg-gold border-gold"
+                    : "border-border bg-surface"
+                )}
+              >
+                {isSelected && <Check size={14} className="text-white" />}
+              </div>
+            )}
+
             {/* Top row: Avatar + Name + Status */}
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center text-sm font-bold text-gold shrink-0">
@@ -36,6 +103,17 @@ export default function ClientsCards({
                   <span className="font-medium text-text truncate">
                     {client.firstName} {client.lastName}
                   </span>
+                  {SCORE_META[client.score as keyof typeof SCORE_META] && (
+                    <span
+                      className="text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                      style={{
+                        backgroundColor: SCORE_META[client.score as keyof typeof SCORE_META].pale,
+                        color: SCORE_META[client.score as keyof typeof SCORE_META].color,
+                      }}
+                    >
+                      {client.score}
+                    </span>
+                  )}
                   <ClientStatusBadge isInvestor={client.isInvestor} />
                 </div>
                 {!isBroker && (
@@ -44,7 +122,9 @@ export default function ClientsCards({
                   </p>
                 )}
               </div>
-              <ChevronRight size={16} className="text-text-faint shrink-0" />
+              {!selectMode && (
+                <ChevronRight size={16} className="text-text-faint shrink-0" />
+              )}
             </div>
 
             {/* Contact info */}

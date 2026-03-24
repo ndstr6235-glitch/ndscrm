@@ -1,5 +1,6 @@
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { calculateScore } from "@/lib/scoring";
 import ClientsPageClient from "@/components/clients/clients-page-client";
 import type { Prisma } from "@prisma/client";
 
@@ -58,19 +59,28 @@ export default async function ClientsRoute({ searchParams }: PageProps) {
     orderBy: { createdAt: "desc" },
   });
 
-  const clients = rawClients.map((c) => ({
-    id: c.id,
-    firstName: c.firstName,
-    lastName: c.lastName,
-    phone: c.phone,
-    email: c.email,
-    callDate: c.callDate,
-    isInvestor: c.payments.length > 0,
-    totalDeposit: c.payments.reduce((s, p) => s + p.amount, 0),
-    totalProfit: c.payments.reduce((s, p) => s + p.profit, 0),
-    brokerName: `${c.user.firstName} ${c.user.lastName}`,
-    brokerId: c.user.id,
-  }));
+  const clients = rawClients.map((c) => {
+    const totalDeposit = c.payments.reduce((s, p) => s + p.amount, 0);
+    return {
+      id: c.id,
+      firstName: c.firstName,
+      lastName: c.lastName,
+      phone: c.phone,
+      email: c.email,
+      callDate: c.callDate,
+      isInvestor: c.payments.length > 0,
+      totalDeposit,
+      totalProfit: c.payments.reduce((s, p) => s + p.profit, 0),
+      brokerName: `${c.user.firstName} ${c.user.lastName}`,
+      brokerId: c.user.id,
+      stage: c.stage,
+      score: calculateScore({
+        totalDeposit,
+        paymentCount: c.payments.length,
+        createdAt: c.createdAt,
+      }),
+    };
+  });
 
   // Total count (without filters) for header display
   const totalCount = await prisma.client.count({

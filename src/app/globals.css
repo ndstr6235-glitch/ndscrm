@@ -73,6 +73,51 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Dark mode — class-based override                                   */
+/* ------------------------------------------------------------------ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+  /* Surfaces */
+  --color-surface: #1a1f2e;
+  --color-surface-hover: #242a3a;
+  --color-bg: #0f1117;
+
+  /* Borders */
+  --color-border: #2a3040;
+  --color-border-dark: #353d50;
+
+  /* Text */
+  --color-text: #e4e8f0;
+  --color-text-mid: #8892aa;
+  --color-text-dim: #6b7590;
+  --color-text-faint: #3d4560;
+
+  /* Semantic — pale backgrounds (muted for dark) */
+  --color-gold-pale: rgba(184, 145, 42, 0.12);
+  --color-emerald-pale: rgba(26, 158, 106, 0.12);
+  --color-ruby-pale: rgba(217, 64, 64, 0.12);
+  --color-sapphire-pale: rgba(45, 107, 228, 0.12);
+  --color-amber-pale: rgba(217, 122, 26, 0.12);
+
+  /* Semantic — borders (muted for dark) */
+  --color-gold-border: rgba(184, 145, 42, 0.3);
+  --color-emerald-border: rgba(26, 158, 106, 0.3);
+  --color-ruby-border: rgba(217, 64, 64, 0.3);
+  --color-sapphire-border: rgba(45, 107, 228, 0.3);
+
+  /* Shadows (darker) */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
+
+  /* Scrollbar */
+  --scrollbar-thumb: #3d4560;
+
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------------ */
 /* Keyframes                                                          */
 /* ------------------------------------------------------------------ */
 @keyframes fade-in {
@@ -168,6 +213,7 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
+  transition: background-color 0.2s ease, color 0.2s ease;
   /* Safe area for iPhone notch */
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   /* Prevent tap highlight on mobile */

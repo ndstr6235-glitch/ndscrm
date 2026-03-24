@@ -5,7 +5,9 @@ import { Loader2 } from "lucide-react";
 import Modal from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
 import { createClient, updateClient } from "@/app/actions/clients";
+import { PIPELINE_STAGES } from "@/lib/constants";
 import type { ClientDetail } from "@/app/actions/clients";
+import type { ClientStage } from "@/lib/types";
 
 interface ClientFormProps {
   open: boolean;
@@ -38,6 +40,7 @@ export default function ClientForm({
     editData?.nextPaymentDate ?? new Date().toISOString().split("T")[0]
   );
   const [paymentFreq, setPaymentFreq] = useState(editData?.paymentFreq ?? 30);
+  const [stage, setStage] = useState(editData?.stage ?? "NEW");
   const [assignedTo, setAssignedTo] = useState(editData?.brokerId ?? "");
   const [note, setNote] = useState(editData?.note ?? "");
   const [error, setError] = useState("");
@@ -58,6 +61,7 @@ export default function ClientForm({
         editData?.nextPaymentDate ?? new Date().toISOString().split("T")[0]
       );
       setPaymentFreq(editData?.paymentFreq ?? 30);
+      setStage(editData?.stage ?? "NEW");
       setAssignedTo(editData?.brokerId ?? "");
       setNote(editData?.note ?? "");
       setError("");
@@ -86,6 +90,7 @@ export default function ClientForm({
       paymentFreq,
       note,
       assignedTo,
+      stage,
     };
 
     const result = isEdit
@@ -205,6 +210,26 @@ export default function ClientForm({
             className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
           />
         </div>
+
+        {/* Stage */}
+        {isEdit && (
+          <div>
+            <label className="block text-xs font-medium text-text-mid mb-1">
+              Stage
+            </label>
+            <select
+              value={stage}
+              onChange={(e) => setStage(e.target.value as ClientStage)}
+              className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
+            >
+              {PIPELINE_STAGES.map((s) => (
+                <option key={s.key} value={s.key}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Broker (admin/supervisor only) */}
         {!isBroker && brokers.length > 0 && (

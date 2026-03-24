@@ -32,8 +32,12 @@ model User {
   signature String?
   createdAt DateTime @default(now())
 
-  clients  Client[]
-  events   CalEvent[]
+  clients       Client[]
+  events        CalEvent[]
+  activities    Activity[]
+  documents     Document[] @relation("DocumentUploader")
+  notifications Notification[]
+  auditLogs     AuditLog[] @relation("AuditLogs")
 }
 
 model Client {
@@ -46,12 +50,15 @@ model Client {
   nextPaymentDate String
   paymentFreq     Int      @default(30)
   note            String   @default("")
+  stage           String   @default("NEW")
   assignedTo      String
   createdAt       DateTime @default(now())
 
-  user     User      @relation(fields: [assignedTo], references: [id])
-  payments Payment[]
-  events   CalEvent[]
+  user       User       @relation(fields: [assignedTo], references: [id])
+  payments   Payment[]
+  events     CalEvent[]
+  activities Activity[]
+  documents  Document[]
 }
 
 model Payment {
@@ -87,4 +94,57 @@ model EmailTemplate {
   subject      String
   body         String
   allowedRoles String @default("ADMINISTRATOR,SUPERVISOR,BROKER")
+}
+
+model Document {
+  id         String   @id @default(cuid())
+  clientId   String
+  name       String
+  fileName   String
+  fileUrl    String
+  fileSize   Int
+  mimeType   String
+  uploadedBy String
+  createdAt  DateTime @default(now())
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  user   User   @relation("DocumentUploader", fields: [uploadedBy], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Activity {
+  id          String   @id @default(cuid())
+  clientId    String
+  userId      String
+  type        String
+  description String
+  metadata    String   @default("{}")
+  createdAt   DateTime @default(now())
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  createdAt DateTime @default(now())
+
+  user User @relation("AuditLogs", fields: [userId], references: [id])
 }

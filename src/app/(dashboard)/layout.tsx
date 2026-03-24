@@ -27,6 +27,7 @@ export default async function DashboardLayout({
         <DashboardMain
           firstName={user.firstName}
           lastName={user.lastName}
+          userRole={user.role}
         >
           {children}
         </DashboardMain>

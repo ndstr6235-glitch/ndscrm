@@ -212,7 +212,7 @@ export default function EmailComposer({
               onChange={(e) => setSalutation(e.target.value)}
               placeholder='Např: "pane Nováku", "Petro"'
               autoFocus
-              className="w-full px-3 py-2.5 min-h-[44px] rounded-[8px] border border-gold-border bg-white text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/40 transition"
+              className="w-full px-3 py-2.5 min-h-[44px] rounded-[8px] border border-gold-border bg-surface text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/40 transition"
             />
           </div>
 
@@ -238,7 +238,7 @@ export default function EmailComposer({
               {clientNote && (
                 <div className="text-xs text-text-mid">
                   <p className="mb-0.5 font-medium">Poznámky:</p>
-                  <p className="text-text whitespace-pre-line bg-white/60 rounded-[6px] p-2">
+                  <p className="text-text whitespace-pre-line bg-surface-hover rounded-[6px] p-2">
                     {clientNote}
                   </p>
                 </div>
@@ -287,7 +287,7 @@ export default function EmailComposer({
                 value={signature}
                 onChange={(e) => setSignature(e.target.value)}
                 rows={4}
-                className="w-full px-3 py-2 rounded-[8px] border border-sapphire-border bg-white text-sm text-text focus:outline-none focus:ring-2 focus:ring-sapphire/30 transition resize-none"
+                className="w-full px-3 py-2 rounded-[8px] border border-sapphire-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-sapphire/30 transition resize-none"
               />
             ) : (
               <p className="text-sm text-text whitespace-pre-line">

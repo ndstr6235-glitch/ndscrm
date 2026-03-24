@@ -2,20 +2,23 @@
 
 import { cn } from "@/lib/utils";
 
-type Tab = "overview" | "payments" | "events" | "email";
+type Tab = "overview" | "payments" | "events" | "email" | "history" | "documents";
 
 interface DrawerTabsProps {
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
   paymentCount: number;
   eventCount: number;
+  showDocuments?: boolean;
 }
 
-const TABS: { key: Tab; label: string; countKey?: "paymentCount" | "eventCount" }[] = [
+const TABS: { key: Tab; label: string; countKey?: "paymentCount" | "eventCount"; requireDocuments?: boolean }[] = [
   { key: "overview", label: "Přehled" },
   { key: "payments", label: "Platby", countKey: "paymentCount" },
   { key: "events", label: "Události", countKey: "eventCount" },
   { key: "email", label: "Email" },
+  { key: "documents", label: "Dokumenty", requireDocuments: true },
+  { key: "history", label: "Historie" },
 ];
 
 export default function DrawerTabs({
@@ -23,13 +26,15 @@ export default function DrawerTabs({
   onTabChange,
   paymentCount,
   eventCount,
+  showDocuments = false,
 }: DrawerTabsProps) {
   const counts = { paymentCount, eventCount };
+  const visibleTabs = TABS.filter((tab) => !tab.requireDocuments || showDocuments);
 
   return (
     <div className="border-b border-border overflow-x-auto shrink-0">
       <div className="flex min-w-max">
-        {TABS.map((tab) => {
+        {visibleTabs.map((tab) => {
           const isActive = activeTab === tab.key;
           const count = tab.countKey ? counts[tab.countKey] : null;
 

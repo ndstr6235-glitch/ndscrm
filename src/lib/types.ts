@@ -20,6 +20,9 @@ export interface Payment {
   note: string;
 }
 
+export type ClientStage = "NEW" | "CONTACTED" | "NEGOTIATION" | "INVESTOR" | "VIP";
+export type ClientScore = "A" | "B" | "C" | "D";
+
 export interface Client {
   id: string;
   firstName: string;
@@ -30,6 +33,7 @@ export interface Client {
   nextPaymentDate: string;
   paymentFreq: number;
   note: string;
+  stage: ClientStage;
   assignedTo: string;
   payments: Payment[];
   createdAt: string;

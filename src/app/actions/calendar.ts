@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { logActivity } from "./activity";
 
 const EVENT_TYPE_MAP: Record<string, string> = {
   CALL: "call",
@@ -89,17 +90,30 @@ export async function createEvent(data: {
     return { success: false, error: "Neplatný typ události" };
   }
 
+  const eventDate = data.date || new Date().toISOString().split("T")[0];
+  const eventTime = data.time || "09:00";
+
   await prisma.calEvent.create({
     data: {
       type: prismaType as "CALL" | "PAYMENT" | "REMINDER" | "INTEREST" | "MEETING",
       title: data.title.trim(),
-      date: data.date || new Date().toISOString().split("T")[0],
-      time: data.time || "09:00",
+      date: eventDate,
+      time: eventTime,
       note: data.note.trim(),
       userId: session.id,
       clientId: data.clientId || null,
     },
   });
+
+  // Log activity if event is linked to a client
+  if (data.clientId) {
+    await logActivity(
+      data.clientId,
+      session.id,
+      "EVENT_CREATED",
+      `Vytvořena událost — ${data.title.trim()} ${eventDate} ${eventTime}`
+    );
+  }
 
   revalidatePath("/calendar");
   revalidatePath("/dashboard");

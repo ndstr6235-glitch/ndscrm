@@ -1,7 +1,10 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { useSidebar } from "./sidebar-context";
+import { useCommandPalette } from "@/components/ui/command-palette-provider";
+import ThemeToggle from "@/components/theme/theme-toggle";
+import NotificationBell from "@/components/layout/notification-bell";
 
 interface MobileHeaderProps {
   firstName: string;
@@ -10,6 +13,7 @@ interface MobileHeaderProps {
 
 export default function MobileHeader({ firstName, lastName }: MobileHeaderProps) {
   const { toggleMobileOpen } = useSidebar();
+  const { open: openSearch } = useCommandPalette();
   const initials = `${firstName[0]}${lastName[0]}`;
 
   return (
@@ -26,8 +30,19 @@ export default function MobileHeader({ firstName, lastName }: MobileHeaderProps)
         Build Fund CRM
       </span>
 
-      <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-[10px] font-bold text-gold">
-        {initials}
+      <div className="flex items-center gap-1">
+        <button
+          onClick={openSearch}
+          className="w-11 h-11 flex items-center justify-center rounded-[8px] hover:bg-surface-hover transition-colors"
+          aria-label="Hledat"
+        >
+          <Search size={18} className="text-text-dim" />
+        </button>
+        <NotificationBell variant="mobile" />
+        <ThemeToggle variant="header" />
+        <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-[10px] font-bold text-gold">
+          {initials}
+        </div>
       </div>
     </header>
   );

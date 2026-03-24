@@ -12,12 +12,16 @@ import {
   Settings,
   LogOut,
   ChevronLeft,
+  Search,
   type LucideIcon,
 } from "lucide-react";
 import { NAV_ITEMS, ROLE_META } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { logout } from "@/app/actions/auth";
 import { useSidebar } from "./sidebar-context";
+import { useCommandPalette } from "@/components/ui/command-palette-provider";
+import ThemeToggle from "@/components/theme/theme-toggle";
+import NotificationBell from "@/components/layout/notification-bell";
 import type { Role } from "@/lib/types";
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -42,6 +46,7 @@ interface SidebarProps {
 
 export default function Sidebar({ user }: SidebarProps) {
   const { collapsed, mobileOpen, toggleCollapsed, setMobileOpen } = useSidebar();
+  const { open: openSearch } = useCommandPalette();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -75,8 +80,29 @@ export default function Sidebar({ user }: SidebarProps) {
         )}
       </div>
 
+      {/* Search */}
+      <div className="px-2 mt-2 mb-1">
+        <button
+          onClick={() => {
+            if (isOverlay) setMobileOpen(false);
+            openSearch();
+          }}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-[8px] text-white/40 hover:text-white/70 hover:bg-white/[0.06] transition-all text-sm"
+        >
+          <Search size={18} className="shrink-0" />
+          {(isOverlay || !collapsed) && (
+            <>
+              <span className="flex-1 text-left whitespace-nowrap">Hledat</span>
+              <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-white/[0.08] border border-white/[0.1] text-[10px] font-medium text-white/30">
+                &#x2318;K
+              </kbd>
+            </>
+          )}
+        </button>
+      </div>
+
       {/* Nav */}
-      <nav className="flex-1 mt-2 px-2 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 px-2 space-y-0.5 overflow-y-auto">
         {filteredNav.map((item) => {
           const isActive = activeKey === item.key;
           const Icon = ICON_MAP[item.key] || LayoutDashboard;
@@ -144,6 +170,12 @@ export default function Sidebar({ user }: SidebarProps) {
               <p className="text-xs text-white/40 truncate">{ROLE_META[user.role as keyof typeof ROLE_META]?.label ?? user.role}</p>
             </div>
           )}
+        </div>
+        <div className="mb-1">
+          <NotificationBell variant="sidebar" collapsed={!isOverlay && collapsed} />
+        </div>
+        <div className="mb-1">
+          <ThemeToggle collapsed={!isOverlay && collapsed} />
         </div>
         <form action={logout}>
           <button

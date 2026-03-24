@@ -1,4 +1,4 @@
-import type { Role, User, EmailTemplate, EventType } from "./types";
+import type { Role, User, EmailTemplate, EventType, ClientStage, ClientScore } from "./types";
 
 // ---------------------------------------------------------------------------
 // Colors
@@ -88,6 +88,55 @@ export const NAV_ITEMS: NavItem[] = [
   { key: "templates", label: "Šablony emailů", icon: "📝", roles: ["administrator"] },
   { key: "settings", label: "Nastavení", icon: "⚙️", roles: ["administrator"] },
 ];
+
+// ---------------------------------------------------------------------------
+// Activity icons
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Pipeline stages
+// ---------------------------------------------------------------------------
+export const PIPELINE_STAGES: {
+  key: ClientStage;
+  label: string;
+  color: string;
+  pale: string;
+}[] = [
+  { key: "NEW", label: "Novy", color: "#8892aa", pale: "#f0f2f7" },
+  { key: "CONTACTED", label: "Kontaktovan", color: "#2d6be4", pale: "#eef3fd" },
+  { key: "NEGOTIATION", label: "Jednani", color: "#d97a1a", pale: "#fef5ec" },
+  { key: "INVESTOR", label: "Investor", color: "#1a9e6a", pale: "#edfaf4" },
+  { key: "VIP", label: "VIP", color: "#b8912a", pale: "#fef9ec" },
+];
+
+export const STAGE_META: Record<
+  ClientStage,
+  { label: string; color: string; pale: string }
+> = Object.fromEntries(
+  PIPELINE_STAGES.map((s) => [s.key, { label: s.label, color: s.color, pale: s.pale }])
+) as Record<ClientStage, { label: string; color: string; pale: string }>;
+
+// ---------------------------------------------------------------------------
+// Client scoring
+// ---------------------------------------------------------------------------
+export const SCORE_META: Record<
+  ClientScore,
+  { label: string; color: string; pale: string }
+> = {
+  A: { label: "A", color: "#b8912a", pale: "#fef9ec" },
+  B: { label: "B", color: "#1a9e6a", pale: "#edfaf4" },
+  C: { label: "C", color: "#2d6be4", pale: "#eef3fd" },
+  D: { label: "D", color: "#8892aa", pale: "#f0f2f7" },
+};
+
+export const ACTIVITY_ICONS: Record<string, string> = {
+  CLIENT_CREATED: "🆕",
+  CLIENT_UPDATED: "✏️",
+  PAYMENT_ADDED: "💰",
+  EMAIL_SENT: "✉️",
+  EVENT_CREATED: "📅",
+  NOTE_CHANGED: "📝",
+  ASSIGNED_TO_CHANGED: "🔄",
+};
 
 // ---------------------------------------------------------------------------
 // Default users (seed data)

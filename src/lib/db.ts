@@ -12,7 +12,7 @@ function getPrismaClient(): PrismaClient {
 
   if (tursoUrl && tursoToken) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { createTursoPrisma } = require("./turso");
+    const { createTursoPrisma } = require("@/lib/turso");
     globalForPrisma._prisma = createTursoPrisma(tursoUrl, tursoToken) as PrismaClient;
   } else {
     globalForPrisma._prisma = new PrismaClient();

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Build Fund CRM — Vizuální přehled obrazovek</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Sora:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#e8eaf0;font-family:'Sora',sans-serif;padding:36px;}
+h1{font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:#0f1117;margin-bottom:8px;}
+.subtitle{font-size:14px;color:#8892aa;margin-bottom:12px;}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:36px;}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:#4a5578;font-weight:600;}
+.dot{width:10px;height:10px;border-radius:50%;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-bottom:40px;}
+.screen{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(15,17,23,0.12);}
+.label{text-align:center;font-size:13px;font-weight:700;color:#4a5578;margin-top:12px;}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700;margin-left:6px;}
+.perm-table{width:100%;background:#fff;border-radius:16px;border:1px solid #e4e8f0;overflow:hidden;box-shadow:0 4px 24px rgba(15,17,23,0.08);}
+.perm-table table{width:100%;border-collapse:collapse;}
+.perm-table th{padding:11px 20px;text-align:left;font-size:10px;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;border-bottom:1px solid #e4e8f0;background:#f8f9fc;}
+.perm-table td{padding:10px 20px;font-size:13px;border-bottom:1px solid #f0f2f7;}
+.perm-table tr:nth-child(even)td{background:#fafbfc;}
+.perm-header{padding:18px 24px;border-bottom:1px solid #e4e8f0;font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:#0f1117;}
+</style>
+</head>
+<body>
+
+<h1>Build Fund CRM — Přehled obrazovek</h1>
+<div class="subtitle">Vizuální mockup · 6 sekcí · Role-based access · Light SaaS design</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot" style="background:#d94040"></div> Administrator — plný přístup</div>
+  <div class="legend-item"><div class="dot" style="background:#b8912a"></div> Supervisor — bez správy uživatelů</div>
+  <div class="legend-item"><div class="dot" style="background:#2d6be4"></div> Broker — jen vlastní klienti</div>
+  <div class="legend-item"><div class="dot" style="background:#1a9e6a"></div> Všechny role</div>
+</div>
+
+<div class="grid">
+
+<!-- ── 1. LOGIN ── -->
+<div>
+<div class="screen" style="height:300px;background:linear-gradient(135deg,#0f1117,#1a1f2e);padding:22px;">
+  <div style="text-align:center;margin-bottom:18px;">
+    <div style="width:40px;height:40px;background:linear-gradient(135deg,#b8912a,#f5c842);border-radius:11px;display:inline-flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:8px;box-shadow:0 6px 20px rgba(184,145,42,0.4);">₿</div>
+    <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:#fff;">Build Fund CRM</div>
+    <div style="font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;">Přihlášení do systému</div>
+  </div>
+  <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;">
+    <div style="font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Email</div>
+    <div style="background:rgba(255,255,255,0.07);border-radius:8px;height:28px;margin-bottom:12px;"></div>
+    <div style="font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Heslo</div>
+    <div style="background:rgba(255,255,255,0.07);border-radius:8px;height:28px;margin-bottom:14px;"></div>
+    <div style="background:linear-gradient(135deg,#b8912a,#f5c842);border-radius:8px;height:34px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#0f1117;box-shadow:0 4px 14px rgba(184,145,42,0.4);">Přihlásit se →</div>
+    <div style="margin-top:12px;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;">
+      <div style="font-size:9px;color:rgba(255,255,255,0.25);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;">Demo přístupy — klikněte pro vyplnění</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <span style="background:rgba(217,64,64,0.15);color:#f5a0a0;border-radius:12px;padding:3px 9px;font-size:9px;font-weight:700;border:1px solid rgba(217,64,64,0.2);">⚡ Administrator</span>
+        <span style="background:rgba(184,145,42,0.15);color:#f5c842;border-radius:12px;padding:3px 9px;font-size:9px;font-weight:700;border:1px solid rgba(184,145,42,0.2);">👁 Supervisor</span>
+        <span style="background:rgba(45,107,228,0.15);color:#7eb3f9;border-radius:12px;padding:3px 9px;font-size:9px;font-weight:700;border:1px solid rgba(45,107,228,0.2);">💼 Broker</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="label">🔐 Login <span class="badge" style="background:#edfaf4;color:#1a9e6a;">Všechny role</span></div>
+</div>
+
+<!-- ── 2. DASHBOARD ── -->
+<div>
+<div class="screen" style="height:300px;display:flex;overflow:hidden;">
+  <div style="width:52px;background:#0f1117;padding:9px 0;display:flex;flex-direction:column;align-items:center;gap:7px;">
+    <div style="width:32px;height:32px;background:linear-gradient(135deg,#b8912a,#f5c842);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:8px;">₿</div>
+    <div style="width:36px;height:22px;border-radius:6px;background:rgba(184,145,42,0.15);border-left:2px solid #b8912a;"></div>
+    <div style="width:36px;height:22px;border-radius:6px;"></div>
+    <div style="width:36px;height:22px;border-radius:6px;"></div>
+    <div style="width:36px;height:22px;border-radius:6px;"></div>
+    <div style="flex:1;"></div>
+    <div style="width:30px;height:30px;border-radius:50%;background:rgba(217,64,64,0.15);border:1.5px solid rgba(217,64,64,0.3);"></div>
+  </div>
+  <div style="flex:1;background:#f0f2f7;padding:14px;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#0f1117;">Dashboard</div>
+      <div style="font-size:10px;color:#8892aa;">Vítejte zpět, Martin 👋</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;">
+      <div style="background:#fff;border-radius:9px;padding:8px;border-left:3px solid #2d6be4;"><div style="font-size:7px;color:#8892aa;text-transform:uppercase;margin-bottom:3px;">Klientů</div><div style="font-size:16px;font-weight:900;color:#0f1117;font-family:'Fraunces',serif;">24</div><div style="font-size:7px;color:#8892aa;">16 investorů</div></div>
+      <div style="background:#fff;border-radius:9px;padding:8px;border-left:3px solid #1a9e6a;"><div style="font-size:7px;color:#8892aa;text-transform:uppercase;margin-bottom:3px;">Vklady</div><div style="font-size:12px;font-weight:900;color:#1a9e6a;font-family:'Fraunces',serif;">4,2M Kč</div></div>
+      <div style="background:#fff;border-radius:9px;padding:8px;border-left:3px solid #b8912a;"><div style="font-size:7px;color:#8892aa;text-transform:uppercase;margin-bottom:3px;">Výdělek</div><div style="font-size:12px;font-weight:900;color:#b8912a;font-family:'Fraunces',serif;">420k Kč</div></div>
+      <div style="background:#fff;border-radius:9px;padding:8px;border-left:3px solid #d97a1a;"><div style="font-size:7px;color:#8892aa;text-transform:uppercase;margin-bottom:3px;">Události</div><div style="font-size:16px;font-weight:900;color:#0f1117;font-family:'Fraunces',serif;">7</div><div style="font-size:7px;color:#8892aa;">příštích 7 dní</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+      <div style="background:#fff;border-radius:9px;padding:8px;">
+        <div style="font-size:8px;font-weight:800;color:#0f1117;margin-bottom:7px;font-family:'Fraunces',serif;">Poslední klienti</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:18px;height:18px;border-radius:50%;background:#dbeafe;border:1px solid #93c5fd;font-size:7px;font-weight:800;color:#2d6be4;display:flex;align-items:center;justify-content:center;">JN</div><div style="flex:1;height:6px;background:#f0f2f7;border-radius:3px;"></div><div style="background:#edfaf4;border-radius:8px;padding:1px 6px;font-size:6px;font-weight:700;color:#1a9e6a;">500k</div></div>
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:18px;height:18px;border-radius:50%;background:#fef9ec;border:1px solid #f0d97a;font-size:7px;font-weight:800;color:#b8912a;display:flex;align-items:center;justify-content:center;">PK</div><div style="flex:1;height:6px;background:#f0f2f7;border-radius:3px;"></div><div style="background:#f4f5f8;border-radius:8px;padding:1px 6px;font-size:6px;color:#8892aa;">Prospect</div></div>
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:18px;height:18px;border-radius:50%;background:#fdf0f0;border:1px solid #f5b8b8;font-size:7px;font-weight:800;color:#d94040;display:flex;align-items:center;justify-content:center;">MH</div><div style="flex:1;height:6px;background:#f0f2f7;border-radius:3px;"></div><div style="background:#edfaf4;border-radius:8px;padding:1px 6px;font-size:6px;font-weight:700;color:#1a9e6a;">1,2M</div></div>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:9px;padding:8px;">
+        <div style="font-size:8px;font-weight:800;color:#0f1117;margin-bottom:7px;font-family:'Fraunces',serif;">Nadcházející události</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:18px;height:18px;border-radius:6px;background:#eef3fd;display:flex;align-items:center;justify-content:center;font-size:10px;">📞</div><div style="flex:1;"><div style="height:5px;background:#f0f2f7;border-radius:2px;margin-bottom:2px;"></div><div style="height:5px;background:#eef3fd;border-radius:2px;width:60%;"></div></div></div>
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:18px;height:18px;border-radius:6px;background:#edfaf4;display:flex;align-items:center;justify-content:center;font-size:10px;">💰</div><div style="flex:1;"><div style="height:5px;background:#f0f2f7;border-radius:2px;margin-bottom:2px;"></div><div style="height:5px;background:#edfaf4;border-radius:2px;width:50%;"></div></div></div>
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:18px;height:18px;border-radius:6px;background:#fef9ec;display:flex;align-items:center;justify-content:center;font-size:10px;">📈</div><div style="flex:1;"><div style="height:5px;background:#f0f2f7;border-radius:2px;margin-bottom:2px;"></div><div style="height:5px;background:#fef9ec;border-radius:2px;width:70%;"></div></div></div>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:9px;padding:8px;">
+        <div style="font-size:8px;font-weight:800;color:#0f1117;margin-bottom:7px;font-family:'Fraunces',serif;">Top brokeři</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#b8912a,#f5c842);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:900;color:#0f1117;flex-shrink:0;">1</div><div style="flex:1;height:6px;background:#f0f2f7;border-radius:3px;"></div><div style="font-size:8px;font-weight:800;color:#b8912a;">210k</div></div>
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:14px;height:14px;border-radius:50%;background:#f0f2f7;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#8892aa;flex-shrink:0;">2</div><div style="flex:1;height:6px;background:#f0f2f7;border-radius:3px;"></div><div style="font-size:8px;font-weight:800;color:#b8912a;">160k</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="label">📊 Dashboard <span class="badge" style="background:#edfaf4;color:#1a9e6a;">Všechny role</span></div>
+</div>
+
+<!-- ── 3. KLIENTI TABULKA ── -->
+<div>
+<div class="screen" style="height:300px;display:flex;overflow:hidden;">
+  <div style="width:52px;background:#0f1117;display:flex;flex-direction:column;align-items:center;padding:9px 0;gap:7px;">
+    <div style="width:32px;height:32px;background:linear-gradient(135deg,#b8912a,#f5c842);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:8px;">₿</div>
+    <div style="width:36px;height:22px;border-radius:6px;"></div>
+    <div style="width:36px;height:22px;border-radius:6px;background:rgba(184,145,42,0.15);border-left:2px solid #b8912a;"></div>
+  </div>
+  <div style="flex:1;background:#f0f2f7;padding:14px;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div><div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#0f1117;">Klienti</div><div style="font-size:10px;color:#8892aa;">24 záznamů</div></div>
+      <div style="background:linear-gradient(135deg,#b8912a,#f5c842);border-radius:8px;padding:5px 12px;font-size:9px;font-weight:800;color:#0f1117;">+ Přidat klienta</div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px;">
+      <div style="flex:1;background:#fff;border-radius:8px;height:26px;border:1.5px solid #e4e8f0;display:flex;align-items:center;padding:0 10px;font-size:9px;color:#c0c8d8;">🔍 Hledat klienta…</div>
+      <div style="background:#fff;border-radius:8px;height:26px;width:80px;border:1.5px solid #e4e8f0;"></div>
+      <div style="background:#fff;border-radius:8px;height:26px;width:80px;border:1.5px solid #e4e8f0;"></div>
+    </div>
+    <div style="background:#fff;border-radius:11px;overflow:hidden;border:1px solid #e4e8f0;">
+      <div style="background:#f8f9fc;padding:7px 12px;display:grid;grid-template-columns:2fr 1.2fr 0.8fr 0.9fr 0.9fr 0.6fr;gap:5px;border-bottom:1px solid #e4e8f0;">
+        <div style="font-size:7px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.06em;">Klient</div>
+        <div style="font-size:7px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.06em;">Kontakt</div>
+        <div style="font-size:7px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.06em;">Status</div>
+        <div style="font-size:7px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.06em;">Vklad</div>
+        <div style="font-size:7px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.06em;">Výdělek</div>
+        <div style="font-size:7px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.06em;"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;">
+        <div style="padding:8px 12px;border-bottom:1px solid #f0f2f7;display:grid;grid-template-columns:2fr 1.2fr 0.8fr 0.9fr 0.9fr 0.6fr;gap:5px;align-items:center;transition:background .12s;" onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='transparent'">
+          <div style="display:flex;align-items:center;gap:6px;"><div style="width:24px;height:24px;border-radius:50%;background:#dbeafe;border:1.5px solid #93c5fd;font-size:8px;font-weight:800;color:#2d6be4;display:flex;align-items:center;justify-content:center;">JN</div><div><div style="height:7px;background:#e8eaf0;border-radius:3px;width:70px;margin-bottom:2px;"></div><div style="height:5px;background:#f4f5f8;border-radius:2px;width:50px;"></div></div></div>
+          <div><div style="height:6px;background:#f0f2f7;border-radius:3px;margin-bottom:2px;width:80px;"></div><div style="height:5px;background:#f0f2f7;border-radius:2px;width:60px;"></div></div>
+          <div><span style="background:#edfaf4;border:1px solid #a3e6c9;border-radius:10px;padding:2px 7px;font-size:7px;font-weight:700;color:#1a9e6a;">✓ Investor</span></div>
+          <div style="font-size:10px;font-weight:800;color:#1a9e6a;">500 000 Kč</div>
+          <div style="font-size:10px;font-weight:800;color:#b8912a;">50 000 Kč</div>
+          <div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #e4e8f0;display:flex;align-items:center;justify-content:center;font-size:9px;color:#c0c8d8;">›</div>
+        </div>
+        <div style="padding:8px 12px;border-bottom:1px solid #f0f2f7;display:grid;grid-template-columns:2fr 1.2fr 0.8fr 0.9fr 0.9fr 0.6fr;gap:5px;align-items:center;">
+          <div style="display:flex;align-items:center;gap:6px;"><div style="width:24px;height:24px;border-radius:50%;background:#fef9ec;border:1.5px solid #f0d97a;font-size:8px;font-weight:800;color:#b8912a;display:flex;align-items:center;justify-content:center;">PK</div><div><div style="height:7px;background:#e8eaf0;border-radius:3px;width:70px;margin-bottom:2px;"></div><div style="height:5px;background:#f4f5f8;border-radius:2px;width:50px;"></div></div></div>
+          <div><div style="height:6px;background:#f0f2f7;border-radius:3px;margin-bottom:2px;width:80px;"></div><div style="height:5px;background:#f0f2f7;border-radius:2px;width:60px;"></div></div>
+          <div><span style="background:#f4f5f8;border:1px solid #e4e8f0;border-radius:10px;padding:2px 7px;font-size:7px;color:#8892aa;">Prospect</span></div>
+          <div style="font-size:10px;color:#c0c8d8;">—</div>
+          <div style="font-size:10px;color:#c0c8d8;">—</div>
+          <div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #e4e8f0;display:flex;align-items:center;justify-content:center;font-size:9px;color:#c0c8d8;">›</div>
+        </div>
+        <div style="padding:8px 12px;display:grid;grid-template-columns:2fr 1.2fr 0.8fr 0.9fr 0.9fr 0.6fr;gap:5px;align-items:center;">
+          <div style="display:flex;align-items:center;gap:6px;"><div style="width:24px;height:24px;border-radius:50%;background:#fdf0f0;border:1.5px solid #f5b8b8;font-size:8px;font-weight:800;color:#d94040;display:flex;align-items:center;justify-content:center;">MH</div><div><div style="height:7px;background:#e8eaf0;border-radius:3px;width:70px;margin-bottom:2px;"></div><div style="height:5px;background:#f4f5f8;border-radius:2px;width:50px;"></div></div></div>
+          <div><div style="height:6px;background:#f0f2f7;border-radius:3px;margin-bottom:2px;width:80px;"></div></div>
+          <div><span style="background:#edfaf4;border:1px solid #a3e6c9;border-radius:10px;padding:2px 7px;font-size:7px;font-weight:700;color:#1a9e6a;">✓ Investor</span></div>
+          <div style="font-size:10px;font-weight:800;color:#1a9e6a;">1 200 000 Kč</div>
+          <div style="font-size:10px;font-weight:800;color:#b8912a;">120 000 Kč</div>
+          <div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #e4e8f0;display:flex;align-items:center;justify-content:center;font-size:9px;color:#c0c8d8;">›</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="label">👥 Klienti — tabulka <span class="badge" style="background:#edfaf4;color:#1a9e6a;">Všechny role</span></div>
+</div>
+
+<!-- ── 4. CLIENT DRAWER ── -->
+<div>
+<div class="screen" style="height:300px;background:#f0f2f7;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:rgba(15,17,23,0.35);"></div>
+  <div style="position:absolute;right:0;top:0;bottom:0;width:75%;background:#fff;display:flex;flex-direction:column;overflow:hidden;box-shadow:-8px 0 32px rgba(15,17,23,0.15);">
+    <div style="background:linear-gradient(135deg,#0f1117,#1a1f2e);padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(45,107,228,0.2);border:2px solid rgba(45,107,228,0.4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#2d6be4;flex-shrink:0;">JN</div>
+        <div style="flex:1;">
+          <div style="font-size:16px;font-weight:900;color:#fff;font-family:'Fraunces',serif;line-height:1;">Jan Novák</div>
+          <div style="display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;">
+            <span style="background:rgba(26,158,106,0.2);color:#4ade80;border-radius:9px;padding:2px 8px;font-size:8px;font-weight:700;">✓ Investor</span>
+            <span style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);border-radius:9px;padding:2px 8px;font-size:8px;">💼 T. Novák</span>
+          </div>
+        </div>
+        <div style="width:22px;height:22px;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;">×</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        <div style="background:rgba(255,255,255,0.06);border-radius:8px;padding:7px 9px;"><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-bottom:3px;text-transform:uppercase;">Celkový vklad</div><div style="font-size:14px;font-weight:900;color:#4ade80;font-family:'Fraunces',serif;">500 000 Kč</div></div>
+        <div style="background:rgba(255,255,255,0.06);border-radius:8px;padding:7px 9px;"><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-bottom:3px;text-transform:uppercase;">Váš výdělek</div><div style="font-size:14px;font-weight:900;color:#f5c842;font-family:'Fraunces',serif;">50 000 Kč</div></div>
+        <div style="background:rgba(255,255,255,0.06);border-radius:8px;padding:7px 9px;"><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-bottom:3px;text-transform:uppercase;">Průměr %</div><div style="font-size:14px;font-weight:900;color:#60a5fa;font-family:'Fraunces',serif;">10,0%</div></div>
+      </div>
+    </div>
+    <div style="display:flex;border-bottom:1px solid #e4e8f0;padding:0 14px;">
+      <div style="padding:9px 12px;font-size:10px;font-weight:800;color:#b8912a;border-bottom:2px solid #b8912a;margin-bottom:-1px;">Přehled</div>
+      <div style="padding:9px 12px;font-size:10px;font-weight:600;color:#8892aa;">Platby (3)</div>
+      <div style="padding:9px 12px;font-size:10px;font-weight:600;color:#8892aa;">Události (5)</div>
+      <div style="padding:9px 12px;font-size:10px;font-weight:600;color:#8892aa;">Email</div>
+    </div>
+    <div style="flex:1;padding:11px 14px;overflow:hidden;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#e4e8f0;border-radius:9px;overflow:hidden;margin-bottom:9px;">
+        <div style="background:#fff;padding:7px 9px;"><div style="font-size:7px;color:#8892aa;text-transform:uppercase;margin-bottom:2px;letter-spacing:0.05em;">Telefon</div><div style="font-size:11px;font-weight:600;color:#0f1117;">+420 777 123 456</div></div>
+        <div style="background:#fff;padding:7px 9px;"><div style="font-size:7px;color:#8892aa;text-transform:uppercase;margin-bottom:2px;letter-spacing:0.05em;">Email</div><div style="font-size:11px;font-weight:600;color:#0f1117;">jan@email.cz</div></div>
+        <div style="background:#fff;padding:7px 9px;"><div style="font-size:7px;color:#8892aa;text-transform:uppercase;margin-bottom:2px;letter-spacing:0.05em;">Datum hovoru</div><div style="font-size:11px;font-weight:600;color:#0f1117;">15. 2. 2026</div></div>
+        <div style="background:#fff;padding:7px 9px;"><div style="font-size:7px;color:#8892aa;text-transform:uppercase;margin-bottom:2px;letter-spacing:0.05em;">Příští platba</div><div style="font-size:11px;font-weight:700;color:#b8912a;">1. 4. 2026</div></div>
+      </div>
+      <div style="background:#fef9ec;border:1px solid #f0d97a;border-radius:9px;padding:8px 10px;">
+        <div style="font-size:7px;font-weight:700;color:#b8912a;text-transform:uppercase;margin-bottom:3px;">Poznámka</div>
+        <div style="font-size:11px;color:#4a5578;line-height:1.5;">Zájem o dlouhodobé investice, preferuje konzervativní přístup.</div>
+      </div>
+    </div>
+    <div style="padding:9px 14px;border-top:1px solid #e4e8f0;background:#f8f9fc;display:flex;gap:6px;">
+      <div style="background:linear-gradient(135deg,#b8912a,#f5c842);border-radius:7px;padding:5px 10px;font-size:9px;font-weight:800;color:#0f1117;cursor:pointer;">✉️ Email</div>
+      <div style="background:#edfaf4;border:1px solid #a3e6c9;border-radius:7px;padding:5px 10px;font-size:9px;font-weight:700;color:#1a9e6a;cursor:pointer;">💰 Platba</div>
+      <div style="background:#fff;border:1px solid #e4e8f0;border-radius:7px;padding:5px 10px;font-size:9px;font-weight:700;color:#4a5578;cursor:pointer;">📅 Událost</div>
+    </div>
+  </div>
+</div>
+<div class="label">👤 Klientský drawer — detail <span class="badge" style="background:#edfaf4;color:#1a9e6a;">Všechny role</span></div>
+</div>
+
+<!-- ── 5. KALENDÁŘ ── -->
+<div>
+<div class="screen" style="height:300px;display:flex;overflow:hidden;">
+  <div style="width:52px;background:#0f1117;display:flex;flex-direction:column;align-items:center;padding:9px 0;gap:7px;">
+    <div style="width:32px;height:32px;background:linear-gradient(135deg,#b8912a,#f5c842);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:8px;">₿</div>
+    <div style="width:36px;height:22px;border-radius:6px;"></div>
+    <div style="width:36px;height:22px;border-radius:6px;"></div>
+    <div style="width:36px;height:22px;border-radius:6px;background:rgba(184,145,42,0.15);border-left:2px solid #b8912a;"></div>
+  </div>
+  <div style="flex:1;background:#f0f2f7;padding:13px;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#0f1117;">Kalendář</div>
+      <div style="background:linear-gradient(135deg,#b8912a,#f5c842);border-radius:7px;padding:4px 10px;font-size:9px;font-weight:800;color:#0f1117;">+ Přidat událost</div>
+    </div>
+    <div style="display:grid;grid-template-columns:140px 1fr;gap:10px;">
+      <div style="background:#fff;border-radius:11px;padding:10px;border:1px solid #e4e8f0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:9px;color:#8892aa;cursor:pointer;">‹</span>
+          <span style="font-size:10px;font-weight:800;color:#0f1117;font-family:'Fraunces',serif;">Březen 2026</span>
+          <span style="font-size:9px;color:#8892aa;cursor:pointer;">›</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;">
+          <div style="text-align:center;font-size:6px;color:#8892aa;font-weight:700;">Po</div><div style="text-align:center;font-size:6px;color:#8892aa;font-weight:700;">Út</div><div style="text-align:center;font-size:6px;color:#8892aa;font-weight:700;">St</div><div style="text-align:center;font-size:6px;color:#8892aa;font-weight:700;">Čt</div><div style="text-align:center;font-size:6px;color:#8892aa;font-weight:700;">Pá</div><div style="text-align:center;font-size:6px;color:#8892aa;font-weight:700;">So</div><div style="text-align:center;font-size:6px;color:#8892aa;font-weight:700;">Ne</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;">
+          <div></div><div></div><div></div><div></div>
+          <div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">1</div>
+          <div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">2</div>
+          <div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">3</div>
+          <div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">4</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">5</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">6</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">7</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">8</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#8892aa;">9</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#8892aa;">10</div>
+          <div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">11</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">12</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">13</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">14</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">15</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#8892aa;">16</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#8892aa;">17</div>
+          <div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">18</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">19</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">20</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">21</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">22</div>
+          <div style="text-align:center;font-size:7px;padding:2px 0;background:linear-gradient(135deg,#b8912a,#f5c842);border-radius:5px;font-weight:900;color:#0f1117;">23</div>
+          <div style="text-align:center;font-size:7px;padding:2px 0;color:#8892aa;">24</div>
+          <div style="text-align:center;font-size:7px;padding:3px 0 1px;color:#0f1117;position:relative;">25<div style="display:flex;justify-content:center;gap:1px;"><div style="width:3px;height:3px;border-radius:50%;background:#2d6be4;"></div><div style="width:3px;height:3px;border-radius:50%;background:#1a9e6a;"></div></div></div>
+          <div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">26</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">27</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#0f1117;">28</div>
+          <div style="text-align:center;font-size:7px;padding:3px 0 1px;color:#8892aa;">29</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#8892aa;">30</div><div style="text-align:center;font-size:7px;padding:2px 0;color:#8892aa;">31</div>
+        </div>
+        <div style="margin-top:9px;padding-top:7px;border-top:1px solid #e4e8f0;">
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <div style="display:flex;justify-content:space-between;padding:3px 5px;background:#eef3fd;border-radius:5px;cursor:pointer;"><span style="font-size:8px;color:#2d6be4;">📞 Hovory</span><span style="font-size:8px;font-weight:800;color:#2d6be4;">8</span></div>
+            <div style="display:flex;justify-content:space-between;padding:3px 5px;cursor:pointer;"><span style="font-size:8px;color:#8892aa;">💰 Platby</span><span style="font-size:8px;font-weight:700;color:#1a9e6a;">3</span></div>
+            <div style="display:flex;justify-content:space-between;padding:3px 5px;cursor:pointer;"><span style="font-size:8px;color:#8892aa;">📈 Úroky</span><span style="font-size:8px;font-weight:700;color:#b8912a;">5</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="font-size:11px;font-weight:800;color:#0f1117;font-family:'Fraunces',serif;">Pondělí 23. března 2026</div>
+        <div style="background:#fff;border:1.5px solid rgba(45,107,228,0.35);border-radius:10px;padding:9px 11px;display:flex;gap:8px;">
+          <div style="width:30px;height:30px;border-radius:8px;background:#eef3fd;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📞</div>
+          <div><div style="font-size:10px;font-weight:800;color:#0f1117;">Hovor – Jan Novák</div><div style="font-size:8px;font-weight:700;color:#2d6be4;margin-top:1px;">🕐 10:00</div><div style="font-size:8px;color:#8892aa;margin-top:1px;">Dohodnout podmínky smlouvy</div></div>
+        </div>
+        <div style="background:#fff;border:1.5px solid rgba(26,158,106,0.35);border-radius:10px;padding:9px 11px;display:flex;gap:8px;">
+          <div style="width:30px;height:30px;border-radius:8px;background:#edfaf4;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">💰</div>
+          <div><div style="font-size:10px;font-weight:800;color:#0f1117;">Platba – Pavel Král</div><div style="font-size:8px;font-weight:700;color:#1a9e6a;margin-top:1px;">🕐 14:30</div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e4e8f0;border-radius:10px;padding:9px 11px;display:flex;gap:8px;opacity:0.55;">
+          <div style="width:30px;height:30px;border-radius:8px;background:#fef9ec;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📈</div>
+          <div><div style="font-size:10px;font-weight:800;color:#0f1117;">Úrok – měsíční výplata</div><div style="font-size:8px;color:#8892aa;margin-top:1px;">Proběhlo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="label">📅 Kalendář — inline mini-cal + události <span class="badge" style="background:#edfaf4;color:#1a9e6a;">Všechny role</span></div>
+</div>
+
+<!-- ── 6. EMAIL COMPOSER ── -->
+<div>
+<div class="screen" style="height:300px;padding:14px;background:#f0f2f7;">
+  <div style="font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:#0f1117;margin-bottom:10px;">Email Composer — modal dialog</div>
+  <div style="background:#fff;border-radius:13px;padding:13px;border:1px solid #e4e8f0;height:calc(100% - 36px);overflow:hidden;">
+    <div style="display:flex;gap:5px;margin-bottom:9px;">
+      <div style="background:#fef9ec;border:1.5px solid #b8912a;border-radius:12px;padding:3px 10px;font-size:9px;font-weight:700;color:#b8912a;">Prezentace</div>
+      <div style="background:#fff;border:1px solid #e4e8f0;border-radius:12px;padding:3px 10px;font-size:9px;color:#8892aa;">Smlouva</div>
+      <div style="background:#fff;border:1px solid #e4e8f0;border-radius:12px;padding:3px 10px;font-size:9px;color:#8892aa;">Úrok</div>
+      <div style="background:#fff;border:1px solid #e4e8f0;border-radius:12px;padding:3px 10px;font-size:9px;color:#8892aa;">Follow-up</div>
+    </div>
+    <div style="background:#f8f9fc;border-radius:9px;border:1px solid #e4e8f0;padding:7px 10px;margin-bottom:7px;">
+      <div style="font-size:8px;color:#8892aa;margin-bottom:2px;">Komu: <span style="color:#0f1117;font-weight:700;">jan.novak@email.cz</span></div>
+      <div style="font-size:8px;color:#8892aa;">Předmět: <span style="color:#0f1117;font-weight:600;">Exkluzivní investiční příležitost – Build Fund</span></div>
+    </div>
+    <!-- OSLOVENÍ — gold highlighted -->
+    <div style="background:linear-gradient(135deg,#fef9ec,#fffdf5);border:2px solid #f0d97a;border-radius:9px;padding:8px 11px;margin-bottom:7px;">
+      <div style="font-size:8px;font-weight:800;color:#b8912a;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em;">✏️ Oslovení * — personalizace emailu</div>
+      <div style="background:rgba(255,255,255,0.9);border:1.5px solid #f0d97a;border-radius:7px;height:22px;display:flex;align-items:center;padding:0 9px;font-size:10px;font-weight:700;color:#0f1117;">pane Nováku</div>
+      <div style="font-size:8px;color:#b8912a;margin-top:3px;font-weight:600;">Např: "pane Nováku", "Petro", "Vážená paní Procházková"</div>
+    </div>
+    <!-- Body -->
+    <div style="background:#fff;border:1.5px solid #e4e8f0;border-radius:8px;padding:8px 10px;margin-bottom:7px;">
+      <div style="height:5px;background:#f0f2f7;border-radius:2px;margin-bottom:3px;"></div>
+      <div style="height:5px;background:#f0f2f7;border-radius:2px;margin-bottom:3px;width:90%;"></div>
+      <div style="height:5px;background:#f0f2f7;border-radius:2px;margin-bottom:3px;width:75%;"></div>
+      <div style="height:5px;background:#f0f2f7;border-radius:2px;width:60%;"></div>
+    </div>
+    <!-- PODPIS — blue highlighted -->
+    <div style="background:#eef3fd;border:1.5px solid #b3cdf9;border-radius:9px;padding:8px 11px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <div style="font-size:8px;font-weight:800;color:#2d6be4;text-transform:uppercase;letter-spacing:0.06em;">✒️ Váš podpis — editovatelný per-broker</div>
+        <div style="font-size:8px;color:#2d6be4;text-decoration:underline;cursor:pointer;font-weight:600;">Upravit</div>
+      </div>
+      <div style="font-size:9px;color:#4a5578;line-height:1.6;">S pozdravem,<br>Tomáš Novák<br>Build Fund | Investiční poradce<br>+420 777 345 678</div>
+    </div>
+  </div>
+</div>
+<div class="label">✉️ Email Composer <span class="badge" style="background:#edfaf4;color:#1a9e6a;">Všechny role</span></div>
+</div>
+
+</div><!-- end grid -->
+
+<!-- PERMISSIONS TABLE -->
+<div class="perm-table" style="margin-bottom:40px;">
+  <div class="perm-header">Matice práv — Role × Funkce</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="color:#4a5578;text-align:left;">Funkce / Sekce</th>
+        <th style="color:#d94040;text-align:center;">⚡ Administrator</th>
+        <th style="color:#b8912a;text-align:center;">👁 Supervisor</th>
+        <th style="color:#2d6be4;text-align:center;">💼 Broker</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="4" style="background:#f8f9fc;font-size:10px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.07em;padding:8px 20px;">Dashboard</td></tr>
+      <tr><td>Vlastní statistiky</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td>Statistiky celé firmy</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Top brokeři + výdělky</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td></tr>
+      <tr><td colspan="4" style="background:#f8f9fc;font-size:10px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.07em;padding:8px 20px;">Klienti</td></tr>
+      <tr><td>Vidět vlastní klienty</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td>Vidět klienty všech</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Přidat klienta</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td>Editovat vlastní klienty</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td>Editovat cizí klienty</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Smazat klienta</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Přiřadit klienta brokerovi</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td></tr>
+      <tr><td colspan="4" style="background:#f8f9fc;font-size:10px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.07em;padding:8px 20px;">Platby</td></tr>
+      <tr><td>Přidat platbu + zadat % výdělku</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td>Vidět výdělky vlastní</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td>Vidět výdělky cizích brokerů</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td></tr>
+      <tr><td colspan="4" style="background:#f8f9fc;font-size:10px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.07em;padding:8px 20px;">Emaily</td></tr>
+      <tr><td>Odesílat emaily</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td>Vlastní editovatelný podpis</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td>Přizpůsobit oslovení</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td colspan="4" style="background:#f8f9fc;font-size:10px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.07em;padding:8px 20px;">Kalendář</td></tr>
+      <tr><td>Vlastní události</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td>Vidět události všech</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Typy: Hovor/Platba/Úrok/Schůzka/Připomínka</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td></tr>
+      <tr><td colspan="4" style="background:#f8f9fc;font-size:10px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.07em;padding:8px 20px;">Správa uživatelů</td></tr>
+      <tr><td>Zobrazit seznam uživatelů</td><td style="text-align:center;">✅</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Přidat uživatele</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Editovat / smazat uživatele</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Aktivovat / deaktivovat účet</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td><td style="text-align:center;">❌</td></tr>
+      <tr><td colspan="4" style="background:#f8f9fc;font-size:10px;font-weight:800;color:#8892aa;text-transform:uppercase;letter-spacing:0.07em;padding:8px 20px;">Šablony a nastavení</td></tr>
+      <tr><td>Editovat šablony emailů</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Proměnné v šablonách</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td><td style="text-align:center;">❌</td></tr>
+      <tr><td>Nastavení systému</td><td style="text-align:center;">✅</td><td style="text-align:center;">❌</td><td style="text-align:center;">❌</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

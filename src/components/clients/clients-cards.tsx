@@ -1,0 +1,86 @@
+"use client";
+
+import { Phone, Mail, ChevronRight } from "lucide-react";
+import { fmtCZK } from "@/lib/utils";
+import ClientStatusBadge from "./client-status-badge";
+import type { ClientRow } from "./clients-page-client";
+
+interface ClientsCardsProps {
+  clients: ClientRow[];
+  isBroker: boolean;
+  onClientClick: (id: string) => void;
+}
+
+export default function ClientsCards({
+  clients,
+  isBroker,
+  onClientClick,
+}: ClientsCardsProps) {
+  return (
+    <div className="md:hidden space-y-3">
+      {clients.map((client) => {
+        const initials = `${client.firstName[0]}${client.lastName[0]}`;
+        return (
+          <div
+            key={client.id}
+            onClick={() => onClientClick(client.id)}
+            className="bg-surface rounded-[16px] border border-border shadow-card p-4 active:bg-surface-hover transition-colors cursor-pointer"
+          >
+            {/* Top row: Avatar + Name + Status */}
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center text-sm font-bold text-gold shrink-0">
+                {initials}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-text truncate">
+                    {client.firstName} {client.lastName}
+                  </span>
+                  <ClientStatusBadge isInvestor={client.isInvestor} />
+                </div>
+                {!isBroker && (
+                  <p className="text-xs text-text-dim mt-0.5">
+                    {client.brokerName}
+                  </p>
+                )}
+              </div>
+              <ChevronRight size={16} className="text-text-faint shrink-0" />
+            </div>
+
+            {/* Contact info */}
+            <div className="flex flex-col gap-1.5 mb-3 text-sm text-text-mid">
+              <div className="flex items-center gap-2">
+                <Phone size={13} className="text-text-dim shrink-0" />
+                <span className="truncate">{client.phone}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail size={13} className="text-text-dim shrink-0" />
+                <span className="truncate">{client.email}</span>
+              </div>
+            </div>
+
+            {/* Financial info */}
+            <div className="flex items-center gap-4 pt-3 border-t border-border">
+              <div className="flex-1">
+                <p className="text-[10px] uppercase tracking-wider text-text-dim">
+                  Vklad
+                </p>
+                <p className="text-sm font-semibold text-text">
+                  {fmtCZK(client.totalDeposit)}
+                </p>
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] uppercase tracking-wider text-text-dim">
+                  Výdělek
+                </p>
+                <p className="text-sm font-semibold text-emerald">
+                  {fmtCZK(client.totalProfit)}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}

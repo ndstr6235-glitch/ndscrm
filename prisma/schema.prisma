@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMINISTRATOR
+  SUPERVISOR
+  BROKER
+}
+
+enum EventType {
+  CALL
+  PAYMENT
+  REMINDER
+  INTEREST
+  MEETING
+}
+
+model User {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  role      Role
+  active    Boolean  @default(true)
+  signature String?
+  createdAt DateTime @default(now())
+
+  clients  Client[]
+  events   CalEvent[]
+}
+
+model Client {
+  id              String   @id @default(cuid())
+  firstName       String
+  lastName        String
+  phone           String
+  email           String
+  callDate        String
+  nextPaymentDate String
+  paymentFreq     Int      @default(30)
+  note            String   @default("")
+  assignedTo      String
+  createdAt       DateTime @default(now())
+
+  user     User      @relation(fields: [assignedTo], references: [id])
+  payments Payment[]
+  events   CalEvent[]
+}
+
+model Payment {
+  id       String @id @default(cuid())
+  amount   Float
+  percent  Float
+  profit   Float
+  date     String
+  note     String @default("")
+  clientId String
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+}
+
+model CalEvent {
+  id        String    @id @default(cuid())
+  clientId  String?
+  userId    String
+  type      EventType
+  title     String
+  date      String
+  time      String
+  note      String    @default("")
+  createdAt DateTime  @default(now())
+
+  client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  user   User    @relation(fields: [userId], references: [id])
+}
+
+model EmailTemplate {
+  id           String @id @default(cuid())
+  label        String
+  subject      String
+  body         String
+  allowedRoles String @default("ADMINISTRATOR,SUPERVISOR,BROKER")
+}

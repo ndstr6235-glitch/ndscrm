@@ -1,0 +1,67 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+
+type Tab = "overview" | "payments" | "events" | "email";
+
+interface DrawerTabsProps {
+  activeTab: Tab;
+  onTabChange: (tab: Tab) => void;
+  paymentCount: number;
+  eventCount: number;
+}
+
+const TABS: { key: Tab; label: string; countKey?: "paymentCount" | "eventCount" }[] = [
+  { key: "overview", label: "Přehled" },
+  { key: "payments", label: "Platby", countKey: "paymentCount" },
+  { key: "events", label: "Události", countKey: "eventCount" },
+  { key: "email", label: "Email" },
+];
+
+export default function DrawerTabs({
+  activeTab,
+  onTabChange,
+  paymentCount,
+  eventCount,
+}: DrawerTabsProps) {
+  const counts = { paymentCount, eventCount };
+
+  return (
+    <div className="border-b border-border overflow-x-auto shrink-0">
+      <div className="flex min-w-max">
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab.key;
+          const count = tab.countKey ? counts[tab.countKey] : null;
+
+          return (
+            <button
+              key={tab.key}
+              onClick={() => onTabChange(tab.key)}
+              className={cn(
+                "px-4 py-3 min-h-[44px] text-sm font-medium whitespace-nowrap transition-colors relative",
+                isActive
+                  ? "text-gold font-semibold"
+                  : "text-text-mid hover:text-text"
+              )}
+            >
+              {tab.label}
+              {count !== null && (
+                <span
+                  className={cn(
+                    "ml-1.5 text-xs",
+                    isActive ? "text-gold/70" : "text-text-dim"
+                  )}
+                >
+                  ({count})
+                </span>
+              )}
+              {isActive && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

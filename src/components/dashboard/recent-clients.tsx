@@ -13,7 +13,7 @@ interface RecentClientsProps {
 
 export default function RecentClients({ clients }: RecentClientsProps) {
   return (
-    <div className="bg-surface rounded-2xl shadow-card p-4 lg:p-5">
+    <div className="bg-surface rounded-[16px] shadow-card p-4 lg:p-5">
       <h2 className="text-sm font-semibold text-text mb-3">
         Poslední klienti
       </h2>

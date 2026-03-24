@@ -18,7 +18,7 @@ export default function TopBrokers({ brokers, visible }: TopBrokersProps) {
   if (!visible) return null;
 
   return (
-    <div className="bg-surface rounded-2xl shadow-card p-4 lg:p-5 md:col-span-2 lg:col-span-1">
+    <div className="bg-surface rounded-[16px] shadow-card p-4 lg:p-5 md:col-span-2 lg:col-span-1">
       <h2 className="text-sm font-semibold text-text mb-3">Top brokeři</h2>
       {brokers.length === 0 ? (
         <p className="text-sm text-text-dim py-4 text-center">

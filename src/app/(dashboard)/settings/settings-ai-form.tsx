@@ -50,7 +50,7 @@ export function SettingsAIForm({ currentKey }: Props) {
           <Check size={16} className="text-emerald shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-emerald">API klíč nastaven</p>
-            <p className="text-xs text-emerald/70 font-mono">{currentKey}</p>
+            <p className="text-xs text-emerald/70 font-mono">{currentKey.slice(0, 8)}...</p>
           </div>
           <button
             onClick={handleDelete}

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect, useMemo, useTransition } from "react";
-import { X, Send, Pencil, AlertTriangle, FileText, Sparkles, Loader2, Wand2 } from "lucide-react";
+import { X, Send, Mail, Pencil, AlertTriangle, FileText, Sparkles, Loader2, Wand2 } from "lucide-react";
 import { generateSalutation, generateEmailDraft, improveEmailText } from "@/app/actions/ai";
 import { cn, fmtCZK } from "@/lib/utils";
-import { getCurrentUserSignature, updateSignature } from "@/app/actions/emails";
+import { getCurrentUserSignature, updateSignature, sendEmail } from "@/app/actions/emails";
 import { useToast } from "@/components/ui/toast";
 import type { Role } from "@/lib/types";
 
@@ -58,6 +58,7 @@ export default function EmailComposer({
   const [editingSignature, setEditingSignature] = useState(false);
   const [bodyOverride, setBodyOverride] = useState("");
   const [loadedSignature, setLoadedSignature] = useState(false);
+  const [sending, setSending] = useState(false);
 
   // Load signature on open
   useEffect(() => {
@@ -109,6 +110,28 @@ export default function EmailComposer({
       toast("Podpis uložen");
     } else {
       toast("Nepodařilo se uložit podpis", "error");
+    }
+  }
+
+  async function handleSendEmail() {
+    if (!selectedTemplate || !clientEmail) return;
+    setSending(true);
+    try {
+      const result = await sendEmail({
+        to: clientEmail,
+        subject: selectedTemplate.subject,
+        body: finalBody,
+      });
+      if (result.success) {
+        toast("Email byl odeslán");
+        onClose();
+      } else {
+        toast("error" in result ? result.error : "Odeslání selhalo", "error");
+      }
+    } catch {
+      toast("Neočekávaná chyba při odesílání", "error");
+    } finally {
+      setSending(false);
     }
   }
 
@@ -344,13 +367,25 @@ export default function EmailComposer({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-border px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] shrink-0">
+        <div className="border-t border-border px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] shrink-0 space-y-2">
+          <button
+            onClick={handleSendEmail}
+            disabled={!clientEmail || sending}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-[10px] bg-gradient-to-r from-gold to-gold-light text-white text-sm font-semibold shadow-md hover:shadow-lg transition-shadow disabled:opacity-50"
+          >
+            {sending ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Send size={16} />
+            )}
+            {sending ? "Odesílání…" : "Odeslat email"}
+          </button>
           <button
             onClick={handleSendMailto}
             disabled={!clientEmail}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-[10px] bg-gradient-to-r from-gold to-gold-light text-white text-sm font-semibold shadow-md hover:shadow-lg transition-shadow disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-[10px] border border-border text-text-mid text-sm font-medium hover:bg-surface-hover transition-colors disabled:opacity-50"
           >
-            <Send size={16} />
+            <Mail size={16} />
             Otevřít v poštovním klientovi
           </button>
         </div>

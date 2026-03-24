@@ -2,6 +2,8 @@
 
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
+import { Resend } from "resend";
+import { logAudit } from "./audit";
 
 export interface EmailClientRow {
   id: string;
@@ -162,4 +164,64 @@ export async function getEmailTemplates(): Promise<EmailTemplateRow[]> {
       body: t.body,
       allowedRoles: t.allowedRoles.split(",").map((r) => r.trim().toLowerCase()),
     }));
+}
+
+// ---------------------------------------------------------------------------
+// Send email via Resend
+// ---------------------------------------------------------------------------
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+interface SendEmailInput {
+  to: string;
+  subject: string;
+  body: string;
+  replyTo?: string;
+}
+
+export async function sendEmail(
+  input: SendEmailInput
+): Promise<{ success: true } | { success: false; error: string }> {
+  const session = await getSession();
+  if (!session) {
+    return { success: false, error: "Neautorizovaný přístup" };
+  }
+
+  const { to, subject, body, replyTo } = input;
+
+  if (!to || !subject || !body) {
+    return { success: false, error: "Chybí povinné údaje (email, předmět, text)" };
+  }
+
+  try {
+    const { error } = await resend.emails.send({
+      from: "Build Fund CRM <noreply@nodistar.cz>",
+      to: [to],
+      subject,
+      text: body,
+      ...(replyTo ? { replyTo: [replyTo] } : {}),
+    });
+
+    if (error) {
+      console.error("Resend error:", error);
+      return { success: false, error: error.message || "Odeslání selhalo" };
+    }
+
+    // Audit log
+    await logAudit(
+      session.id,
+      "SEND_EMAIL",
+      "email",
+      undefined,
+      `To: ${to}, Subject: ${subject}`
+    );
+
+    return { success: true };
+  } catch (err) {
+    console.error("Email send failed:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Neočekávaná chyba při odesílání",
+    };
+  }
 }

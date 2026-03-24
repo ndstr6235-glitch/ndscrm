@@ -1,9 +1,13 @@
 import { SignJWT, jwtVerify } from "jose";
 import type { Role } from "./types";
 
-const secret = new TextEncoder().encode(
-  process.env.SESSION_SECRET || "buildfund-crm-dev-secret-key-min-32-chars-here"
-);
+if (!process.env.SESSION_SECRET) {
+  throw new Error(
+    "SESSION_SECRET environment variable is required. Set it to a random string of at least 32 characters."
+  );
+}
+
+const secret = new TextEncoder().encode(process.env.SESSION_SECRET);
 
 export interface SessionPayload {
   id: string;

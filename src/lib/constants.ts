@@ -1,4 +1,4 @@
-import type { Role, User, EmailTemplate, EventType, ClientStage, ClientScore } from "./types";
+import type { Role, EmailTemplate, EventType, ClientStage, ClientScore } from "./types";
 
 // ---------------------------------------------------------------------------
 // Colors
@@ -137,56 +137,6 @@ export const ACTIVITY_ICONS: Record<string, string> = {
   NOTE_CHANGED: "📝",
   ASSIGNED_TO_CHANGED: "🔄",
 };
-
-// ---------------------------------------------------------------------------
-// Default users (seed data)
-// ---------------------------------------------------------------------------
-export const DEFAULT_USERS: User[] = [
-  {
-    id: "u1",
-    firstName: "Martin",
-    lastName: "Kovář",
-    email: "admin@buildfund.cz",
-    password: "admin123",
-    role: "administrator",
-    active: true,
-    createdAt: "2024-01-01",
-    signature: "S úctou,\nMartin Kovář\nBuild Fund | CEO\n+420 777 123 456\nwww.buildfund.cz",
-  },
-  {
-    id: "u2",
-    firstName: "Jana",
-    lastName: "Procházková",
-    email: "supervisor@buildfund.cz",
-    password: "super123",
-    role: "supervisor",
-    active: true,
-    createdAt: "2024-01-15",
-    signature: "S úctou,\nJana Procházková\nBuild Fund | Vedoucí týmu\n+420 777 234 567",
-  },
-  {
-    id: "u3",
-    firstName: "Tomáš",
-    lastName: "Novák",
-    email: "broker1@buildfund.cz",
-    password: "broker123",
-    role: "broker",
-    active: true,
-    createdAt: "2024-02-01",
-    signature: "S pozdravem,\nTomáš Novák\nBuild Fund | Investiční poradce\n+420 777 345 678",
-  },
-  {
-    id: "u4",
-    firstName: "Petra",
-    lastName: "Horáková",
-    email: "broker2@buildfund.cz",
-    password: "broker456",
-    role: "broker",
-    active: true,
-    createdAt: "2024-02-10",
-    signature: "S pozdravem,\nPetra Horáková\nBuild Fund | Investiční poradce\n+420 777 456 789",
-  },
-];
 
 // ---------------------------------------------------------------------------
 // Default email templates (5 templates, "Smlouva finální" admin-only)

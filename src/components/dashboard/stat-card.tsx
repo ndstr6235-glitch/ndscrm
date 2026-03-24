@@ -28,7 +28,7 @@ export default function StatCard({
   return (
     <div
       className={cn(
-        "bg-surface rounded-2xl shadow-card border-l-4 p-3.5 md:p-4 lg:p-5",
+        "bg-surface rounded-[16px] shadow-card border-l-4 p-3.5 md:p-4 lg:p-5",
         accent.border
       )}
     >

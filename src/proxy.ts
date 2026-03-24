@@ -13,9 +13,12 @@ export async function proxy(request: NextRequest) {
 
   if (token) {
     // Inline decrypt — avoid importing from lib which may pull in non-edge deps
-    const secret = new TextEncoder().encode(
-      process.env.SESSION_SECRET || "buildfund-crm-dev-secret-key-min-32-chars-here"
-    );
+    if (!process.env.SESSION_SECRET) {
+      throw new Error(
+        "SESSION_SECRET environment variable is required. Set it to a random string of at least 32 characters."
+      );
+    }
+    const secret = new TextEncoder().encode(process.env.SESSION_SECRET);
     let session = null;
     try {
       const { payload } = await jwtVerify(token, secret);

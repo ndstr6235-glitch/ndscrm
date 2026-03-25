@@ -172,11 +172,20 @@ export async function getEmailTemplates(): Promise<EmailTemplateRow[]> {
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+interface ContractMeta {
+  investmentAmount: number;
+  interestRate?: number;
+  duration?: string;
+  startDate?: string;
+  payoutFrequency?: string;
+}
+
 interface SendEmailInput {
   to: string;
   subject: string;
   body: string;
   replyTo?: string;
+  contractMeta?: ContractMeta;
 }
 
 export async function sendEmail(
@@ -187,7 +196,7 @@ export async function sendEmail(
     return { success: false, error: "Neautorizovaný přístup" };
   }
 
-  const { to, subject, body, replyTo } = input;
+  const { to, subject, body, replyTo, contractMeta } = input;
 
   if (!to || !subject || !body) {
     return { success: false, error: "Chybí povinné údaje (email, předmět, text)" };
@@ -207,13 +216,25 @@ export async function sendEmail(
       return { success: false, error: error.message || "Odeslání selhalo" };
     }
 
+    // Build audit detail string including contract metadata if present
+    let auditDetail = `To: ${to}, Subject: ${subject}`;
+    if (contractMeta) {
+      const parts: string[] = [];
+      parts.push(`Vklad: ${contractMeta.investmentAmount} CZK`);
+      if (contractMeta.interestRate != null) parts.push(`Úrok: ${contractMeta.interestRate}%`);
+      if (contractMeta.duration) parts.push(`Doba: ${contractMeta.duration} měs.`);
+      if (contractMeta.startDate) parts.push(`Začátek: ${contractMeta.startDate}`);
+      if (contractMeta.payoutFrequency) parts.push(`Frekvence: ${contractMeta.payoutFrequency}`);
+      auditDetail += ` | Smlouva: ${parts.join(", ")}`;
+    }
+
     // Audit log
     await logAudit(
       session.id,
       "SEND_EMAIL",
       "email",
       undefined,
-      `To: ${to}, Subject: ${subject}`
+      auditDetail
     );
 
     return { success: true };

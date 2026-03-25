@@ -237,10 +237,19 @@ export default function EmailComposer({
           }
         : undefined;
 
+      // Get selected team member for sender name + replyTo
+      const selectedMember =
+        selectedSignatureId && selectedSignatureId !== "custom"
+          ? TEAM_SIGNATURES.find((m) => m.id === selectedSignatureId)
+          : null;
+
       const result = await sendEmail({
         to: recipientEmail,
         subject: subjectOverride || selectedTemplate.subject,
         body: finalBody,
+        replyTo: selectedMember?.email,
+        senderName: selectedMember?.name || "Nodi Star s.r.o.",
+        templateLabel: selectedTemplate.label,
         contractMeta,
       });
       if (result.success) {

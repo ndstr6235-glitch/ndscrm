@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { Resend } from "resend";
 import { logAudit } from "./audit";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
 export interface EmailClientRow {
   id: string;
@@ -197,6 +199,8 @@ interface SendEmailInput {
   subject: string;
   body: string;
   replyTo?: string;
+  senderName?: string;
+  templateLabel?: string;
   contractMeta?: ContractMeta;
 }
 
@@ -208,19 +212,39 @@ export async function sendEmail(
     return { success: false, error: "Neautorizovaný přístup" };
   }
 
-  const { to, subject, body, replyTo, contractMeta } = input;
+  const { to, subject, body, replyTo, senderName, templateLabel, contractMeta } = input;
 
   if (!to || !subject || !body) {
     return { success: false, error: "Chybí povinné údaje (email, předmět, text)" };
   }
 
   try {
+    // Build sender name — use the team member name or default to company
+    const fromName = senderName || "Nodi Star s.r.o.";
+    const from = `${fromName} <noreply@nodistar.cz>`;
+
+    // Attach presentation PDF for "Prezentace" templates
+    const attachments: Array<{ filename: string; content: Buffer }> = [];
+    if (templateLabel?.toLowerCase().includes("prezentace")) {
+      try {
+        const pdfPath = join(process.cwd(), "public", "prezentace-nodistar.pdf");
+        const pdfBuffer = await readFile(pdfPath);
+        attachments.push({
+          filename: "Prezentace-Nodi-Star.pdf",
+          content: pdfBuffer,
+        });
+      } catch {
+        console.warn("Presentation PDF not found at public/prezentace-nodistar.pdf");
+      }
+    }
+
     const { error } = await resend.emails.send({
-      from: "Nodi Star CRM <noreply@nodistar.cz>",
+      from,
       to: [to],
       subject,
       text: body,
       ...(replyTo ? { replyTo: [replyTo] } : {}),
+      ...(attachments.length > 0 ? { attachments } : {}),
     });
 
     if (error) {

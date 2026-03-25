@@ -34,35 +34,35 @@ async function main() {
     {
       id: "t1",
       label: "Prezentace",
-      subject: "Exkluzivní investiční příležitost – Build Fund",
-      body: "Vážený/á [OSLOVENÍ],\n\ndovolte, abych Vám představil/a investiční platformu Build Fund.\n\nNabízíme:\n• Roční výnos 8–14 % p.a.\n• Plná transparentnost a měsíční výpisy\n• Minimální vstup od 50 000 Kč\n\n[PODPIS]",
+      subject: "Představení společnosti – Nodi Star",
+      body: "Vážený/á [OSLOVENÍ],\n\nna základě našeho hovoru si Vám dovoluji zaslat prezentaci společnosti Nodi Star s.r.o.\n\nV příloze naleznete podrobné informace o naší společnosti a podmínkách spolupráce.\n\nV případě jakýchkoli dotazů mě neváhejte kontaktovat.\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",
     },
     {
       id: "t2",
       label: "Návrh smlouvy",
-      subject: "Investiční smlouva – Build Fund",
-      body: "Vážený/á [OSLOVENÍ],\n\nzasílám Vám investiční smlouvu k prostudování a podpisu.\n\n[PODPIS]",
+      subject: "Návrh smlouvy – Nodi Star",
+      body: "Vážený/á [OSLOVENÍ],\n\nzasílám Vám návrh smlouvy k prostudování.\n\nV případě připomínek se na mě neváhejte obrátit.\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",
     },
     {
       id: "t3",
       label: "Smlouva finální",
-      subject: "Finální investiční smlouva – Build Fund",
-      body: "Vážený/á [OSLOVENÍ],\n\nv příloze zasílám finální investiční smlouvu k podpisu.\n\nProsím o prostudování a zaslání podepsané verze zpět.\n\n[PODPIS]",
+      subject: "Smlouva – Nodi Star",
+      body: "Vážený/á [OSLOVENÍ],\n\nv příloze zasílám finální verzi smlouvy k podpisu.\n\nProsím o prostudování a zaslání podepsané verze zpět.\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR",
     },
     {
       id: "t4",
-      label: "Úrok – měsíční výpis",
-      subject: "Měsíční výpis výnosu – Build Fund",
-      body: "Vážený/á [OSLOVENÍ],\n\nzasílám měsíční přehled výnosu z Vaší investice.\n\nPřipsaný výnos: [CASTKA]\nCelkový vložený kapitál: [VKLAD]\n\n[PODPIS]",
+      label: "Měsíční výpis",
+      subject: "Měsíční výpis – Nodi Star",
+      body: "Vážený/á [OSLOVENÍ],\n\nzasílám měsíční přehled k Vaší smlouvě.\n\nPřipsaná částka: [CASTKA]\nCelková výše: [VKLAD]\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",
     },
     {
       id: "t5",
       label: "Follow-up",
-      subject: "Navazuji na náš hovor – Build Fund",
+      subject: "Navazuji na náš hovor – Nodi Star",
       body: "Vážený/á [OSLOVENÍ],\n\nnavazuji na náš nedávný hovor. Rád/a bych domluvil/a schůzku.\n\nKdy by Vám vyhovovalo?\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",
     },
@@ -71,7 +71,7 @@ async function main() {
   for (const t of templates) {
     await prisma.emailTemplate.upsert({
       where: { id: t.id },
-      update: {},
+      update: { label: t.label, subject: t.subject, body: t.body, allowedRoles: t.allowedRoles },
       create: t,
     });
   }

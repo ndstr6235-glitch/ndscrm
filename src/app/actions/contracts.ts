@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth";
 import { logAudit } from "./audit";
 import { Resend } from "resend";
 import { generateContractHTML } from "@/lib/contract-template";
+import { htmlToPdf } from "@/lib/html-to-pdf";
 import type { ContractData } from "@/lib/contract-template";
 
 export type { ContractData };
@@ -63,11 +64,31 @@ export async function sendContractEmail(
   }
 
   try {
+    // Generate PDF from contract HTML
+    let pdfBuffer: Buffer | null = null;
+    try {
+      pdfBuffer = await htmlToPdf(contractHtml);
+    } catch (pdfErr) {
+      console.error("PDF generation failed, sending without attachment:", pdfErr);
+    }
+
+    const safeName = clientName.replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+
     const { error } = await resend.emails.send({
-      from: "Nodi Star <noreply@nodistar.cz>",
+      from: "Nodi Star s.r.o. <noreply@nodistar.cz>",
       to: [to],
       subject: `Smlouva o zápůjčce – ${clientName}`,
       html: contractHtml,
+      ...(pdfBuffer
+        ? {
+            attachments: [
+              {
+                filename: `Smlouva-${safeName}.pdf`,
+                content: pdfBuffer,
+              },
+            ],
+          }
+        : {}),
     });
 
     if (error) {

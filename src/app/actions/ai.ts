@@ -19,7 +19,7 @@ export async function generateSalutation(clientName: string): Promise<{ result?:
   try {
     const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
     const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: `Jsi asistent pro české investiční CRM "Nodi Star". Vygeneruj krátké české oslovení pro klienta jménem "${clientName}". Jen oslovení, nic jiného. Například pro "Jan Novák" odpověz "pane Nováku", pro "Eva Svobodová" odpověz "paní Svobodová".` }] }],
+      contents: [{ role: "user", parts: [{ text: `Vygeneruj krátké české oslovení pro osobu jménem "${clientName}". Jen oslovení v 5. pádu, nic jiného. Například pro "Jan Novák" odpověz "pane Nováku", pro "Eva Svobodová" odpověz "paní Svobodová".` }] }],
       generationConfig: { temperature: 0.3, maxOutputTokens: 50 },
     });
     return { result: result.response.text().trim() };
@@ -48,20 +48,21 @@ export async function generateEmailDraft(context: {
   try {
     const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-    const prompt = `Jsi asistent pro české investiční CRM "Nodi Star". Pomáháš brokerům psát personalizované emaily klientům.
+    const prompt = `Pomáháš psát profesionální obchodní emaily v češtině pro firmu Nodi Star s.r.o.
 
-Pravidla:
-- Piš profesionálně ale přátelsky, v češtině
-- Používej vykání
-- Email by měl být stručný (max 150 slov)
+DŮLEŽITÉ PRAVIDLA:
+- Piš profesionálně ale přátelsky, v češtině, vykej
+- NIKDY nepoužívej slova jako "investice", "investiční", "výnos", "zhodnocení", "příležitost" ani žádné nabádání k investování
+- Email musí znít jako běžná obchodní korespondence, ne jako marketingový materiál
+- Stručně (max 150 slov)
 - Vrať JSON: {"salutation": "oslovení v 5. pádu", "body": "tělo emailu BEZ oslovení a podpisu"}
 
 Napiš email.
 Typ: ${context.templateLabel || "obecný"}
 Klient: ${context.clientName}
 ${context.clientNote ? `Poznámky: ${context.clientNote}` : ""}
-${context.totalDeposit ? `Vklad: ${context.totalDeposit.toLocaleString("cs-CZ")} Kč` : ""}
-${context.brokerName ? `Broker: ${context.brokerName}` : ""}
+${context.totalDeposit ? `Částka: ${context.totalDeposit.toLocaleString("cs-CZ")} Kč` : ""}
+${context.brokerName ? `Odesílatel: ${context.brokerName}` : ""}
 ${context.templateBody ? `Šablona (inspirace): ${context.templateBody.substring(0, 300)}` : ""}`;
 
     const result = await model.generateContent({

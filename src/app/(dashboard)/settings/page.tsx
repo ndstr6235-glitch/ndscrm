@@ -12,7 +12,7 @@ export default async function SettingsRoute() {
     redirect("/dashboard");
   }
 
-  const hasGroqKey = !!process.env.GROQ_API_KEY;
+  const hasGeminiKey = !!process.env.GEMINI_API_KEY;
 
   return (
     <div className="space-y-6">
@@ -34,11 +34,11 @@ export default async function SettingsRoute() {
           <div>
             <h2 className="text-base font-semibold text-text">AI Asistent</h2>
             <p className="text-xs text-text-dim">
-              Generování emailů, oslovení a návrhů pomocí Groq AI
+              Generování emailů, oslovení a návrhů pomocí Google Gemini
             </p>
           </div>
         </div>
-        <SettingsAIForm hasKey={hasGroqKey} />
+        <SettingsAIForm hasKey={hasGeminiKey} />
       </div>
 
       {/* Systém info */}

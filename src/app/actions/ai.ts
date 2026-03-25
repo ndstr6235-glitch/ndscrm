@@ -1,129 +1,100 @@
 "use server";
 
-import Groq from "groq-sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getSession } from "@/lib/auth";
 
-function getGroqClient(): Groq | null {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) return null;
-  return new Groq({ apiKey });
+function getGemini() {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) return null;
+  return new GoogleGenerativeAI(key);
 }
 
-interface AIEmailContext {
+export async function generateSalutation(clientName: string): Promise<{ result?: string; error?: string }> {
+  const session = await getSession();
+  if (!session) return { error: "Nepřihlášen" };
+
+  const ai = getGemini();
+  if (!ai) return { error: "AI není nakonfigurováno. Chybí GEMINI_API_KEY v env." };
+
+  try {
+    const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: `Jsi asistent pro české investiční CRM "Nodi Star". Vygeneruj krátké české oslovení pro klienta jménem "${clientName}". Jen oslovení, nic jiného. Například pro "Jan Novák" odpověz "pane Nováku", pro "Eva Svobodová" odpověz "paní Svobodová".` }] }],
+      generationConfig: { temperature: 0.3, maxOutputTokens: 50 },
+    });
+    return { result: result.response.text().trim() };
+  } catch {
+    return { error: "Nepodařilo se vygenerovat oslovení." };
+  }
+}
+
+export async function generateEmailDraft(context: {
   clientName: string;
   clientNote?: string;
   totalDeposit?: number;
   templateLabel?: string;
   templateBody?: string;
   brokerName?: string;
-}
-
-// Vygeneruj oslovení na základě jména klienta
-export async function generateSalutation(clientName: string): Promise<{ result?: string; error?: string }> {
-  const session = await getSession();
-  if (!session) return { error: "Nepřihlášen" };
-
-  const groq = getGroqClient();
-  if (!groq) return { error: "AI není nakonfigurováno. Chybí GROQ_API_KEY v env." };
-
-  try {
-    const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [
-        {
-          role: "system",
-          content: `Jsi asistent pro české investiční CRM. Vygeneruj vhodné oslovení pro klienta.
-Vrať POUZE oslovení (1-3 slova), nic jiného. Bez uvozovek.
-Příklady: "pane Nováku", "paní Dvořáková", "Petro", "vážený pane Černý"
-Použij český 5. pád (vokativ) pro příjmení.`,
-        },
-        { role: "user", content: `Klient: ${clientName}` },
-      ],
-      max_tokens: 30,
-      temperature: 0.3,
-    });
-
-    return { result: response.choices[0]?.message?.content?.trim() ?? "" };
-  } catch {
-    return { error: "Nepodařilo se vygenerovat oslovení." };
-  }
-}
-
-// Vygeneruj návrh emailu
-export async function generateEmailDraft(context: AIEmailContext): Promise<{
+}): Promise<{
   result?: { salutation: string; body: string };
   error?: string;
 }> {
   const session = await getSession();
   if (!session) return { error: "Nepřihlášen" };
 
-  const groq = getGroqClient();
-  if (!groq) return { error: "AI není nakonfigurováno. Chybí GROQ_API_KEY v env." };
+  const ai = getGemini();
+  if (!ai) return { error: "AI není nakonfigurováno. Chybí GEMINI_API_KEY v env." };
 
   try {
-    const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [
-        {
-          role: "system",
-          content: `Jsi asistent pro české investiční CRM "Nodi Star". Pomáháš brokerům psát personalizované emaily klientům.
+    const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+    const prompt = `Jsi asistent pro české investiční CRM "Nodi Star". Pomáháš brokerům psát personalizované emaily klientům.
 
 Pravidla:
 - Piš profesionálně ale přátelsky, v češtině
 - Používej vykání
 - Email by měl být stručný (max 150 slov)
-- Vrať JSON: {"salutation": "oslovení v 5. pádu", "body": "tělo emailu BEZ oslovení a podpisu"}`,
-        },
-        {
-          role: "user",
-          content: `Napiš email.
+- Vrať JSON: {"salutation": "oslovení v 5. pádu", "body": "tělo emailu BEZ oslovení a podpisu"}
+
+Napiš email.
 Typ: ${context.templateLabel || "obecný"}
 Klient: ${context.clientName}
 ${context.clientNote ? `Poznámky: ${context.clientNote}` : ""}
 ${context.totalDeposit ? `Vklad: ${context.totalDeposit.toLocaleString("cs-CZ")} Kč` : ""}
 ${context.brokerName ? `Broker: ${context.brokerName}` : ""}
-${context.templateBody ? `Šablona (inspirace): ${context.templateBody.substring(0, 300)}` : ""}`,
-        },
-      ],
-      max_tokens: 500,
-      temperature: 0.7,
-      response_format: { type: "json_object" },
+${context.templateBody ? `Šablona (inspirace): ${context.templateBody.substring(0, 300)}` : ""}`;
+
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 500 },
     });
 
-    const content = response.choices[0]?.message?.content;
-    if (!content) return { error: "Prázdná odpověď od AI." };
-
-    const parsed = JSON.parse(content);
-    return { result: { salutation: parsed.salutation || "", body: parsed.body || "" } };
+    const content = result.response.text().trim();
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      return { result: { salutation: parsed.salutation || "", body: parsed.body || "" } };
+    }
+    return { error: "Prázdná odpověď od AI." };
   } catch {
     return { error: "Nepodařilo se vygenerovat email." };
   }
 }
 
-// Vylepši existující text emailu
 export async function improveEmailText(text: string): Promise<{ result?: string; error?: string }> {
   const session = await getSession();
   if (!session) return { error: "Nepřihlášen" };
 
-  const groq = getGroqClient();
-  if (!groq) return { error: "AI není nakonfigurováno." };
+  const ai = getGemini();
+  if (!ai) return { error: "AI není nakonfigurováno." };
 
   try {
-    const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [
-        {
-          role: "system",
-          content: `Vylepši český obchodní email — oprav gramatiku, zlepši styl, udělej profesionálnější.
-Zachovej smysl a délku. Vrať POUZE vylepšený text.`,
-        },
-        { role: "user", content: text },
-      ],
-      max_tokens: 500,
-      temperature: 0.5,
+    const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: `Vylepši následující český email — oprav gramatiku, zlepši formulace, zachovej význam a délku. Vrať POUZE vylepšený text, nic jiného:\n\n${text}` }] }],
+      generationConfig: { temperature: 0.5, maxOutputTokens: 500 },
     });
-
-    return { result: response.choices[0]?.message?.content?.trim() ?? text };
+    return { result: result.response.text().trim() };
   } catch {
     return { error: "Nepodařilo se vylepšit text." };
   }

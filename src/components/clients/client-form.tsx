@@ -171,45 +171,48 @@ export default function ClientForm({
           />
         </div>
 
-        {/* Dates */}
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-xs font-medium text-text-mid mb-1">
-              Datum hovoru
-            </label>
-            <input
-              type="date"
-              value={callDate}
-              onChange={(e) => setCallDate(e.target.value)}
-              className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-text-mid mb-1">
-              Příští platba
-            </label>
-            <input
-              type="date"
-              value={nextPaymentDate}
-              onChange={(e) => setNextPaymentDate(e.target.value)}
-              className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
-            />
-          </div>
-        </div>
+        {/* Dates & Freq — only show when editing */}
+        {isEdit && (
+          <>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-text-mid mb-1">
+                  Datum hovoru
+                </label>
+                <input
+                  type="date"
+                  value={callDate}
+                  onChange={(e) => setCallDate(e.target.value)}
+                  className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-text-mid mb-1">
+                  Příští platba
+                </label>
+                <input
+                  type="date"
+                  value={nextPaymentDate}
+                  onChange={(e) => setNextPaymentDate(e.target.value)}
+                  className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
+                />
+              </div>
+            </div>
 
-        {/* Freq */}
-        <div>
-          <label className="block text-xs font-medium text-text-mid mb-1">
-            Frekvence plateb (dny)
-          </label>
-          <input
-            type="number"
-            min={1}
-            value={paymentFreq}
-            onChange={(e) => setPaymentFreq(parseInt(e.target.value) || 30)}
-            className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
-          />
-        </div>
+            <div>
+              <label className="block text-xs font-medium text-text-mid mb-1">
+                Frekvence plateb (dny)
+              </label>
+              <input
+                type="number"
+                min={1}
+                value={paymentFreq}
+                onChange={(e) => setPaymentFreq(parseInt(e.target.value) || 30)}
+                className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
+              />
+            </div>
+          </>
+        )}
 
         {/* Stage */}
         {isEdit && (

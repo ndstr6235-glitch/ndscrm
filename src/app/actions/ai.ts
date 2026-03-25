@@ -1,16 +1,12 @@
 "use server";
 
-import OpenAI from "openai";
+import Groq from "groq-sdk";
 import { getSession } from "@/lib/auth";
-import { prisma } from "@/lib/db";
 
-// Načte OpenAI API klíč z DB (admin ho nastaví v Settings)
-async function getOpenAIClient(): Promise<OpenAI | null> {
-  const setting = await prisma.systemSetting.findUnique({
-    where: { key: "openai_api_key" },
-  });
-  if (!setting?.value) return null;
-  return new OpenAI({ apiKey: setting.value });
+function getGroqClient(): Groq | null {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) return null;
+  return new Groq({ apiKey });
 }
 
 interface AIEmailContext {
@@ -27,12 +23,12 @@ export async function generateSalutation(clientName: string): Promise<{ result?:
   const session = await getSession();
   if (!session) return { error: "Nepřihlášen" };
 
-  const openai = await getOpenAIClient();
-  if (!openai) return { error: "AI není nakonfigurováno. Admin musí nastavit OpenAI API klíč v Nastavení." };
+  const groq = getGroqClient();
+  if (!groq) return { error: "AI není nakonfigurováno. Chybí GROQ_API_KEY v env." };
 
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+    const response = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
       messages: [
         {
           role: "system",
@@ -61,12 +57,12 @@ export async function generateEmailDraft(context: AIEmailContext): Promise<{
   const session = await getSession();
   if (!session) return { error: "Nepřihlášen" };
 
-  const openai = await getOpenAIClient();
-  if (!openai) return { error: "AI není nakonfigurováno. Admin musí nastavit OpenAI API klíč v Nastavení." };
+  const groq = getGroqClient();
+  if (!groq) return { error: "AI není nakonfigurováno. Chybí GROQ_API_KEY v env." };
 
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+    const response = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
       messages: [
         {
           role: "system",
@@ -109,12 +105,12 @@ export async function improveEmailText(text: string): Promise<{ result?: string;
   const session = await getSession();
   if (!session) return { error: "Nepřihlášen" };
 
-  const openai = await getOpenAIClient();
-  if (!openai) return { error: "AI není nakonfigurováno." };
+  const groq = getGroqClient();
+  if (!groq) return { error: "AI není nakonfigurováno." };
 
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+    const response = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
       messages: [
         {
           role: "system",

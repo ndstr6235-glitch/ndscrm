@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo, useTransition } from "react";
-import { X, Send, Mail, Pencil, AlertTriangle, FileText, Sparkles, Loader2, Wand2 } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { X, Send, Mail, AlertTriangle, FileText, Sparkles, Loader2, Wand2 } from "lucide-react";
 import { generateSalutation, generateEmailDraft, improveEmailText } from "@/app/actions/ai";
 import { cn, fmtCZK } from "@/lib/utils";
-import { getCurrentUserSignature, updateSignature, sendEmail } from "@/app/actions/emails";
+import { sendEmail } from "@/app/actions/emails";
 import { useToast } from "@/components/ui/toast";
 import type { Role } from "@/lib/types";
 
@@ -44,6 +44,38 @@ const FREQUENCY_OPTIONS = [
   { value: "quarterly", label: "čtvrtletně" },
 ];
 
+// Pre-defined team member signatures
+const TEAM_SIGNATURES = [
+  {
+    id: "fencl",
+    name: "Miroslav Fencl",
+    role: "Zakladatel & jednatel",
+    email: "fencl@nodistar.cz",
+    phone: "",
+  },
+  {
+    id: "novak",
+    name: "Jan Novák",
+    role: "Obchodní ředitel",
+    email: "novak@nodistar.cz",
+    phone: "+420 728 722 924",
+  },
+  {
+    id: "svoboda",
+    name: "Petr Svoboda",
+    role: "Provozní ředitel",
+    email: "svoboda@nodistar.cz",
+    phone: "+420 728 733 093",
+  },
+  {
+    id: "sojkova",
+    name: "Lucie Sojková",
+    role: "Finanční manažerka",
+    email: "sojkova@nodistar.cz",
+    phone: "+420 728 739 389",
+  },
+];
+
 export default function EmailComposer({
   open,
   onClose,
@@ -69,9 +101,8 @@ export default function EmailComposer({
   );
   const [salutation, setSalutation] = useState("");
   const [signature, setSignature] = useState("");
-  const [editingSignature, setEditingSignature] = useState(false);
+  const [selectedSignatureId, setSelectedSignatureId] = useState<string | null>(null);
   const [bodyOverride, setBodyOverride] = useState("");
-  const [loadedSignature, setLoadedSignature] = useState(false);
   const [sending, setSending] = useState(false);
 
   // Editable recipient email address
@@ -87,15 +118,25 @@ export default function EmailComposer({
   const [startDate, setStartDate] = useState("");
   const [payoutFrequency, setPayoutFrequency] = useState("monthly");
 
-  // Load signature on open
-  useEffect(() => {
-    if (open && !loadedSignature) {
-      getCurrentUserSignature().then((sig) => {
-        setSignature(sig);
-        setLoadedSignature(true);
-      });
+  // Helper to build a signature string from a team member
+  function buildTeamSignature(member: typeof TEAM_SIGNATURES[number]) {
+    const lines = ["S pozdravem,", "", member.name, member.role, "Nodi Star s.r.o.", member.email];
+    if (member.phone) lines.push(member.phone);
+    lines.push("www.nodistar.cz");
+    return lines.join("\n");
+  }
+
+  // When a team member pill is selected, auto-generate signature
+  function handleSelectSignature(id: string) {
+    if (id === selectedSignatureId) return;
+    setSelectedSignatureId(id);
+    if (id === "custom") {
+      setSignature("");
+    } else {
+      const member = TEAM_SIGNATURES.find((m) => m.id === id);
+      if (member) setSignature(buildTeamSignature(member));
     }
-  }, [open, loadedSignature]);
+  }
 
   // Reset when template or open changes
   /* eslint-disable react-hooks/set-state-in-effect -- intentional form reset on open */
@@ -104,7 +145,8 @@ export default function EmailComposer({
       setSelectedTemplateId(initialTemplateId || allowedTemplates[0]?.id || "");
       setSalutation("");
       setBodyOverride("");
-      setLoadedSignature(false);
+      setSignature("");
+      setSelectedSignatureId(null);
       setRecipientEmail(clientEmail);
       setSubjectOverride("");
       setInvestmentAmount("");
@@ -180,16 +222,6 @@ export default function EmailComposer({
       .replace(/\[DOBA\]/g, durationLabel)
       .replace(/\[FREKVENCE\]/g, frequencyLabel);
   }, [selectedTemplate, bodyOverride, salutation, signature, totalDeposit, investmentAmount, interestRate, calculatedPayout, durationLabel, frequencyLabel]);
-
-  async function handleSaveSignature() {
-    const result = await updateSignature(signature);
-    setEditingSignature(false);
-    if (result.success) {
-      toast("Podpis uložen");
-    } else {
-      toast("Nepodařilo se uložit podpis", "error");
-    }
-  }
 
   async function handleSendEmail() {
     if (!selectedTemplate || !recipientEmail) return;
@@ -566,41 +598,49 @@ export default function EmailComposer({
             />
           </div>
 
-          {/* Signature — blue frame */}
-          <div className="rounded-[10px] border-2 border-sapphire-border bg-sapphire-pale p-3">
-            <div className="flex items-center justify-between mb-1">
-              <label className="text-xs font-medium text-sapphire">
-                Podpis
-              </label>
-              {editingSignature ? (
+          {/* Signature — blue frame with team member selector */}
+          <div className="rounded-[10px] border-2 border-sapphire-border bg-sapphire-pale p-3 space-y-2">
+            <label className="block text-xs font-medium text-sapphire">
+              Podpis
+            </label>
+            {/* Signature pills — horizontal scroll */}
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {TEAM_SIGNATURES.map((member) => (
                 <button
-                  onClick={handleSaveSignature}
-                  className="text-xs text-sapphire font-medium hover:underline"
+                  key={member.id}
+                  type="button"
+                  onClick={() => handleSelectSignature(member.id)}
+                  className={cn(
+                    "px-3 py-2 min-h-[36px] rounded-full text-xs font-medium whitespace-nowrap transition-colors shrink-0",
+                    selectedSignatureId === member.id
+                      ? "bg-sapphire text-white"
+                      : "bg-sapphire/10 text-sapphire hover:bg-sapphire/20"
+                  )}
                 >
-                  Uložit
+                  {member.name.split(" ")[1] || member.name}
                 </button>
-              ) : (
-                <button
-                  onClick={() => setEditingSignature(true)}
-                  className="flex items-center gap-1 text-xs text-sapphire/70 hover:text-sapphire"
-                >
-                  <Pencil size={10} />
-                  Upravit
-                </button>
-              )}
+              ))}
+              <button
+                type="button"
+                onClick={() => handleSelectSignature("custom")}
+                className={cn(
+                  "px-3 py-2 min-h-[36px] rounded-full text-xs font-medium whitespace-nowrap transition-colors shrink-0",
+                  selectedSignatureId === "custom"
+                    ? "bg-sapphire text-white"
+                    : "bg-sapphire/10 text-sapphire hover:bg-sapphire/20"
+                )}
+              >
+                Vlastní
+              </button>
             </div>
-            {editingSignature ? (
-              <textarea
-                value={signature}
-                onChange={(e) => setSignature(e.target.value)}
-                rows={4}
-                className="w-full px-3 py-2 rounded-[8px] border border-sapphire-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-sapphire/30 transition resize-none"
-              />
-            ) : (
-              <p className="text-sm text-text whitespace-pre-line">
-                {signature || "Žádný podpis"}
-              </p>
-            )}
+            {/* Signature textarea — editable after selecting */}
+            <textarea
+              value={signature}
+              onChange={(e) => setSignature(e.target.value)}
+              rows={4}
+              placeholder={selectedSignatureId ? "Napište vlastní podpis…" : "Vyberte podpis…"}
+              className="w-full px-3 py-2 rounded-[8px] border border-sapphire-border bg-surface text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-sapphire/30 transition resize-none"
+            />
           </div>
         </div>
 

@@ -1,8 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import { Settings, Shield, ChevronRight, Bot, Key } from "lucide-react";
+import { Settings, Shield, ChevronRight, Bot } from "lucide-react";
 import Link from "next/link";
-import { getSystemSettings } from "@/app/actions/settings";
 import { SettingsAIForm } from "./settings-ai-form";
 
 export default async function SettingsRoute() {
@@ -13,7 +12,7 @@ export default async function SettingsRoute() {
     redirect("/dashboard");
   }
 
-  const settings = await getSystemSettings();
+  const hasGroqKey = !!process.env.GROQ_API_KEY;
 
   return (
     <div className="space-y-6">
@@ -35,11 +34,11 @@ export default async function SettingsRoute() {
           <div>
             <h2 className="text-base font-semibold text-text">AI Asistent</h2>
             <p className="text-xs text-text-dim">
-              Generování emailů, oslovení a návrhů pomocí ChatGPT
+              Generování emailů, oslovení a návrhů pomocí Groq AI
             </p>
           </div>
         </div>
-        <SettingsAIForm currentKey={settings.openai_api_key || ""} />
+        <SettingsAIForm hasKey={hasGroqKey} />
       </div>
 
       {/* Systém info */}

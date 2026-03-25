@@ -84,16 +84,28 @@ export async function getEmailPageData(): Promise<EmailPageData | null> {
   };
 }
 
-export async function getCurrentUserSignature(): Promise<string> {
+export interface SignatureData {
+  signature: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export async function getCurrentUserSignature(): Promise<SignatureData> {
   const session = await getSession();
-  if (!session) return "";
+  if (!session) return { signature: "", firstName: "", lastName: "", email: "" };
 
   const user = await prisma.user.findUnique({
     where: { id: session.id },
-    select: { signature: true },
+    select: { signature: true, firstName: true, lastName: true, email: true },
   });
 
-  return user?.signature || "";
+  return {
+    signature: user?.signature || "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+  };
 }
 
 // Aliases used by email-composer.tsx

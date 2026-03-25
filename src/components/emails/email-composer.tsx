@@ -151,7 +151,7 @@ export default function EmailComposer({
       .replace(/\[PODPIS\]/g, signature || "[PODPIS]")
       .replace(/\[VKLAD\]/g, fmtCZK(effectiveAmount))
       .replace(/\[ČÁSTKA\]/g, calculatedPayout > 0 ? fmtCZK(calculatedPayout) : "–")
-      .replace(/\[ÚROK\]/g, interestRate ? `${interestRate} %` : "[ÚROK]")
+      .replace(/\[ÚROK\]/g, interestRate ? `${interestRate} %` : "–")
       .replace(/\[DOBA\]/g, durationLabel)
       .replace(/\[FREKVENCE\]/g, frequencyLabel);
   }, [selectedTemplate, bodyOverride, salutation, signature, totalDeposit, investmentAmount, interestRate, calculatedPayout, durationLabel, frequencyLabel]);
@@ -576,7 +576,7 @@ export default function EmailComposer({
         <div className="border-t border-border px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] shrink-0 space-y-2">
           <button
             onClick={handleSendEmail}
-            disabled={!recipientEmail || sending}
+            disabled={!recipientEmail || !selectedTemplate || sending}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-[10px] bg-gradient-to-r from-gold to-gold-light text-white text-sm font-semibold shadow-md hover:shadow-lg transition-shadow disabled:opacity-50"
           >
             {sending ? (
@@ -588,7 +588,7 @@ export default function EmailComposer({
           </button>
           <button
             onClick={handleSendMailto}
-            disabled={!recipientEmail}
+            disabled={!recipientEmail || !selectedTemplate}
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-[10px] border border-border text-text-mid text-sm font-medium hover:bg-surface-hover transition-colors disabled:opacity-50"
           >
             <Mail size={16} />

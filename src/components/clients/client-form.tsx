@@ -117,7 +117,7 @@ export default function ClientForm({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name row */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-medium text-text-mid mb-1">
               Jméno *
@@ -174,7 +174,7 @@ export default function ClientForm({
         {/* Dates & Freq — only show when editing */}
         {isEdit && (
           <>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-medium text-text-mid mb-1">
                   Datum hovoru

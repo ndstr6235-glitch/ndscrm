@@ -222,7 +222,7 @@ export default function ContractGenerator({ userRole }: ContractGeneratorProps) 
             </div>
 
             {/* Amount row */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <label className={LABEL_CLASS}>Výše zápůjčky (Kč) *</label>
                 <input
@@ -342,8 +342,8 @@ export default function ContractGenerator({ userRole }: ContractGeneratorProps) 
                 ref={updateIframe}
                 onLoad={iframeOnLoad}
                 title="Contract preview"
-                className="w-full bg-white rounded-[8px] shadow-md"
-                style={{ height: "800px", border: "none" }}
+                className="w-full h-[400px] md:h-[600px] lg:h-[800px] bg-white rounded-[8px] shadow-md"
+                style={{ border: "none" }}
               />
             </div>
           </div>

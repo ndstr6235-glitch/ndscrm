@@ -332,8 +332,8 @@ export default function EmailComposer({
 
           {/* To (editable) + Subject */}
           <div className="bg-surface-hover rounded-[10px] p-3 space-y-2">
-            <div className="flex items-center gap-2 text-sm">
-              <label htmlFor="recipient-email" className="text-text-dim w-16 shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-sm">
+              <label htmlFor="recipient-email" className="text-text-dim sm:w-16 shrink-0">
                 Komu:
               </label>
               <input
@@ -359,8 +359,8 @@ export default function EmailComposer({
                 </button>
               </div>
             )}
-            <div className="flex items-center gap-2 text-sm">
-              <label htmlFor="subject-input" className="text-text-dim w-16 shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-sm">
+              <label htmlFor="subject-input" className="text-text-dim sm:w-16 shrink-0">
                 Předmět:
               </label>
               <input
@@ -604,7 +604,7 @@ export default function EmailComposer({
               Podpis
             </label>
             {/* Signature pills — horizontal scroll */}
-            <div className="flex gap-2 overflow-x-auto pb-1">
+            <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
               {TEAM_SIGNATURES.map((member) => (
                 <button
                   key={member.id}

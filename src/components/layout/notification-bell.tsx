@@ -201,8 +201,8 @@ export default function NotificationBell({ variant, collapsed }: Props) {
           className={cn(
             "absolute z-[80] bg-surface border border-border rounded-[12px] shadow-lg overflow-hidden",
             variant === "sidebar"
-              ? "left-full top-0 ml-2 w-[360px]"
-              : "right-0 top-full mt-2 w-[360px]"
+              ? "left-full top-0 ml-2 w-[calc(100vw-2rem)] sm:w-[360px]"
+              : "right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-[360px]"
           )}
         >
           <div className="flex items-center justify-between px-4 py-3 border-b border-border">

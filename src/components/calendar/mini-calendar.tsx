@@ -72,7 +72,7 @@ export default function MiniCalendar({
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={prevMonth}
-          className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-[8px] text-text-dim hover:text-text hover:bg-surface-hover transition-colors"
+          className="w-11 h-11 sm:w-8 sm:h-8 min-h-[44px] sm:min-h-0 flex items-center justify-center rounded-[8px] text-text-dim hover:text-text hover:bg-surface-hover transition-colors"
         >
           <ChevronLeft size={16} />
         </button>
@@ -81,7 +81,7 @@ export default function MiniCalendar({
         </span>
         <button
           onClick={nextMonth}
-          className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-[8px] text-text-dim hover:text-text hover:bg-surface-hover transition-colors"
+          className="w-11 h-11 sm:w-8 sm:h-8 min-h-[44px] sm:min-h-0 flex items-center justify-center rounded-[8px] text-text-dim hover:text-text hover:bg-surface-hover transition-colors"
         >
           <ChevronRight size={16} />
         </button>

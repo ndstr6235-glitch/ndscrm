@@ -43,7 +43,7 @@ export default function DrawerHeader({ client, onClose }: DrawerHeaderProps) {
         </div>
         <button
           onClick={onClose}
-          className="w-10 h-10 flex items-center justify-center rounded-[8px] text-white/40 hover:text-white hover:bg-white/10 transition-colors shrink-0"
+          className="w-11 h-11 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-[8px] text-white/40 hover:text-white hover:bg-white/10 transition-colors shrink-0"
           aria-label="Zavřít"
         >
           <X size={18} />

@@ -18,7 +18,7 @@ export default function DrawerTabOverview({
   return (
     <div className="p-4 md:p-6 space-y-5">
       {/* Contact grid */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <InfoCard
           icon={<Phone size={14} className="text-text-dim" />}
           label="Telefon"

@@ -128,6 +128,7 @@ export default function ClientDrawer({
         className={cn(
           "absolute right-0 top-0 bottom-0 bg-surface flex flex-col shadow-lg overflow-hidden",
           "w-full md:w-[min(540px,95vw)] lg:w-[min(640px,95vw)]",
+          "pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
           isClosing ? "animate-drawer-out" : "animate-drawer-in"
         )}
         style={

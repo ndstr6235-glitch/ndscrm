@@ -311,7 +311,7 @@ export default function MyDay({ tasks: initialTasks, followUps, isCompanyView }:
             <textarea
               value={noteText}
               onChange={(e) => setNoteText(e.target.value)}
-              placeholder="Kratka poznamka (nepovinne)..."
+              placeholder="Krátká poznámka (nepovinné)..."
               className="w-full px-3 py-2.5 rounded-[10px] border border-border bg-surface-hover text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/40 resize-none transition-colors"
               rows={3}
               autoFocus
@@ -321,14 +321,14 @@ export default function MyDay({ tasks: initialTasks, followUps, isCompanyView }:
                 onClick={skipNote}
                 className="flex-1 px-4 py-2.5 min-h-[44px] rounded-[10px] border border-border text-sm font-medium text-text-mid hover:bg-surface-hover transition-colors"
               >
-                Preskocit
+                Přeskočit
               </button>
               <button
                 onClick={submitNote}
                 className="flex-1 px-4 py-2.5 min-h-[44px] rounded-[10px] bg-gold text-white text-sm font-medium hover:bg-gold-light transition-colors"
                 disabled={isPending}
               >
-                Ulozit
+                Uložit
               </button>
             </div>
           </div>

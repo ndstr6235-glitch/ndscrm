@@ -66,7 +66,7 @@ export default function DrawerTabDocuments({ clientId }: Props) {
 
       const result = await uploadDocument(formData);
       if (!result.success) {
-        toast(result.error || "Chyba pri nahravani", "error");
+        toast(result.error || "Chyba při nahrávání", "error");
         hasError = true;
       }
     }
@@ -75,7 +75,7 @@ export default function DrawerTabDocuments({ clientId }: Props) {
     const updated = await getClientDocuments(clientId);
     setDocs(updated);
     setUploading(false);
-    if (!hasError) toast("Dokument nahran");
+    if (!hasError) toast("Dokument nahrán");
   }
 
   async function handleDelete() {
@@ -83,7 +83,7 @@ export default function DrawerTabDocuments({ clientId }: Props) {
     const result = await deleteDocument(deleteId);
     if (result.success) {
       setDocs((prev) => prev.filter((d) => d.id !== deleteId));
-      toast("Dokument smazan");
+      toast("Dokument smazán");
     } else {
       toast(result.error || "Chyba", "error");
     }
@@ -140,7 +140,7 @@ export default function DrawerTabDocuments({ clientId }: Props) {
       {docs.length === 0 ? (
         <div className="text-center py-8">
           <FileText size={32} className="mx-auto text-text-faint mb-2" />
-          <p className="text-sm text-text-dim">Zadne dokumenty</p>
+          <p className="text-sm text-text-dim">Žádné dokumenty</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -207,7 +207,7 @@ export default function DrawerTabDocuments({ clientId }: Props) {
       <ConfirmDialog
         open={!!deleteId}
         title="Smazat dokument?"
-        message="Tato akce je nevratna."
+        message="Tato akce je nevratná."
         onConfirm={handleDelete}
         onCancel={() => setDeleteId(null)}
       />

@@ -71,22 +71,22 @@ export async function uploadDocument(
   formData: FormData
 ): Promise<{ success: boolean; error?: string }> {
   const session = await checkAdminOrSupervisor();
-  if (!session) return { success: false, error: "Nemate opravneni" };
+  if (!session) return { success: false, error: "Nemáte oprávnění" };
 
   const file = formData.get("file") as File | null;
   const clientId = formData.get("clientId") as string | null;
   const name = formData.get("name") as string | null;
 
   if (!file || !clientId) {
-    return { success: false, error: "Chybi soubor nebo klient" };
+    return { success: false, error: "Chybí soubor nebo klient" };
   }
 
   if (file.size > MAX_SIZE) {
-    return { success: false, error: "Soubor je prilis velky (max 10MB)" };
+    return { success: false, error: "Soubor je příliš velký (max 10MB)" };
   }
 
   if (!ALLOWED_TYPES.includes(file.type)) {
-    return { success: false, error: "Nepodporovany typ souboru (PDF, DOC, DOCX, JPG, PNG)" };
+    return { success: false, error: "Nepodporovaný typ souboru (PDF, DOC, DOCX, JPG, PNG)" };
   }
 
   const ext = file.name.split(".").pop() || "bin";
@@ -121,7 +121,7 @@ export async function deleteDocument(
   documentId: string
 ): Promise<{ success: boolean; error?: string }> {
   const session = await checkAdminOrSupervisor();
-  if (!session) return { success: false, error: "Nemate opravneni" };
+  if (!session) return { success: false, error: "Nemáte oprávnění" };
 
   const doc = await prisma.document.findUnique({ where: { id: documentId } });
   if (!doc) return { success: false, error: "Dokument nenalezen" };

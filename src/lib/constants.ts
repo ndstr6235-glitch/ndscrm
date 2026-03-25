@@ -101,9 +101,9 @@ export const PIPELINE_STAGES: {
   color: string;
   pale: string;
 }[] = [
-  { key: "NEW", label: "Novy", color: "#8892aa", pale: "#f0f2f7" },
-  { key: "CONTACTED", label: "Kontaktovan", color: "#2d6be4", pale: "#eef3fd" },
-  { key: "NEGOTIATION", label: "Jednani", color: "#d97a1a", pale: "#fef5ec" },
+  { key: "NEW", label: "Nový", color: "#8892aa", pale: "#f0f2f7" },
+  { key: "CONTACTED", label: "Kontaktován", color: "#2d6be4", pale: "#eef3fd" },
+  { key: "NEGOTIATION", label: "Jednání", color: "#d97a1a", pale: "#fef5ec" },
   { key: "INVESTOR", label: "Investor", color: "#1a9e6a", pale: "#edfaf4" },
   { key: "VIP", label: "VIP", color: "#b8912a", pale: "#fef9ec" },
 ];
@@ -167,7 +167,7 @@ export const DEFAULT_TEMPLATES: EmailTemplate[] = [
     id: "t4",
     label: "Úrok – měsíční výpis",
     subject: "Měsíční výpis výnosu – Build Fund",
-    body: "Vážený/á [OSLOVENÍ],\n\nzasílám měsíční přehled výnosu z Vaší investice.\n\nPřipsaný výnos: [CASTKA]\nCelkový vložený kapitál: [VKLAD]\n\n[PODPIS]",
+    body: "Vážený/á [OSLOVENÍ],\n\nzasílám měsíční přehled výnosu z Vaší investice.\n\nPřipsaný výnos: [ČÁSTKA]\nCelkový vložený kapitál: [VKLAD]\n\n[PODPIS]",
     allowedRoles: ["administrator", "supervisor", "broker"],
   },
   {

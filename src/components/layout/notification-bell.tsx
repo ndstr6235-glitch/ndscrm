@@ -240,7 +240,7 @@ function NotificationList({
     return (
       <div className="flex flex-col items-center justify-center py-12 text-text-faint">
         <Bell size={32} className="mb-2" />
-        <p className="text-sm">Zadne nove notifikace</p>
+        <p className="text-sm">Žádné nové notifikace</p>
       </div>
     );
   }

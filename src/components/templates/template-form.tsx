@@ -145,7 +145,7 @@ export default function TemplateForm({
             Tělo šablony *
           </label>
           <p className="text-[10px] text-text-faint mb-1">
-            Proměnné: [OSLOVENÍ], [PODPIS], [VKLAD], [CASTKA]
+            Proměnné: [OSLOVENÍ], [PODPIS], [VKLAD], [ČÁSTKA]
           </p>
           <textarea
             value={body}

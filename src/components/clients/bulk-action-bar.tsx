@@ -52,7 +52,7 @@ export default function BulkActionBar({
     if (result.error) {
       toast(result.error, "error");
     } else {
-      toast(`${result.count} klientu prirazeno`);
+      toast(`${result.count} klientů přiřazeno`);
       onDone();
     }
   }
@@ -65,7 +65,7 @@ export default function BulkActionBar({
     if (result.error) {
       toast(result.error, "error");
     } else {
-      toast(`Stage zmenen u ${result.count} klientu`);
+      toast(`Stage změněn u ${result.count} klientů`);
       onDone();
     }
   }
@@ -86,7 +86,7 @@ export default function BulkActionBar({
       a.download = `klienti-export-${new Date().toISOString().split("T")[0]}.csv`;
       a.click();
       URL.revokeObjectURL(url);
-      toast("CSV exportovano");
+      toast("CSV exportováno");
     }
   }
 
@@ -98,7 +98,7 @@ export default function BulkActionBar({
     if (result.error) {
       toast(result.error, "error");
     } else {
-      toast(`${result.count} klientu smazano`);
+      toast(`${result.count} klientů smazáno`);
       onDone();
     }
   }
@@ -116,7 +116,7 @@ export default function BulkActionBar({
           <div className="flex items-center gap-2 shrink-0">
             <span className="text-sm font-semibold">
               Vybrano {count}{" "}
-              {count === 1 ? "klient" : count < 5 ? "klienti" : "klientu"}
+              {count === 1 ? "klient" : count < 5 ? "klienti" : "klientů"}
             </span>
             <button
               onClick={onClear}
@@ -231,8 +231,8 @@ export default function BulkActionBar({
         open={showDeleteConfirm}
         onConfirm={handleDelete}
         onCancel={() => setShowDeleteConfirm(false)}
-        title={`Smazat ${count} klientu?`}
-        message="Tato akce je nevratna. Vsichni vybrani klienti a jejich data budou smazani."
+        title={`Smazat ${count} klientů?`}
+        message="Tato akce je nevratná. Všichni vybraní klienti a jejich data budou smazáni."
         confirmLabel="Smazat"
         destructive
       />

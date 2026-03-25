@@ -99,8 +99,8 @@ async function generateAutoNotifications(userId: string) {
       data: {
         userId,
         type: "payment_due",
-        title: isToday ? "Platba dnes splatna" : "Platba zitra splatna",
-        message: `${client.firstName} ${client.lastName} — splatnost ${isToday ? "dnes" : "zitra"}`,
+        title: isToday ? "Platba dnes splatná" : "Platba zítra splatná",
+        message: `${client.firstName} ${client.lastName} — splatnost ${isToday ? "dnes" : "zítra"}`,
         link: `/clients?open=${client.id}`,
       },
     });
@@ -126,7 +126,7 @@ async function generateAutoNotifications(userId: string) {
       data: {
         userId,
         type: "call_today",
-        title: "Hovor naplanovany na dnes",
+        title: "Hovor naplánovaný na dnes",
         message: `${clientName} v ${event.time}`,
         link: `/calendar`,
       },
@@ -153,7 +153,7 @@ async function generateAutoNotifications(userId: string) {
       data: {
         userId,
         type: "reminder",
-        title: "Pripominka",
+        title: "Připomínka",
         message: `${clientName} — ${event.title}`,
         link: `/calendar`,
       },
@@ -184,8 +184,8 @@ export async function createAssignmentNotification(
     data: {
       userId: brokerId,
       type: "client_assigned",
-      title: "Novy klient prirazen",
-      message: `${clientName} vam byl prirazen`,
+      title: "Nový klient přiřazen",
+      message: `${clientName} vám byl přiřazen`,
       link: `/clients?open=${clientId}`,
     },
   });

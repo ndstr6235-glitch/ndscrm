@@ -360,13 +360,13 @@ export async function updateClientStage(
   stage: string
 ): Promise<{ success: boolean; error?: string }> {
   const session = await getSession();
-  if (!session) return { success: false, error: "Neprihlesen" };
+  if (!session) return { success: false, error: "Nepřihlášen" };
 
   const existing = await prisma.client.findUnique({ where: { id: clientId } });
   if (!existing) return { success: false, error: "Klient nenalezen" };
 
   if (session.role === "broker" && existing.assignedTo !== session.id) {
-    return { success: false, error: "Nemate opravneni" };
+    return { success: false, error: "Nemáte oprávnění" };
   }
 
   await prisma.client.update({
@@ -374,7 +374,7 @@ export async function updateClientStage(
     data: { stage },
   });
 
-  await logActivity(clientId, session.id, "CLIENT_UPDATED", `Stage zmenen na ${stage}`);
+  await logActivity(clientId, session.id, "CLIENT_UPDATED", `Stage změněn na ${stage}`);
 
   revalidatePath("/clients");
   revalidatePath("/dashboard");

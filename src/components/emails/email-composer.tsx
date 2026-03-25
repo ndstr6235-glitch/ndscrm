@@ -100,7 +100,7 @@ export default function EmailComposer({
       .replace(/\[OSLOVENÍ\]/g, salutation || "[OSLOVENÍ]")
       .replace(/\[PODPIS\]/g, signature || "[PODPIS]")
       .replace(/\[VKLAD\]/g, fmtCZK(totalDeposit))
-      .replace(/\[CASTKA\]/g, "–");
+      .replace(/\[ČÁSTKA\]/g, "–");
   }, [selectedTemplate, bodyOverride, salutation, signature, totalDeposit]);
 
   async function handleSaveSignature() {

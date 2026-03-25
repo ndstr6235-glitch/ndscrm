@@ -77,6 +77,9 @@ export default function EmailComposer({
   // Editable recipient email address
   const [recipientEmail, setRecipientEmail] = useState(clientEmail);
 
+  // Editable subject line — defaults to template subject with client name inserted
+  const [subjectOverride, setSubjectOverride] = useState("");
+
   // Contract fields for "smlouva" templates
   const [investmentAmount, setInvestmentAmount] = useState<number | "">("");
   const [interestRate, setInterestRate] = useState<number | "">("");
@@ -103,6 +106,7 @@ export default function EmailComposer({
       setBodyOverride("");
       setLoadedSignature(false);
       setRecipientEmail(clientEmail);
+      setSubjectOverride("");
       setInvestmentAmount("");
       setInterestRate("");
       setDuration("12");
@@ -115,6 +119,27 @@ export default function EmailComposer({
   const selectedTemplate = allowedTemplates.find(
     (t) => t.id === selectedTemplateId
   );
+
+  // Build subject with client name inserted before the last " – " segment
+  function buildSubjectWithClient(templateSubject: string): string {
+    const parts = templateSubject.split(" – ");
+    if (parts.length >= 2) {
+      // Insert client name before the last segment
+      // e.g. "Investiční smlouva – Build Fund" → "Investiční smlouva – Ondřej Šrutek – Build Fund"
+      const last = parts.pop()!;
+      return [...parts, clientName, last].join(" – ");
+    }
+    // Fallback: just append client name
+    return `${templateSubject} – ${clientName}`;
+  }
+
+  // Reset subject when template changes
+  useEffect(() => {
+    if (selectedTemplate) {
+      setSubjectOverride(buildSubjectWithClient(selectedTemplate.subject));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTemplateId, selectedTemplate?.subject, clientName]);
 
   // Detect if selected template is "Smlouva" (admin-only contract)
   const isContractTemplate =
@@ -182,7 +207,7 @@ export default function EmailComposer({
 
       const result = await sendEmail({
         to: recipientEmail,
-        subject: selectedTemplate.subject,
+        subject: subjectOverride || selectedTemplate.subject,
         body: finalBody,
         contractMeta,
       });
@@ -201,7 +226,7 @@ export default function EmailComposer({
 
   function handleSendMailto() {
     if (!selectedTemplate || !recipientEmail) return;
-    const subject = selectedTemplate.subject;
+    const subject = subjectOverride || selectedTemplate.subject;
     const mailtoUrl = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(finalBody)}`;
     window.open(mailtoUrl);
   }
@@ -303,10 +328,17 @@ export default function EmailComposer({
               </div>
             )}
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-text-dim w-16 shrink-0">Předmět:</span>
-              <span className="text-text truncate">
-                {selectedTemplate?.subject || "—"}
-              </span>
+              <label htmlFor="subject-input" className="text-text-dim w-16 shrink-0">
+                Předmět:
+              </label>
+              <input
+                id="subject-input"
+                type="text"
+                value={subjectOverride}
+                onChange={(e) => setSubjectOverride(e.target.value)}
+                placeholder="Předmět emailu"
+                className="flex-1 min-w-0 px-2.5 py-1.5 rounded-[8px] border border-border bg-surface text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
+              />
             </div>
           </div>
 

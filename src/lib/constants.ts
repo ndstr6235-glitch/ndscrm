@@ -84,6 +84,7 @@ export const NAV_ITEMS: NavItem[] = [
   { key: "clients", label: "Klienti", icon: "👥", roles: ["administrator", "supervisor", "broker"] },
   { key: "calendar", label: "Kalendář", icon: "📅", roles: ["administrator", "supervisor", "broker"] },
   { key: "emails", label: "Emaily", icon: "✉️", roles: ["administrator", "supervisor", "broker"] },
+  { key: "contracts", label: "Smlouvy", icon: "📄", roles: ["administrator", "supervisor"] },
   { key: "users", label: "Uživatelé", icon: "👤", roles: ["administrator", "supervisor"] },
   { key: "templates", label: "Šablony emailů", icon: "📝", roles: ["administrator"] },
   { key: "settings", label: "Nastavení", icon: "⚙️", roles: ["administrator"] },

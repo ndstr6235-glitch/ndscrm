@@ -29,6 +29,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   clients: Users,
   calendar: Calendar,
   emails: Mail,
+  contracts: FileText,
   users: UserCog,
   templates: FileText,
   settings: Settings,

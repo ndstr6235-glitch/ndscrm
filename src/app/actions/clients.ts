@@ -37,6 +37,9 @@ export interface ClientDetail {
     profit: number;
     date: string;
     note: string;
+    duration: number;
+    monthlyPayout: number;
+    payoutFrequency: string;
   }[];
   events: {
     id: string;
@@ -119,6 +122,9 @@ export async function getClientDetail(
       profit: p.profit,
       date: p.date,
       note: p.note,
+      duration: p.duration,
+      monthlyPayout: p.monthlyPayout,
+      payoutFrequency: p.payoutFrequency,
     })),
     events: client.events.map((e) => ({
       id: e.id,
@@ -303,6 +309,8 @@ export async function createPayment(data: {
   clientId: string;
   amount: number;
   percent: number;
+  duration?: number;
+  payoutFrequency?: string;
   date: string;
   note: string;
 }): Promise<{ success: boolean; error?: string }> {
@@ -326,6 +334,12 @@ export async function createPayment(data: {
   }
 
   const profit = (data.amount * data.percent) / 100;
+  const duration = data.duration || 12;
+  const payoutFrequency = data.payoutFrequency || "monthly";
+  const monthlyPayout =
+    payoutFrequency === "monthly"
+      ? (data.amount * (data.percent / 100)) / 12
+      : (data.amount * (data.percent / 100)) / 4;
 
   await prisma.payment.create({
     data: {
@@ -333,6 +347,9 @@ export async function createPayment(data: {
       amount: data.amount,
       percent: data.percent,
       profit,
+      duration,
+      monthlyPayout,
+      payoutFrequency,
       date: data.date || new Date().toISOString().split("T")[0],
       note: data.note.trim(),
     },

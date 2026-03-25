@@ -63,13 +63,16 @@ model Client {
 }
 
 model Payment {
-  id       String @id @default(cuid())
-  amount   Float
-  percent  Float
-  profit   Float
-  date     String
-  note     String @default("")
-  clientId String
+  id              String @id @default(cuid())
+  amount          Float
+  percent         Float
+  profit          Float
+  date            String
+  note            String @default("")
+  duration        Int    @default(12)
+  monthlyPayout   Float  @default(0)
+  payoutFrequency String @default("monthly")
+  clientId        String
 
   client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
 }

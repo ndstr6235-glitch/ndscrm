@@ -25,6 +25,8 @@ export default function PaymentForm({
   const { toast } = useToast();
   const [amount, setAmount] = useState("");
   const [percent, setPercent] = useState("");
+  const [duration, setDuration] = useState("12");
+  const [payoutFrequency, setPayoutFrequency] = useState("monthly");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
@@ -33,6 +35,12 @@ export default function PaymentForm({
   const amountNum = parseFloat(amount) || 0;
   const percentNum = parseFloat(percent) || 0;
   const profit = (amountNum * percentNum) / 100;
+  const monthlyPayout =
+    amountNum > 0 && percentNum > 0
+      ? payoutFrequency === "monthly"
+        ? (amountNum * (percentNum / 100)) / 12
+        : (amountNum * (percentNum / 100)) / 4
+      : 0;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -53,6 +61,8 @@ export default function PaymentForm({
       clientId,
       amount: amountNum,
       percent: percentNum,
+      duration: parseInt(duration),
+      payoutFrequency,
       date,
       note,
     });
@@ -63,6 +73,8 @@ export default function PaymentForm({
       toast("Platba přidána");
       setAmount("");
       setPercent("");
+      setDuration("12");
+      setPayoutFrequency("monthly");
       setNote("");
       onSuccess();
       onClose();
@@ -107,6 +119,51 @@ export default function PaymentForm({
             placeholder="10"
             className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
             required
+          />
+        </div>
+
+        {/* Duration */}
+        <div>
+          <label className="block text-xs font-medium text-text-mid mb-1">
+            Doba trvání smlouvy
+          </label>
+          <select
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+            className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
+          >
+            <option value="6">6 měsíců</option>
+            <option value="12">12 měsíců</option>
+            <option value="24">24 měsíců</option>
+            <option value="36">36 měsíců</option>
+          </select>
+        </div>
+
+        {/* Payout Frequency */}
+        <div>
+          <label className="block text-xs font-medium text-text-mid mb-1">
+            Frekvence výplaty
+          </label>
+          <select
+            value={payoutFrequency}
+            onChange={(e) => setPayoutFrequency(e.target.value)}
+            className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
+          >
+            <option value="monthly">Měsíčně</option>
+            <option value="quarterly">Čtvrtletně</option>
+          </select>
+        </div>
+
+        {/* Monthly Payout (auto-calculated, read-only) */}
+        <div>
+          <label className="block text-xs font-medium text-text-mid mb-1">
+            {payoutFrequency === "monthly" ? "Měsíční výplata" : "Čtvrtletní výplata"}
+          </label>
+          <input
+            type="text"
+            value={monthlyPayout > 0 ? fmtCZK(monthlyPayout) : "—"}
+            readOnly
+            className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface/50 text-sm text-text-mid font-medium cursor-default focus:outline-none"
           />
         </div>
 

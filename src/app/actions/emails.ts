@@ -204,7 +204,7 @@ export async function sendEmail(
 
   try {
     const { error } = await resend.emails.send({
-      from: "Build Fund CRM <noreply@nodistar.cz>",
+      from: "Nodi Star CRM <noreply@nodistar.cz>",
       to: [to],
       subject,
       text: body,

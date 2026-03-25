@@ -18,7 +18,7 @@ export default function LoginForm() {
             ₿
           </div>
           <h1 className="font-display text-2xl md:text-3xl font-bold text-white tracking-tight">
-            Build Fund CRM
+            Nodi Star CRM
           </h1>
           <p className="mt-2 text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
             Přihlášení do systému
@@ -104,7 +104,7 @@ export default function LoginForm() {
 
         {/* Footer */}
         <p className="mt-8 text-center text-xs text-white/20">
-          Build Fund CRM &copy; {new Date().getFullYear()}
+          Nodi Star CRM &copy; {new Date().getFullYear()}
         </p>
       </div>
     </div>

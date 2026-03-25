@@ -70,7 +70,7 @@ export async function generateEmailDraft(context: AIEmailContext): Promise<{
       messages: [
         {
           role: "system",
-          content: `Jsi asistent pro české investiční CRM "Build Fund". Pomáháš brokerům psát personalizované emaily klientům.
+          content: `Jsi asistent pro české investiční CRM "Nodi Star". Pomáháš brokerům psát personalizované emaily klientům.
 
 Pravidla:
 - Piš profesionálně ale přátelsky, v češtině

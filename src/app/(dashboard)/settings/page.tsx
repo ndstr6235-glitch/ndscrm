@@ -22,7 +22,7 @@ export default async function SettingsRoute() {
           Nastavení
         </h1>
         <p className="mt-0.5 text-sm text-text-mid">
-          Nastavení systému Build Fund CRM
+          Nastavení systému Nodi Star CRM
         </p>
       </div>
 
@@ -53,7 +53,7 @@ export default async function SettingsRoute() {
         <div className="space-y-2 text-sm">
           <div className="flex justify-between py-2 border-b border-border/50">
             <span className="text-text-mid">Verze</span>
-            <span className="font-medium">Build Fund CRM v3</span>
+            <span className="font-medium">Nodi Star CRM v3</span>
           </div>
           <div className="flex justify-between py-2 border-b border-border/50">
             <span className="text-text-mid">Prostředí</span>

@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Build Fund CRM",
-    short_name: "BF CRM",
-    description: "CRM system pro investicni call-centrum Build Fund",
+    name: "Nodi Star CRM",
+    short_name: "NS CRM",
+    description: "CRM system pro investicni call-centrum Nodi Star",
     start_url: "/dashboard",
     display: "standalone",
     background_color: "#0f1117",

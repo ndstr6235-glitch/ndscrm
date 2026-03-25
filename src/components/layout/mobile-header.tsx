@@ -27,7 +27,7 @@ export default function MobileHeader({ firstName, lastName }: MobileHeaderProps)
       </button>
 
       <span className="font-display text-sm font-bold text-text">
-        Build Fund CRM
+        Nodi Star CRM
       </span>
 
       <div className="flex items-center gap-1">

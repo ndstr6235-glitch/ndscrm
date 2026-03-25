@@ -125,7 +125,7 @@ export default function EmailComposer({
     const parts = templateSubject.split(" – ");
     if (parts.length >= 2) {
       // Insert client name before the last segment
-      // e.g. "Investiční smlouva – Build Fund" → "Investiční smlouva – Ondřej Šrutek – Build Fund"
+      // e.g. "Investiční smlouva – Nodi Star" → "Investiční smlouva – Ondřej Šrutek – Nodi Star"
       const last = parts.pop()!;
       return [...parts, clientName, last].join(" – ");
     }

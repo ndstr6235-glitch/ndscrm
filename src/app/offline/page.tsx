@@ -19,7 +19,7 @@ export default function OfflinePage() {
           Jste offline
         </h1>
         <p className="text-sm text-white/50 leading-relaxed mb-8">
-          Build Fund CRM potřebuje připojení k internetu.
+          Nodi Star CRM potřebuje připojení k internetu.
           <br />
           Zkontrolujte připojení a zkuste to znovu.
         </p>

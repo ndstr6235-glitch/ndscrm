@@ -28,6 +28,27 @@ async function main() {
   console.log("  Admin user seeded.");
 
   // -----------------------------------------------------------------------
+  // Petr user
+  // -----------------------------------------------------------------------
+  const petrPassword = await bcrypt.hash("Petr123456", 10);
+  await prisma.user.upsert({
+    where: { email: "petr@nodistar.cz" },
+    update: {},
+    create: {
+      id: "u2",
+      firstName: "Petr",
+      lastName: "Nodistar",
+      email: "petr@nodistar.cz",
+      password: petrPassword,
+      role: "ADMINISTRATOR",
+      active: true,
+      signature:
+        "S pozdravem,\nPetr | Nodi Star\nwww.nodistar.cz",
+    },
+  });
+  console.log("  Petr user seeded.");
+
+  // -----------------------------------------------------------------------
   // Email Templates
   // -----------------------------------------------------------------------
   const templates = [

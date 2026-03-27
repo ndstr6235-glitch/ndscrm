@@ -221,16 +221,22 @@ export async function sendEmail(
     const fromName = senderName || "Nodi Star s.r.o.";
     const from = `${fromName} <noreply@nodistar.cz>`;
 
-    // Always attach presentation PDF for "Prezentace" templates
-    const attachments: Array<{ filename: string; path: string }> = [];
+    // Attach presentation PDF for "Prezentace" templates
+    const attachments: Array<{ filename: string; content: Buffer }> = [];
     if (templateLabel?.toLowerCase().includes("prezentace")) {
-      attachments.push({
-        filename: "Prezentace-Nodi-Star.pdf",
-        path: "https://ndscrm-gamma.vercel.app/prezentace-nodistar.pdf",
-      });
-      console.log("PDF attachment added for template:", templateLabel);
-    } else {
-      console.log("No PDF attachment, templateLabel:", templateLabel);
+      try {
+        const { readFile } = await import("fs/promises");
+        const { join } = await import("path");
+        const pdfPath = join(process.cwd(), "public", "prezentace-nodistar.pdf");
+        const pdfBuffer = await readFile(pdfPath);
+        attachments.push({
+          filename: "Prezentace-Nodi-Star.pdf",
+          content: pdfBuffer,
+        });
+        console.log("PDF attached, size:", pdfBuffer.length);
+      } catch (err) {
+        console.error("PDF read failed:", err);
+      }
     }
 
     const { error } = await resend.emails.send({

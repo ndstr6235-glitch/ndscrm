@@ -221,27 +221,16 @@ export async function sendEmail(
     const fromName = senderName || "Nodi Star s.r.o.";
     const from = `${fromName} <noreply@nodistar.cz>`;
 
-    // Attach presentation PDF for "Prezentace" templates
-    const attachments: Array<{ filename: string; content: Buffer }> = [];
+    // Always attach presentation PDF for "Prezentace" templates
+    const attachments: Array<{ filename: string; path: string }> = [];
     if (templateLabel?.toLowerCase().includes("prezentace")) {
-      try {
-        // On Vercel, public/ files are not on the serverless filesystem — fetch via HTTP
-        const baseUrl = process.env.VERCEL_URL
-          ? `https://${process.env.VERCEL_URL}`
-          : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-        const pdfRes = await fetch(`${baseUrl}/prezentace-nodistar.pdf`);
-        if (pdfRes.ok) {
-          const pdfBuffer = Buffer.from(await pdfRes.arrayBuffer());
-          attachments.push({
-            filename: "Prezentace-Nodi-Star.pdf",
-            content: pdfBuffer,
-          });
-        } else {
-          console.warn("Presentation PDF fetch failed:", pdfRes.status);
-        }
-      } catch (pdfErr) {
-        console.warn("Presentation PDF not available:", pdfErr);
-      }
+      attachments.push({
+        filename: "Prezentace-Nodi-Star.pdf",
+        path: "https://ndscrm-gamma.vercel.app/prezentace-nodistar.pdf",
+      });
+      console.log("PDF attachment added for template:", templateLabel);
+    } else {
+      console.log("No PDF attachment, templateLabel:", templateLabel);
     }
 
     const { error } = await resend.emails.send({

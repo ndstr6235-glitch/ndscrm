@@ -4,8 +4,6 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { Resend } from "resend";
 import { logAudit } from "./audit";
-import { readFile } from "fs/promises";
-import { join } from "path";
 
 export interface EmailClientRow {
   id: string;
@@ -227,14 +225,22 @@ export async function sendEmail(
     const attachments: Array<{ filename: string; content: Buffer }> = [];
     if (templateLabel?.toLowerCase().includes("prezentace")) {
       try {
-        const pdfPath = join(process.cwd(), "public", "prezentace-nodistar.pdf");
-        const pdfBuffer = await readFile(pdfPath);
-        attachments.push({
-          filename: "Prezentace-Nodi-Star.pdf",
-          content: pdfBuffer,
-        });
-      } catch {
-        console.warn("Presentation PDF not found at public/prezentace-nodistar.pdf");
+        // On Vercel, public/ files are not on the serverless filesystem — fetch via HTTP
+        const baseUrl = process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}`
+          : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+        const pdfRes = await fetch(`${baseUrl}/prezentace-nodistar.pdf`);
+        if (pdfRes.ok) {
+          const pdfBuffer = Buffer.from(await pdfRes.arrayBuffer());
+          attachments.push({
+            filename: "Prezentace-Nodi-Star.pdf",
+            content: pdfBuffer,
+          });
+        } else {
+          console.warn("Presentation PDF fetch failed:", pdfRes.status);
+        }
+      } catch (pdfErr) {
+        console.warn("Presentation PDF not available:", pdfErr);
       }
     }
 

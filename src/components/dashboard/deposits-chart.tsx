@@ -46,7 +46,7 @@ export default function DepositsChart({ data }: Props) {
           Zatím žádná data pro zobrazení grafu
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height={240}>
+        <ResponsiveContainer width="100%" height={200}>
           <BarChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
             <XAxis

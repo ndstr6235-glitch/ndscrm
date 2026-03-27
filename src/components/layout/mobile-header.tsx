@@ -27,7 +27,7 @@ export default function MobileHeader({ firstName, lastName }: MobileHeaderProps)
       </button>
 
       <span className="font-display text-sm font-bold text-text">
-        Nodi Star CRM
+        Nodi Star
       </span>
 
       <div className="flex items-center gap-1">
@@ -40,7 +40,7 @@ export default function MobileHeader({ firstName, lastName }: MobileHeaderProps)
         </button>
         <NotificationBell variant="mobile" />
         <ThemeToggle variant="header" />
-        <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-[10px] font-bold text-gold">
+        <div className="w-9 h-9 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">
           {initials}
         </div>
       </div>

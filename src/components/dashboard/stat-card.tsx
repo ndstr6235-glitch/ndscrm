@@ -28,7 +28,7 @@ export default function StatCard({
   return (
     <div
       className={cn(
-        "bg-surface rounded-[16px] shadow-card border-l-4 p-3.5 md:p-4 lg:p-5",
+        "bg-surface rounded-[12px] sm:rounded-[16px] shadow-card border-l-4 p-3 sm:p-3.5 md:p-4 lg:p-5",
         accent.border
       )}
     >
@@ -45,7 +45,7 @@ export default function StatCard({
           <span className={accent.text}>{icon}</span>
         </div>
       </div>
-      <p className="font-display text-lg md:text-xl lg:text-2xl font-bold text-text">
+      <p className="font-display text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-text truncate">
         {value}
       </p>
       {subtitle && (

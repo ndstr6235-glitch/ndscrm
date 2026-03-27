@@ -46,13 +46,13 @@ export default function PipelineBoard({ clients: initial, onSelectClient }: Prop
   }
 
   return (
-    <div className="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory md:snap-none">
+    <div className="flex flex-col sm:flex-row gap-3 sm:overflow-x-auto pb-4 sm:snap-x sm:snap-mandatory md:snap-none">
       {PIPELINE_STAGES.map((stage) => {
         const stageClients = clients.filter((c) => c.stage === stage.key);
         return (
           <div
             key={stage.key}
-            className="flex-shrink-0 w-[260px] md:w-[240px] lg:flex-1 snap-start"
+            className="flex-shrink-0 w-full sm:w-[260px] md:w-[240px] lg:flex-1 sm:snap-start"
             onDragOver={(e) => handleDragOver(e, stage.key)}
             onDrop={() => handleDrop(stage.key)}
           >

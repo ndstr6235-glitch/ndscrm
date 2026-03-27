@@ -109,7 +109,7 @@ export default function EventForm({
         </div>
 
         {/* Date + Time */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-medium text-text-mid mb-1">
               Datum

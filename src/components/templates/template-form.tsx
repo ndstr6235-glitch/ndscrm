@@ -150,7 +150,7 @@ export default function TemplateForm({
           <textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            rows={8}
+            rows={5}
             placeholder="Vážený/á [OSLOVENÍ],&#10;&#10;...&#10;&#10;[PODPIS]"
             className="w-full px-3 py-2.5 rounded-[10px] border border-border bg-surface text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition resize-none leading-relaxed"
             required

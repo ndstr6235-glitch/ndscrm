@@ -110,7 +110,7 @@ export default function BulkActionBar({
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 z-[55] p-3 md:p-4">
+      <div className="fixed bottom-0 left-0 right-0 z-[55] p-3 md:p-4 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <div className="max-w-4xl mx-auto bg-sidebar text-white rounded-[14px] shadow-lg border border-white/10 px-4 py-3 flex items-center gap-3 flex-wrap">
           {/* Count + close */}
           <div className="flex items-center gap-2 shrink-0">

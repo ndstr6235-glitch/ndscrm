@@ -176,7 +176,7 @@ export default function MyDay({ tasks: initialTasks, followUps, isCompanyView }:
                 <button
                   onClick={() => handleToggle(task.id)}
                   className={cn(
-                    "w-[44px] h-[44px] md:w-7 md:h-7 rounded-full border-2 flex items-center justify-center shrink-0 transition-all",
+                    "w-8 h-8 md:w-7 md:h-7 min-w-[32px] min-h-[32px] rounded-full border-2 flex items-center justify-center shrink-0 transition-all",
                     task.done
                       ? "bg-emerald border-emerald text-white"
                       : "border-border-dark hover:border-gold"

@@ -162,7 +162,7 @@ export default function ContractGenerator({ userRole }: ContractGeneratorProps) 
         </div>
       </div>
 
-      <div className="flex flex-col xl:flex-row gap-6">
+      <div className="flex flex-col xl:flex-row gap-4 sm:gap-6">
         {/* LEFT: Form */}
         <div className="w-full xl:w-[420px] shrink-0">
           <div className="bg-surface rounded-[16px] border border-border shadow-card p-5 space-y-4">
@@ -342,7 +342,7 @@ export default function ContractGenerator({ userRole }: ContractGeneratorProps) 
                 ref={updateIframe}
                 onLoad={iframeOnLoad}
                 title="Contract preview"
-                className="w-full h-[400px] md:h-[600px] lg:h-[800px] bg-white rounded-[8px] shadow-md"
+                className="w-full h-[300px] sm:h-[400px] md:h-[600px] lg:h-[800px] bg-white rounded-[8px] shadow-md"
                 style={{ border: "none" }}
               />
             </div>

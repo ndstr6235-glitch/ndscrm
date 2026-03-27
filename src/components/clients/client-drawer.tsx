@@ -89,7 +89,7 @@ export default function ClientDrawer({
 
   function handleTouchEnd(e: React.TouchEvent) {
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    if (deltaX > 80) handleClose();
+    if (deltaX > 50) handleClose();
   }
 
   function handleFormSuccess() {

@@ -56,7 +56,7 @@ export default function Modal({ open, onClose, title, children }: ModalProps) {
           <h2 className="font-display text-lg font-bold text-text">{title}</h2>
           <button
             onClick={onClose}
-            className="w-10 h-10 flex items-center justify-center rounded-[8px] text-text-dim hover:text-text hover:bg-surface-hover transition-colors"
+            className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-[8px] text-text-dim hover:text-text hover:bg-surface-hover transition-colors"
             aria-label="Zavřít"
           >
             <X size={18} />

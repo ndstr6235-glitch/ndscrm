@@ -22,7 +22,7 @@ export default async function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-dvh">
+      <div className="flex min-h-dvh overflow-x-hidden max-w-[100dvw]">
         <Sidebar user={user} />
         <DashboardMain
           firstName={user.firstName}

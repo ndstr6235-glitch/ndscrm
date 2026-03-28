@@ -25,7 +25,7 @@ export default function DashboardMain({
     <CommandPaletteProvider userRole={userRole}>
       <div
         className={cn(
-          "flex-1 flex flex-col transition-[margin] duration-250 ease-[cubic-bezier(0.4,0,0.2,1)]",
+          "flex-1 flex flex-col min-w-0 w-full overflow-x-hidden transition-[margin] duration-250 ease-[cubic-bezier(0.4,0,0.2,1)]",
           "md:ml-[68px]",
           collapsed ? "lg:ml-[68px]" : "lg:ml-[220px]"
         )}

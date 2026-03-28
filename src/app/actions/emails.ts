@@ -222,14 +222,17 @@ export async function sendEmail(
     const from = `${fromName} <noreply@nodistar.cz>`;
 
     // Attach presentation PDF for "Prezentace" templates
-    const attachments: Array<{ filename: string; content: Buffer }> = [];
+    const attachments: Array<{ filename: string; content: string; content_type: string }> = [];
     if (templateLabel?.toLowerCase().includes("prezentace")) {
       const { PREZENTACE_PDF_BASE64 } = await import("@/lib/prezentace-pdf");
       attachments.push({
         filename: "Prezentace-Nodi-Star.pdf",
-        content: Buffer.from(PREZENTACE_PDF_BASE64, "base64"),
+        content: PREZENTACE_PDF_BASE64,
+        content_type: "application/pdf",
       });
     }
+    // Debug: always log attachment status
+    console.log("[EMAIL] templateLabel:", templateLabel, "| attachments:", attachments.length);
 
     const { error } = await resend.emails.send({
       from,

@@ -224,19 +224,11 @@ export async function sendEmail(
     // Attach presentation PDF for "Prezentace" templates
     const attachments: Array<{ filename: string; content: Buffer }> = [];
     if (templateLabel?.toLowerCase().includes("prezentace")) {
-      try {
-        const { readFile } = await import("fs/promises");
-        const { join } = await import("path");
-        const pdfPath = join(process.cwd(), "public", "prezentace-nodistar.pdf");
-        const pdfBuffer = await readFile(pdfPath);
-        attachments.push({
-          filename: "Prezentace-Nodi-Star.pdf",
-          content: pdfBuffer,
-        });
-        console.log("PDF attached, size:", pdfBuffer.length);
-      } catch (err) {
-        console.error("PDF read failed:", err);
-      }
+      const { PREZENTACE_PDF_BASE64 } = await import("@/lib/prezentace-pdf");
+      attachments.push({
+        filename: "Prezentace-Nodi-Star.pdf",
+        content: Buffer.from(PREZENTACE_PDF_BASE64, "base64"),
+      });
     }
 
     const { error } = await resend.emails.send({

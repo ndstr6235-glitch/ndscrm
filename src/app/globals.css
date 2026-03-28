@@ -207,6 +207,7 @@
 /* ------------------------------------------------------------------ */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -214,8 +215,8 @@ body {
   color: var(--color-text);
   font-family: var(--font-sans);
   transition: background-color 0.2s ease, color 0.2s ease;
-  /* Safe area for iPhone notch */
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
   /* Prevent tap highlight on mobile */
   -webkit-tap-highlight-color: transparent;
   /* Prevent text size adjust on orientation change */

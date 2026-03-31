@@ -223,8 +223,10 @@ export async function sendEmail(
     const fromName = senderName || "Nodi Star s.r.o.";
     const from = `${fromName} <noreply@nodistar.cz>`;
 
+    // Build attachments list
+    const attachments: { filename: string; content: Buffer | string; content_type?: string }[] = [];
+
     // Attach presentation PDF if available
-    const attachments: { filename: string; content: string; content_type: string }[] = [];
     try {
       const { PREZENTACE_PDF_BASE64 } = await import("@/lib/prezentace-pdf");
       if (PREZENTACE_PDF_BASE64) {
@@ -235,7 +237,28 @@ export async function sendEmail(
         });
       }
     } catch {
-      // PDF module not available — send without attachment
+      // PDF module not available — send without presentation attachment
+    }
+
+    // Generate contract proposal PDF when sending a "smlouva" template
+    if (contractMeta && templateLabel?.toLowerCase().includes("smlouva")) {
+      try {
+        const { generateProposalHTML } = await import("@/lib/proposal-template");
+        const { htmlToPdf } = await import("@/lib/html-to-pdf");
+        const proposalHtml = generateProposalHTML({
+          amount: contractMeta.investmentAmount,
+          interestRate: contractMeta.interestRate,
+          duration: contractMeta.duration,
+          payoutFrequency: contractMeta.payoutFrequency,
+        });
+        const pdfBuffer = await htmlToPdf(proposalHtml);
+        attachments.push({
+          filename: "Navrh-smlouvy-Nodi-Star.pdf",
+          content: pdfBuffer,
+        });
+      } catch (pdfErr) {
+        console.error("Proposal PDF generation failed:", pdfErr);
+      }
     }
 
     const { error } = await resend.emails.send({

@@ -28,6 +28,8 @@ interface EmailComposerProps {
   /** Broker notes for "Smlouva" template (admin only) */
   clientNote?: string;
   brokerName?: string;
+  /** Client ID for tracking sent emails */
+  clientId?: string;
 }
 
 // Duration options for contract fields
@@ -87,6 +89,7 @@ export default function EmailComposer({
   initialTemplateId,
   clientNote,
   brokerName,
+  clientId,
 }: EmailComposerProps) {
   const { toast } = useToast();
 
@@ -251,6 +254,7 @@ export default function EmailComposer({
         senderName: selectedMember?.name || "Nodi Star s.r.o.",
         templateLabel: selectedTemplate.label,
         contractMeta,
+        clientId,
       });
       if (result.success) {
         toast("Email byl odeslán");

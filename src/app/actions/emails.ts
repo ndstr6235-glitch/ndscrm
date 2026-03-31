@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { Resend } from "resend";
 import { logAudit } from "./audit";
+import { logActivity } from "./activity";
 
 export interface EmailClientRow {
   id: string;
@@ -200,6 +201,7 @@ interface SendEmailInput {
   senderName?: string;
   templateLabel?: string;
   contractMeta?: ContractMeta;
+  clientId?: string;
 }
 
 export async function sendEmail(
@@ -210,7 +212,7 @@ export async function sendEmail(
     return { success: false, error: "Neautorizovaný přístup" };
   }
 
-  const { to, subject, body, replyTo, senderName, templateLabel, contractMeta } = input;
+  const { to, subject, body, replyTo, senderName, templateLabel, contractMeta, clientId } = input;
 
   if (!to || !subject || !body) {
     return { success: false, error: "Chybí povinné údaje (email, předmět, text)" };
@@ -221,15 +223,20 @@ export async function sendEmail(
     const fromName = senderName || "Nodi Star s.r.o.";
     const from = `${fromName} <noreply@nodistar.cz>`;
 
-    // Always attach presentation PDF
-    const { PREZENTACE_PDF_BASE64 } = await import("@/lib/prezentace-pdf");
-    const attachments = [
-      {
-        filename: "Prezentace-Nodi-Star.pdf",
-        content: PREZENTACE_PDF_BASE64,
-        content_type: "application/pdf",
-      },
-    ];
+    // Attach presentation PDF if available
+    const attachments: { filename: string; content: string; content_type: string }[] = [];
+    try {
+      const { PREZENTACE_PDF_BASE64 } = await import("@/lib/prezentace-pdf");
+      if (PREZENTACE_PDF_BASE64) {
+        attachments.push({
+          filename: "Prezentace-Nodi-Star.pdf",
+          content: PREZENTACE_PDF_BASE64,
+          content_type: "application/pdf",
+        });
+      }
+    } catch {
+      // PDF module not available — send without attachment
+    }
 
     const { error } = await resend.emails.send({
       from,
@@ -266,6 +273,28 @@ export async function sendEmail(
       auditDetail
     );
 
+    // Save sent email record + activity log if clientId is provided
+    if (clientId) {
+      await Promise.all([
+        prisma.sentEmail.create({
+          data: {
+            clientId,
+            userId: session.id,
+            to,
+            subject,
+            body,
+            templateLabel: templateLabel || null,
+          },
+        }),
+        logActivity(
+          clientId,
+          session.id,
+          "EMAIL_SENT",
+          `Odeslán email: ${subject}`
+        ),
+      ]);
+    }
+
     return { success: true };
   } catch (err) {
     console.error("Email send failed:", err);
@@ -274,4 +303,52 @@ export async function sendEmail(
       error: err instanceof Error ? err.message : "Neočekávaná chyba při odesílání",
     };
   }
+}
+
+// ---------------------------------------------------------------------------
+// Sent email history for a client
+// ---------------------------------------------------------------------------
+
+export interface SentEmailRow {
+  id: string;
+  to: string;
+  subject: string;
+  body: string;
+  templateLabel: string | null;
+  senderName: string;
+  createdAt: string;
+}
+
+export async function getClientSentEmails(
+  clientId: string
+): Promise<SentEmailRow[]> {
+  const session = await getSession();
+  if (!session) return [];
+
+  // RBAC: brokers can only see emails for their own clients
+  if (session.role === "broker") {
+    const client = await prisma.client.findUnique({
+      where: { id: clientId },
+      select: { assignedTo: true },
+    });
+    if (!client || client.assignedTo !== session.id) return [];
+  }
+
+  const emails = await prisma.sentEmail.findMany({
+    where: { clientId },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return emails.map((e) => ({
+    id: e.id,
+    to: e.to,
+    subject: e.subject,
+    body: e.body,
+    templateLabel: e.templateLabel,
+    senderName: `${e.user.firstName} ${e.user.lastName}`,
+    createdAt: e.createdAt.toISOString(),
+  }));
 }

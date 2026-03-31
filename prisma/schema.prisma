@@ -39,6 +39,7 @@ model User {
   documents     Document[] @relation("DocumentUploader")
   notifications Notification[]
   auditLogs     AuditLog[] @relation("AuditLogs")
+  sentEmails    SentEmail[] @relation("SentEmails")
 }
 
 model Client {
@@ -60,6 +61,7 @@ model Client {
   events     CalEvent[]
   activities Activity[]
   documents  Document[]
+  sentEmails SentEmail[]
 }
 
 model Payment {
@@ -151,6 +153,20 @@ model AuditLog {
   createdAt DateTime @default(now())
 
   user User @relation("AuditLogs", fields: [userId], references: [id])
+}
+
+model SentEmail {
+  id            String   @id @default(cuid())
+  clientId      String
+  userId        String
+  to            String
+  subject       String
+  body          String
+  templateLabel String?
+  createdAt     DateTime @default(now())
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  user   User   @relation("SentEmails", fields: [userId], references: [id])
 }
 
 model SystemSetting {

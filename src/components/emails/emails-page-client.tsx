@@ -101,6 +101,7 @@ export default function EmailsPageClient({
           initialTemplateId={composerState.templateId}
           clientNote={composerState.client.note}
           brokerName={composerState.client.brokerName}
+          clientId={composerState.client.id}
         />
       )}
     </div>

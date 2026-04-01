@@ -240,19 +240,25 @@ export async function sendEmail(
       // PDF module not available — send without presentation attachment
     }
 
-    // For smlouva templates, generate styled HTML email body with the contract
-    let htmlBody: string | undefined;
-    if (contractMeta && templateLabel?.toLowerCase().includes("smlouv")) {
+    // For smlouva templates, generate PDF of the contract and attach it
+    if (templateLabel?.toLowerCase().includes("smlouv")) {
       try {
         const { generateProposalHTML } = await import("@/lib/proposal-template");
-        htmlBody = generateProposalHTML({
-          amount: contractMeta.investmentAmount,
-          interestRate: contractMeta.interestRate,
-          duration: contractMeta.duration,
-          payoutFrequency: contractMeta.payoutFrequency,
+        const { htmlToPdf } = await import("@/lib/html-to-pdf");
+        const proposalHtml = generateProposalHTML({
+          amount: contractMeta?.investmentAmount,
+          interestRate: contractMeta?.interestRate,
+          duration: contractMeta?.duration,
+          payoutFrequency: contractMeta?.payoutFrequency,
+        });
+        const pdfBuffer = await htmlToPdf(proposalHtml);
+        attachments.push({
+          filename: "Navrh-smlouvy-Nodi-Star.pdf",
+          content: pdfBuffer,
+          content_type: "application/pdf",
         });
       } catch (err) {
-        console.error("Proposal HTML generation failed:", err);
+        console.error("Proposal PDF generation failed, sending without:", err);
       }
     }
 
@@ -261,7 +267,6 @@ export async function sendEmail(
       to: [to],
       subject,
       text: body,
-      ...(htmlBody ? { html: htmlBody } : {}),
       ...(replyTo ? { replyTo: [replyTo] } : {}),
       ...(attachments.length > 0 ? { attachments } : {}),
     });

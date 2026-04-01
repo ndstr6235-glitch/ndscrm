@@ -230,9 +230,9 @@ export default function EmailComposer({
     if (!selectedTemplate || !recipientEmail) return;
     setSending(true);
     try {
-      const contractMeta = isSmlouvaTemplate && investmentAmount
+      const contractMeta = isSmlouvaTemplate
         ? {
-            investmentAmount: Number(investmentAmount),
+            investmentAmount: investmentAmount ? Number(investmentAmount) : 0,
             interestRate: interestRate ? Number(interestRate) : undefined,
             duration,
             startDate: startDate || undefined,

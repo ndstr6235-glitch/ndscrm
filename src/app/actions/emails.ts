@@ -202,6 +202,7 @@ interface SendEmailInput {
   templateLabel?: string;
   contractMeta?: ContractMeta;
   clientId?: string;
+  clientName?: string;
 }
 
 export async function sendEmail(
@@ -212,7 +213,7 @@ export async function sendEmail(
     return { success: false, error: "Neautorizovaný přístup" };
   }
 
-  const { to, subject, body, replyTo, senderName, templateLabel, contractMeta, clientId } = input;
+  const { to, subject, body, replyTo, senderName, templateLabel, contractMeta, clientId, clientName } = input;
 
   if (!to || !subject || !body) {
     return { success: false, error: "Chybí povinné údaje (email, předmět, text)" };
@@ -246,6 +247,8 @@ export async function sendEmail(
       try {
         const { generateProposalPdf } = await import("@/lib/proposal-pdf");
         const pdfBuffer = await generateProposalPdf({
+          clientName: clientName || undefined,
+          clientEmail: to,
           amount: contractMeta?.investmentAmount,
           interestRate: contractMeta?.interestRate,
           duration: contractMeta?.duration,

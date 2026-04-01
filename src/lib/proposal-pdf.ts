@@ -4,6 +4,8 @@
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 
 export interface ProposalPdfData {
+  clientName?: string;
+  clientEmail?: string;
   amount?: number;
   interestRate?: number;
   duration?: string;
@@ -157,11 +159,11 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
   y -= 22;
 
   drawPartyBox("VERITEL", [
-    ["Jmeno a prijmeni:", "______________________________"],
+    ["Jmeno a prijmeni:", data.clientName || "______________________________"],
     ["RC / datum narozeni:", "______________________________"],
     ["Bytem:", "______________________________"],
     ["Bankovni spojeni:", "______________________________"],
-  ], false);
+  ], !!data.clientName);
 
   drawPartyBox("DLUZNIK", [
     ["Spolecnost:", "Nodi Star s.r.o."],

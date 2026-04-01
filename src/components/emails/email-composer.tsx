@@ -255,6 +255,7 @@ export default function EmailComposer({
         templateLabel: selectedTemplate.label,
         contractMeta,
         clientId,
+        clientName,
       });
       if (result.success) {
         toast("Email byl odeslán");

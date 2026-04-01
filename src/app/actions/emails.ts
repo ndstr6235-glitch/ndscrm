@@ -223,25 +223,26 @@ export async function sendEmail(
     const fromName = senderName || "Nodi Star s.r.o.";
     const from = `${fromName} <noreply@nodistar.cz>`;
 
-    // Build attachments list
+    // Build attachments list — each template gets its own attachment
     const attachments: { filename: string; content: Buffer | string; content_type?: string }[] = [];
+    const label = templateLabel?.toLowerCase() || "";
 
-    // Attach presentation PDF if available
-    try {
-      const { PREZENTACE_PDF_BASE64 } = await import("@/lib/prezentace-pdf");
-      if (PREZENTACE_PDF_BASE64) {
-        attachments.push({
-          filename: "Prezentace-Nodi-Star.pdf",
-          content: PREZENTACE_PDF_BASE64,
-          content_type: "application/pdf",
-        });
+    if (label.includes("prezentace")) {
+      // Prezentace → attach presentation PDF
+      try {
+        const { PREZENTACE_PDF_BASE64 } = await import("@/lib/prezentace-pdf");
+        if (PREZENTACE_PDF_BASE64) {
+          attachments.push({
+            filename: "Prezentace-Nodi-Star.pdf",
+            content: PREZENTACE_PDF_BASE64,
+            content_type: "application/pdf",
+          });
+        }
+      } catch {
+        // PDF module not available
       }
-    } catch {
-      // PDF module not available — send without presentation attachment
-    }
-
-    // For smlouva templates, generate PDF of the contract and attach it
-    if (templateLabel?.toLowerCase().includes("smlouv")) {
+    } else if (label.includes("smlouv")) {
+      // Návrh smlouvy / Smlouva finální → generate contract PDF
       try {
         const { generateProposalHTML } = await import("@/lib/proposal-template");
         const { htmlToPdf } = await import("@/lib/html-to-pdf");
@@ -258,7 +259,7 @@ export async function sendEmail(
           content_type: "application/pdf",
         });
       } catch (err) {
-        console.error("Proposal PDF generation failed, sending without:", err);
+        console.error("Proposal PDF generation failed:", err);
       }
     }
 

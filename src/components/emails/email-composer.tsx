@@ -188,13 +188,13 @@ export default function EmailComposer({
 
   // Detect if selected template is "Smlouva" (admin-only contract)
   const isContractTemplate =
-    selectedTemplate?.label.toLowerCase().includes("smlouva") &&
+    selectedTemplate?.label.toLowerCase().includes("smlouv") &&
     selectedTemplate?.allowedRoles.length === 1 &&
     selectedTemplate?.allowedRoles[0] === "administrator";
 
   // Detect if selected template is any "smlouva" type (for showing contract fields)
   const isSmlouvaTemplate =
-    selectedTemplate?.label.toLowerCase().includes("smlouva") ?? false;
+    selectedTemplate?.label.toLowerCase().includes("smlouv") ?? false;
 
   // Calculate payout amount based on contract fields
   const calculatedPayout = useMemo(() => {

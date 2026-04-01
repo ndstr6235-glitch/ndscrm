@@ -242,7 +242,7 @@ export async function sendEmail(
 
     // For smlouva templates, generate styled HTML email body with the contract
     let htmlBody: string | undefined;
-    if (contractMeta && templateLabel?.toLowerCase().includes("smlouva")) {
+    if (contractMeta && templateLabel?.toLowerCase().includes("smlouv")) {
       try {
         const { generateProposalHTML } = await import("@/lib/proposal-template");
         htmlBody = generateProposalHTML({

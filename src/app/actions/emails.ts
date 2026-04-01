@@ -242,17 +242,15 @@ export async function sendEmail(
         // PDF module not available
       }
     } else if (label.includes("smlouv")) {
-      // Návrh smlouvy / Smlouva finální → generate contract PDF
+      // Návrh smlouvy / Smlouva finální → generate contract PDF (pure JS, no browser)
       try {
-        const { generateProposalHTML } = await import("@/lib/proposal-template");
-        const { htmlToPdf } = await import("@/lib/html-to-pdf");
-        const proposalHtml = generateProposalHTML({
+        const { generateProposalPdf } = await import("@/lib/proposal-pdf");
+        const pdfBuffer = await generateProposalPdf({
           amount: contractMeta?.investmentAmount,
           interestRate: contractMeta?.interestRate,
           duration: contractMeta?.duration,
           payoutFrequency: contractMeta?.payoutFrequency,
         });
-        const pdfBuffer = await htmlToPdf(proposalHtml);
         attachments.push({
           filename: "Navrh-smlouvy-Nodi-Star.pdf",
           content: pdfBuffer,

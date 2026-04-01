@@ -211,23 +211,36 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
   drawNumberedItem("7.4", "Smlouva nabyva ucinnosti dnem podpisu obema smluvnimi stranami.");
 
   // ── SIGNATURES ──
-  ensureSpace(120);
-  y -= 15;
+  ensureSpace(160);
+  y -= 20;
   page.drawLine({ start: { x: margin, y }, end: { x: pageWidth - margin, y }, thickness: 1, color: rgb(0.82, 0.82, 0.82) });
-  y -= 25;
+  y -= 30;
 
-  page.drawText("VERITEL", { x: margin + 20, y, size: 11, font: helveticaBold, color: navy });
-  page.drawText("DLUZNIK", { x: pageWidth / 2 + 20, y, size: 11, font: helveticaBold, color: navy });
-  y -= 55;
+  // Column positions
+  const leftCol = margin + 15;
+  const rightCol = pageWidth / 2 + 15;
+  const leftLineEnd = pageWidth / 2 - 35;
+  const rightLineEnd = pageWidth - margin - 15;
 
-  page.drawLine({ start: { x: margin + 10, y: y + 5 }, end: { x: pageWidth / 2 - 30, y: y + 5 }, thickness: 0.5, color: navy });
-  page.drawLine({ start: { x: pageWidth / 2 + 10, y: y + 5 }, end: { x: pageWidth - margin - 10, y: y + 5 }, thickness: 0.5, color: navy });
+  // Headers
+  page.drawText("VERITEL", { x: leftCol, y, size: 11, font: helveticaBold, color: navy });
+  page.drawText("DLUZNIK", { x: rightCol, y, size: 11, font: helveticaBold, color: navy });
 
-  y -= 5;
-  page.drawText("V Praze dne _____________", { x: margin + 10, y, size: 10, font: helvetica, color: grey });
-  page.drawText("Miroslav Fencl, jednatel", { x: pageWidth / 2 + 10, y: y + 3, size: 10, font: helveticaBold, color: black });
+  // Signature space
+  y -= 70;
+
+  // Signature lines
+  page.drawLine({ start: { x: leftCol, y }, end: { x: leftLineEnd, y }, thickness: 0.7, color: navy });
+  page.drawLine({ start: { x: rightCol, y }, end: { x: rightLineEnd, y }, thickness: 0.7, color: navy });
+
+  // Left side — blank for client
+  y -= 16;
+  page.drawText("V Praze dne _____________", { x: leftCol, y, size: 10, font: helvetica, color: grey });
+
+  // Right side — Miroslav Fencl
+  page.drawText("Miroslav Fencl, jednatel", { x: rightCol, y: y + 2, size: 10, font: helveticaBold, color: black });
   y -= 14;
-  page.drawText("V Praze dne _____________", { x: pageWidth / 2 + 10, y, size: 10, font: helvetica, color: grey });
+  page.drawText("V Praze dne _____________", { x: rightCol, y, size: 10, font: helvetica, color: grey });
 
   // ── FOOTER ──
   drawFooter();

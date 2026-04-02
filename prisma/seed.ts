@@ -157,6 +157,7 @@ děkujeme za Váš zájem o spolupráci s Nodi Star s.r.o. Abychom mohli připra
 2. Rodné číslo nebo datum narození
 3. Adresa trvalého bydliště
 4. Bankovní spojení (číslo účtu a kód banky)
+5. Výše vkladu (částka, kterou chcete investovat)
 
 Údaje nám prosím zašlete odpovědí na tento email nebo je sdělte telefonicky.
 

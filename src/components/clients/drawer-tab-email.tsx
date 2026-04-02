@@ -95,13 +95,13 @@ export default function DrawerTabEmail({
           </span>
         </div>
 
-        {!client.email ? (
-          <div className="flex flex-col items-center justify-center py-8 text-center">
-            <p className="text-sm text-text-dim">
-              Klient nemá vyplněný email. Přidejte email v záložce Přehled.
-            </p>
+        {!client.email && (
+          <div className="flex items-center gap-2 p-3 rounded-[10px] bg-amber-pale border border-amber text-amber text-sm mb-2">
+            Klient nemá vyplněný email — adresu lze zadat ručně v composeru.
           </div>
-        ) : !loaded ? (
+        )}
+
+        {!loaded ? (
           <div className="flex items-center justify-center py-8">
             <div className="w-6 h-6 border-2 border-gold border-t-transparent rounded-full animate-spin" />
           </div>

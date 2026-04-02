@@ -145,6 +145,28 @@ V případě jakýchkoli dotazů nebo připomínek se na mě neváhejte obrátit
       body: "Vážený/á [OSLOVENÍ],\n\nnavazuji na náš nedávný hovor. Rád/a bych domluvil/a schůzku.\n\nKdy by Vám vyhovovalo?\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",
     },
+    {
+      id: "t6",
+      label: "Vyžádání údajů",
+      subject: "Vyžádání údajů k podpisu smlouvy – Nodi Star",
+      body: `Vážený/á [OSLOVENÍ],
+
+děkujeme za Váš zájem o spolupráci s Nodi Star s.r.o. Abychom mohli připravit smlouvu o zápůjčce, potřebujeme od Vás následující údaje:
+
+1. Celé jméno a příjmení
+2. Rodné číslo nebo datum narození
+3. Adresa trvalého bydliště
+4. Bankovní spojení (číslo účtu a kód banky)
+
+Údaje nám prosím zašlete odpovědí na tento email nebo je sdělte telefonicky.
+
+Vaše osobní údaje budou použity výhradně pro účely smluvního vztahu a budou zpracovány v souladu s GDPR.
+
+Děkujeme a těšíme se na spolupráci.
+
+[PODPIS]`,
+      allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",
+    },
   ];
 
   for (const t of templates) {

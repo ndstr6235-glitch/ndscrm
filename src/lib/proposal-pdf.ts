@@ -34,7 +34,8 @@ function fmtDuration(d?: string): string {
 }
 
 function fmtFrequency(f?: string): string {
-  if (!f || f === "monthly") return "mesicne";
+  if (!f) return "___________";
+  if (f === "monthly") return "mesicne";
   if (f === "quarterly") return "ctvrtletne";
   return f;
 }

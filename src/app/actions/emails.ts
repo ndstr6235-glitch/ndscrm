@@ -243,17 +243,23 @@ export async function sendEmail(
         // PDF module not available
       }
     } else if (label.includes("smlouv")) {
-      // Návrh smlouvy / Smlouva finální → generate contract PDF (pure JS, no browser)
+      // Návrh smlouvy → completely blank PDF (no client name, no amount, no rate, no duration)
+      // Smlouva finální → filled PDF with client data
       try {
         const { generateProposalPdf } = await import("@/lib/proposal-pdf");
-        const pdfBuffer = await generateProposalPdf({
-          clientName: clientName || undefined,
-          clientEmail: to,
-          amount: contractMeta?.investmentAmount,
-          interestRate: contractMeta?.interestRate,
-          duration: contractMeta?.duration,
-          payoutFrequency: contractMeta?.payoutFrequency,
-        });
+        const isNavrh = label.includes("návrh") || label.includes("navrh");
+        const pdfBuffer = await generateProposalPdf(
+          isNavrh
+            ? {}
+            : {
+                clientName: clientName || undefined,
+                clientEmail: to,
+                amount: contractMeta?.investmentAmount,
+                interestRate: contractMeta?.interestRate,
+                duration: contractMeta?.duration,
+                payoutFrequency: contractMeta?.payoutFrequency,
+              }
+        );
         attachments.push({
           filename: "Navrh-smlouvy-Nodi-Star.pdf",
           content: pdfBuffer,

@@ -47,6 +47,8 @@ const FREQUENCY_OPTIONS = [
 ];
 
 // Pre-defined team member signatures
+// Note: `email` is used as replyTo (personal inbox).
+// The displayed signature always shows the shared info@nodistar.cz address.
 const TEAM_SIGNATURES = [
   {
     id: "fencl",
@@ -77,6 +79,9 @@ const TEAM_SIGNATURES = [
     phone: "+420 728 739 389",
   },
 ];
+
+// Email shown inside the signature block (shared inbox, not personal)
+const SIGNATURE_DISPLAY_EMAIL = "info@nodistar.cz";
 
 export default function EmailComposer({
   open,
@@ -122,8 +127,9 @@ export default function EmailComposer({
   const [payoutFrequency, setPayoutFrequency] = useState("monthly");
 
   // Helper to build a signature string from a team member
+  // Always shows the shared SIGNATURE_DISPLAY_EMAIL — personal email is only used as replyTo
   function buildTeamSignature(member: typeof TEAM_SIGNATURES[number]) {
-    const lines = ["S pozdravem,", "", member.name, member.role, "Nodi Star s.r.o.", member.email];
+    const lines = ["S pozdravem,", "", member.name, member.role, "Nodi Star s.r.o.", SIGNATURE_DISPLAY_EMAIL];
     if (member.phone) lines.push(member.phone);
     lines.push("www.nodistar.cz");
     return lines.join("\n");
@@ -192,9 +198,16 @@ export default function EmailComposer({
     selectedTemplate?.allowedRoles.length === 1 &&
     selectedTemplate?.allowedRoles[0] === "administrator";
 
-  // Detect if selected template is any "smlouva" type (for showing contract fields)
+  // Detect if selected template is any "smlouva" type
   const isSmlouvaTemplate =
     selectedTemplate?.label.toLowerCase().includes("smlouv") ?? false;
+
+  // "Návrh smlouvy" → blank proposal, no parameters to fill in
+  const isNavrhSmlouva =
+    selectedTemplate?.label.toLowerCase().includes("návrh") ?? false;
+
+  // Show contract parameter fields only for "Smlouva finální" — návrh is sent blank
+  const showContractFields = isSmlouvaTemplate && !isNavrhSmlouva;
 
   // Calculate payout amount based on contract fields
   const calculatedPayout = useMemo(() => {
@@ -230,7 +243,7 @@ export default function EmailComposer({
     if (!selectedTemplate || !recipientEmail) return;
     setSending(true);
     try {
-      const contractMeta = isSmlouvaTemplate
+      const contractMeta = showContractFields
         ? {
             investmentAmount: investmentAmount ? Number(investmentAmount) : 0,
             interestRate: interestRate ? Number(interestRate) : undefined,
@@ -388,8 +401,8 @@ export default function EmailComposer({
             </div>
           </div>
 
-          {/* Contract fields — shown for "smlouva" type templates */}
-          {isSmlouvaTemplate && (
+          {/* Contract fields — shown only for "Smlouva finální" (návrh is sent blank) */}
+          {showContractFields && (
             <div className="rounded-[10px] border-2 border-gold/30 bg-gold-pale p-3 space-y-3">
               <div className="flex items-center gap-1.5">
                 <FileText size={14} className="text-gold" />

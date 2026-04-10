@@ -62,64 +62,20 @@ async function main() {
     {
       id: "t2",
       label: "Návrh smlouvy",
-      subject: "Návrh smlouvy o zápůjčce – Nodi Star",
+      subject: "Návrh smlouvy – Nodi Star",
       body: `Vážený/á [OSLOVENÍ],
 
-na základě našeho hovoru si Vám dovoluji zaslat návrh smlouvy o zápůjčce k prostudování.
+zasílám Vám návrh smlouvy k prostudování.
 
-═══════════════════════════════════════
-  SMLOUVA O ZÁPŮJČCE — NÁVRH
-  dle § 2390 a násl. zákona č. 89/2012 Sb.
-═══════════════════════════════════════
+Zároveň Vás prosím o zaslání následujících údajů potřebných pro vyhotovení finální smlouvy:
 
-I. SMLUVNÍ STRANY
+– Jméno a příjmení
+– Datum narození
+– Trvalé bydliště
+– Číslo občanského průkazu
+– Číslo bankovního účtu
 
-VĚŘITEL: (Vaše údaje budou doplněny)
-
-DLUŽNÍK:
-  Nodi Star s.r.o.
-  IČO: 21300101
-  Sídlo: Hradecká 2526/3, 130 00 Praha 3
-  Jednající: Miroslav Fencl, jednatel
-  Bankovní spojení: 4829670004/5500
-
-II. PŘEDMĚT SMLOUVY
-
-2.1 Předmětem smlouvy je poskytnutí peněžní zápůjčky ve výši [VKLAD].
-2.2 Účelem zápůjčky je financování podnikatelské činnosti Dlužníka.
-2.3 Zápůjčka bude vyplacena bezhotovostně na účet Dlužníka.
-
-III. DOBA TRVÁNÍ
-
-3.1 Smlouva se uzavírá na dobu určitou [DOBA].
-3.2 Smluvní strany se mohou písemně dohodnout na prodloužení (prolongaci) smlouvy, a to nejpozději 30 dnů před uplynutím sjednané doby.
-
-IV. ÚROK A VÝPLATA VÝNOSU
-
-4.1 Zápůjčka je úročena pevnou sazbou ve výši [ÚROK] měsíčně z jistiny.
-4.2 Úroky budou vypláceny [FREKVENCE], vždy k 15. dni příslušného období.
-4.3 Předpokládaná výplata: [ČÁSTKA] ([FREKVENCE]).
-
-V. PRODLENÍ A SANKCE
-
-5.1 V případě prodlení Dlužníka delšího než 5 kalendářních dnů vzniká Věřiteli právo na smluvní úrok z prodlení ve výši 12 % ročně z dlužné částky.
-5.2 Při prodlení delším než 30 dnů je Věřitel oprávněn zesplatnit celý závazek.
-
-VI. PROHLÁŠENÍ DLUŽNÍKA
-
-6.1 Dlužník prohlašuje, že není v úpadku, není proti němu vedeno insolvenční řízení ani exekuce a je schopen dostát svým závazkům.
-
-VII. ZÁVĚREČNÁ USTANOVENÍ
-
-7.1 Změny smlouvy lze provádět pouze písemnými dodatky.
-7.2 Smlouva je vyhotovena ve dvou stejnopisech.
-7.3 Smlouva nabývá účinnosti dnem podpisu oběma stranami.
-
-═══════════════════════════════════════
-
-Jedná se o nezávazný návrh. Konkrétní podmínky (výše zápůjčky, úroková sazba, doba trvání) budou upřesněny dle Vaší volby.
-
-V případě jakýchkoli dotazů nebo připomínek se na mě neváhejte obrátit.
+V případě jakýchkoli dotazů mě neváhejte kontaktovat.
 
 [PODPIS]`,
       allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",

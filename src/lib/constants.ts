@@ -154,7 +154,7 @@ export const DEFAULT_TEMPLATES: EmailTemplate[] = [
     id: "t2",
     label: "Návrh smlouvy",
     subject: "Návrh smlouvy – Nodi Star",
-    body: "Vážený/á [OSLOVENÍ],\n\nzasílám Vám návrh smlouvy k prostudování.\n\nV případě připomínek se na mě neváhejte obrátit.\n\n[PODPIS]",
+    body: "Vážený/á [OSLOVENÍ],\n\nzasílám Vám návrh smlouvy k prostudování.\n\nZároveň Vás prosím o zaslání následujících údajů potřebných pro vyhotovení finální smlouvy:\n\n– Jméno a příjmení\n– Datum narození\n– Trvalé bydliště\n– Číslo občanského průkazu\n– Číslo bankovního účtu\n\nV případě jakýchkoli dotazů mě neváhejte kontaktovat.\n\n[PODPIS]",
     allowedRoles: ["administrator", "supervisor", "broker"],
   },
   {

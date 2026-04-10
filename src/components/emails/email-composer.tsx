@@ -154,8 +154,10 @@ export default function EmailComposer({
       setSelectedTemplateId(initialTemplateId || allowedTemplates[0]?.id || "");
       setSalutation("");
       setBodyOverride("");
-      setSignature("");
-      setSelectedSignatureId(null);
+      // Auto-select first team member so replyTo is always set
+      const defaultMember = TEAM_SIGNATURES[0];
+      setSelectedSignatureId(defaultMember.id);
+      setSignature(buildTeamSignature(defaultMember));
       setRecipientEmail(clientEmail);
       setSubjectOverride("");
       setInvestmentAmount("");
@@ -263,7 +265,7 @@ export default function EmailComposer({
         to: recipientEmail,
         subject: subjectOverride || selectedTemplate.subject,
         body: finalBody,
-        replyTo: selectedMember?.email,
+        replyTo: "info@nodistar.cz",
         senderName: selectedMember?.name || "Nodi Star s.r.o.",
         templateLabel: selectedTemplate.label,
         contractMeta,

@@ -224,6 +224,9 @@ export async function sendEmail(
     const fromName = senderName || "Nodi Star s.r.o.";
     const from = `${fromName} <noreply@nodistar.cz>`;
 
+    // Always reply to the shared inbox — personal addresses are display-only
+    const effectiveReplyTo = "info@nodistar.cz";
+
     // Build attachments list — each template gets its own attachment
     const attachments: { filename: string; content: Buffer | string; content_type?: string }[] = [];
     const label = templateLabel?.toLowerCase() || "";
@@ -275,7 +278,7 @@ export async function sendEmail(
       to: [to],
       subject,
       text: body,
-      ...(replyTo ? { replyTo: [replyTo] } : {}),
+      replyTo: [effectiveReplyTo],
       ...(attachments.length > 0 ? { attachments } : {}),
     });
 

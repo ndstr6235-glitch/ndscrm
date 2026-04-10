@@ -164,18 +164,4 @@ export const DEFAULT_TEMPLATES: EmailTemplate[] = [
     body: "Vážený/á [OSLOVENÍ],\n\nv příloze zasílám finální verzi smlouvy k podpisu.\n\nProsím o prostudování a zaslání podepsané verze zpět.\n\n[PODPIS]",
     allowedRoles: ["administrator"],
   },
-  {
-    id: "t4",
-    label: "Měsíční výpis",
-    subject: "Měsíční výpis – Nodi Star",
-    body: "Vážený/á [OSLOVENÍ],\n\nzasílám měsíční přehled k Vaší smlouvě.\n\nPřipsaná částka: [ČÁSTKA]\nCelková výše: [VKLAD]\n\n[PODPIS]",
-    allowedRoles: ["administrator", "supervisor", "broker"],
-  },
-  {
-    id: "t5",
-    label: "Follow-up",
-    subject: "Navazuji na náš hovor – Nodi Star",
-    body: "Vážený/á [OSLOVENÍ],\n\nnavazuji na náš nedávný hovor. Rád/a bych domluvil/a schůzku.\n\nKdy by Vám vyhovovalo?\n\n[PODPIS]",
-    allowedRoles: ["administrator", "supervisor", "broker"],
-  },
 ];

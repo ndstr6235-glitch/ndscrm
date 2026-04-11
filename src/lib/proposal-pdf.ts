@@ -1,7 +1,10 @@
-// Generates a contract proposal PDF using pdf-lib (pure JS, no browser needed).
-// Works reliably on Vercel serverless — no Puppeteer/Chromium dependency.
+// Generates a contract proposal PDF using pdf-lib + embedded Inter font.
+// Inter supports full Czech diacritics. Works on Vercel serverless (no Puppeteer).
 
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument, PDFFont, PDFPage, rgb } from "pdf-lib";
+import * as fontkit from "@pdf-lib/fontkit";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 export interface ProposalPdfData {
   clientName?: string;
@@ -13,8 +16,8 @@ export interface ProposalPdfData {
 }
 
 function fmtAmount(n?: number): string {
-  if (!n) return "___________";
-  return `${n.toLocaleString("cs-CZ")} Kc`;
+  if (!n) return "_______________";
+  return `${n.toLocaleString("cs-CZ")} Kč`;
 }
 
 function fmtRate(r?: number): string {
@@ -23,90 +26,139 @@ function fmtRate(r?: number): string {
 }
 
 function fmtDuration(d?: string): string {
-  if (!d) return "___________";
+  if (!d) return "_______________";
   const map: Record<string, string> = {
-    "6": "sesti mesicu (6)",
-    "12": "jednoho roku (12 mes.)",
-    "24": "dvou let (24 mes.)",
-    "36": "tri let (36 mes.)",
+    "6": "šesti měsíců (6)",
+    "12": "jednoho roku (12 měs.)",
+    "24": "dvou let (24 měs.)",
+    "36": "tří let (36 měs.)",
   };
-  return map[d] || `${d} mesicu`;
+  return map[d] || `${d} měsíců`;
 }
 
 function fmtFrequency(f?: string): string {
-  if (!f) return "___________";
-  if (f === "monthly") return "mesicne";
-  if (f === "quarterly") return "ctvrtletne";
+  if (!f) return "_______________";
+  if (f === "monthly") return "měsíčně";
+  if (f === "quarterly") return "čtvrtletně";
   return f;
 }
 
+// Load fonts once at module init — they're bundled with the app
+const FONTS_DIR = join(process.cwd(), "src/lib/fonts");
+const interRegularBytes = readFileSync(join(FONTS_DIR, "Inter-Regular.ttf"));
+const interBoldBytes = readFileSync(join(FONTS_DIR, "Inter-Bold.ttf"));
+const interSemiBoldBytes = readFileSync(join(FONTS_DIR, "Inter-SemiBold.ttf"));
+
 export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer> {
   const doc = await PDFDocument.create();
-  const helvetica = await doc.embedFont(StandardFonts.Helvetica);
-  const helveticaBold = await doc.embedFont(StandardFonts.HelveticaBold);
+  doc.registerFontkit(fontkit);
 
+  const fontRegular = await doc.embedFont(interRegularBytes, { subset: true });
+  const fontBold = await doc.embedFont(interBoldBytes, { subset: true });
+  const fontSemi = await doc.embedFont(interSemiBoldBytes, { subset: true });
+
+  // ── Layout constants ──
   const pageWidth = 595.28; // A4
   const pageHeight = 841.89;
-  const margin = 50;
+  const margin = 56;
   const contentWidth = pageWidth - 2 * margin;
 
-  const navy = rgb(0.1, 0.15, 0.27);
-  const gold = rgb(0.83, 0.66, 0.15);
-  const grey = rgb(0.42, 0.42, 0.42);
-  const black = rgb(0.1, 0.12, 0.18);
+  // ── Color palette (matches Nodi Star brand) ──
+  const navy = rgb(0.102, 0.153, 0.267); // #1a2744
+  const navyLight = rgb(0.18, 0.24, 0.36);
+  const gold = rgb(0.831, 0.659, 0.149); // #d4a826
+  const goldLight = rgb(0.961, 0.851, 0.376);
+  const grey = rgb(0.42, 0.46, 0.52); // #6b7280
+  const greyLight = rgb(0.82, 0.84, 0.87);
+  const greyBg = rgb(0.969, 0.973, 0.98); // #f7f8fa
+  const black = rgb(0.102, 0.122, 0.18); // #1a1f2e
   const white = rgb(1, 1, 1);
-  const lightGrey = rgb(0.94, 0.95, 0.97);
 
   let page = doc.addPage([pageWidth, pageHeight]);
   let y = pageHeight;
 
   // ── HEADER BAR ──
-  const headerH = 60;
-  page.drawRectangle({ x: 0, y: pageHeight - headerH, width: pageWidth, height: headerH, color: navy });
-
-  page.drawText("*", { x: margin, y: pageHeight - 38, size: 22, font: helveticaBold, color: gold });
-  page.drawText("Nodi Star", { x: margin + 22, y: pageHeight - 36, size: 18, font: helveticaBold, color: white });
-
-  const rightLines = ["Nodi Star s.r.o.", "ICO: 21300101 | DS: 3tduri7", "Hradecka 2526/3, 130 00 Praha 3"];
-  rightLines.forEach((line, i) => {
-    const w = helvetica.widthOfTextAtSize(line, 9);
-    page.drawText(line, { x: pageWidth - margin - w, y: pageHeight - 25 - i * 12, size: 9, font: helvetica, color: rgb(0.7, 0.7, 0.75) });
+  const headerH = 72;
+  page.drawRectangle({
+    x: 0,
+    y: pageHeight - headerH,
+    width: pageWidth,
+    height: headerH,
+    color: navy,
   });
 
-  // ── GOLD LINE ──
-  page.drawRectangle({ x: 0, y: pageHeight - headerH - 3, width: pageWidth, height: 3, color: gold });
-  y = pageHeight - headerH - 3 - 40;
+  // Star icon
+  page.drawText("★", {
+    x: margin,
+    y: pageHeight - 44,
+    size: 24,
+    font: fontBold,
+    color: gold,
+  });
+  // Brand
+  page.drawText("Nodi Star", {
+    x: margin + 30,
+    y: pageHeight - 42,
+    size: 19,
+    font: fontBold,
+    color: white,
+  });
+
+  // Right side company info
+  const headerRight = [
+    { text: "Nodi Star s.r.o.", size: 9.5, font: fontSemi, color: rgb(1, 1, 1) },
+    { text: "IČO: 21300101  |  DS: 3tduri7", size: 8.5, font: fontRegular, color: rgb(0.78, 0.81, 0.86) },
+    { text: "Hradecká 2526/3, 130 00 Praha 3", size: 8.5, font: fontRegular, color: rgb(0.78, 0.81, 0.86) },
+  ];
+  headerRight.forEach((line, i) => {
+    const w = line.font.widthOfTextAtSize(line.text, line.size);
+    page.drawText(line.text, {
+      x: pageWidth - margin - w,
+      y: pageHeight - 28 - i * 13,
+      size: line.size,
+      font: line.font,
+      color: line.color,
+    });
+  });
+
+  // Gold accent line under header
+  page.drawRectangle({
+    x: 0,
+    y: pageHeight - headerH - 3,
+    width: pageWidth,
+    height: 3,
+    color: gold,
+  });
+
+  y = pageHeight - headerH - 3 - 75;
 
   // ── TITLE ──
-  const title = "Smlouva o zapujcce";
-  const titleW = helveticaBold.widthOfTextAtSize(title, 24);
-  page.drawText(title, { x: (pageWidth - titleW) / 2, y, size: 24, font: helveticaBold, color: navy });
-  y -= 18;
+  const title = "Smlouva o zápůjčce";
+  const titleSize = 28;
+  const titleW = fontBold.widthOfTextAtSize(title, titleSize);
+  page.drawText(title, {
+    x: (pageWidth - titleW) / 2,
+    y,
+    size: titleSize,
+    font: fontBold,
+    color: navy,
+  });
+  y -= 30;
 
-  const subtitle = "uzavrena dle § 2390 a nasl. zakona c. 89/2012 Sb., obcansky zakonik";
-  const subtitleW = helvetica.widthOfTextAtSize(subtitle, 10);
-  page.drawText(subtitle, { x: (pageWidth - subtitleW) / 2, y, size: 10, font: helvetica, color: grey });
-  y -= 35;
+  const subtitle = "uzavřená dle § 2390 a násl. zákona č. 89/2012 Sb., občanský zákoník";
+  const subtitleSize = 10.5;
+  const subtitleW = fontRegular.widthOfTextAtSize(subtitle, subtitleSize);
+  page.drawText(subtitle, {
+    x: (pageWidth - subtitleW) / 2,
+    y,
+    size: subtitleSize,
+    font: fontRegular,
+    color: grey,
+  });
+  y -= 58;
 
-  // ── Helper functions ──
-  function drawSectionHeader(num: string, title: string) {
-    const label = `CLANEK ${num}`;
-    page.drawText(label, { x: margin, y, size: 9, font: helveticaBold, color: gold });
-    y -= 18;
-    page.drawText(title, { x: margin, y, size: 16, font: helveticaBold, color: navy });
-    y -= 22;
-  }
-
-  function drawNumberedItem(num: string, text: string) {
-    page.drawText(num, { x: margin, y, size: 10, font: helveticaBold, color: gold });
-    const lines = wrapText(text, contentWidth - 35, helvetica, 10);
-    lines.forEach((line, i) => {
-      page.drawText(line, { x: margin + 35, y: y - i * 14, size: 10, font: helvetica, color: black });
-    });
-    y -= lines.length * 14 + 6;
-  }
-
-  function wrapText(text: string, maxWidth: number, font: typeof helvetica, fontSize: number): string[] {
+  // ── Helper: text wrapping ──
+  function wrapText(text: string, maxWidth: number, font: PDFFont, fontSize: number): string[] {
     const words = text.split(" ");
     const lines: string[] = [];
     let current = "";
@@ -123,130 +175,306 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
     return lines;
   }
 
-  function drawPartyBox(label: string, fields: [string, string][], filled: boolean) {
-    const boxH = 20 + fields.length * 20;
-    page.drawRectangle({ x: margin, y: y - boxH + 10, width: contentWidth, height: boxH, color: lightGrey, borderWidth: 0 });
-    page.drawText(label, { x: margin + 15, y: y, size: 10, font: helveticaBold, color: gold });
+  // ── Helper: section heading ──
+  function drawSectionHeader(num: string, titleText: string) {
+    const eyebrow = `ČLÁNEK ${num}`;
+    page.drawText(eyebrow, {
+      x: margin,
+      y,
+      size: 9,
+      font: fontBold,
+      color: gold,
+    });
     y -= 20;
+    page.drawText(titleText, {
+      x: margin,
+      y,
+      size: 17,
+      font: fontBold,
+      color: navy,
+    });
+    y -= 28;
+  }
+
+  // ── Helper: numbered clause ──
+  function drawNumberedItem(num: string, text: string) {
+    const lineHeight = 16;
+    const fontSize = 10.5;
+    page.drawText(num, {
+      x: margin,
+      y,
+      size: fontSize,
+      font: fontBold,
+      color: gold,
+    });
+    const lines = wrapText(text, contentWidth - 42, fontRegular, fontSize);
+    lines.forEach((line, i) => {
+      page.drawText(line, {
+        x: margin + 42,
+        y: y - i * lineHeight,
+        size: fontSize,
+        font: fontRegular,
+        color: black,
+      });
+    });
+    y -= lines.length * lineHeight + 12;
+  }
+
+  // ── Helper: party box ──
+  function drawPartyBox(label: string, fields: [string, string][], filled: boolean) {
+    const padTop = 20;
+    const padBottom = 22;
+    const padLeft = 24;
+    const rowHeight = 22;
+    const labelGap = 22;
+    const boxH = padTop + labelGap + fields.length * rowHeight + padBottom - rowHeight;
+
+    const boxTop = y + 10;
+    const boxBottom = boxTop - boxH;
+
+    // Background
+    page.drawRectangle({
+      x: margin,
+      y: boxBottom,
+      width: contentWidth,
+      height: boxH,
+      color: greyBg,
+    });
+    // Left gold accent bar
+    page.drawRectangle({
+      x: margin,
+      y: boxBottom,
+      width: 3,
+      height: boxH,
+      color: gold,
+    });
+
+    // Label
+    let cursorY = boxTop - padTop;
+    page.drawText(label, {
+      x: margin + padLeft,
+      y: cursorY,
+      size: 10,
+      font: fontBold,
+      color: gold,
+    });
+    cursorY -= labelGap;
+
+    // Fields
     for (const [key, val] of fields) {
-      page.drawText(key, { x: margin + 15, y, size: 10, font: helvetica, color: grey });
-      page.drawText(val, { x: margin + 170, y, size: 10, font: filled ? helveticaBold : helvetica, color: filled ? black : grey });
-      y -= 18;
+      page.drawText(key, {
+        x: margin + padLeft,
+        y: cursorY,
+        size: 10,
+        font: fontRegular,
+        color: grey,
+      });
+      page.drawText(val, {
+        x: margin + 190,
+        y: cursorY,
+        size: 10,
+        font: filled ? fontSemi : fontRegular,
+        color: filled ? black : grey,
+      });
+      cursorY -= rowHeight;
     }
-    y -= 12;
+    y = boxBottom - 22;
   }
 
+  // ── Helper: page break ──
   function ensureSpace(needed: number) {
-    if (y - needed < 60) {
-      drawFooter();
+    if (y - needed < 80) {
+      drawFooter(page);
       page = doc.addPage([pageWidth, pageHeight]);
-      y = pageHeight - 40;
+      y = pageHeight - 50;
     }
   }
 
-  function drawFooter() {
-    const footerY = 30;
-    page.drawLine({ start: { x: margin, y: footerY + 12 }, end: { x: pageWidth - margin, y: footerY + 12 }, thickness: 0.5, color: rgb(0.82, 0.82, 0.82) });
-    page.drawText("Nodi Star s.r.o. | ICO: 21300101 | Hradecka 2526/3, 130 00 Praha 3", { x: margin, y: footerY, size: 8, font: helvetica, color: grey });
-    const footRight = "Smlouva o zapujcce";
-    const frW = helvetica.widthOfTextAtSize(footRight, 8);
-    page.drawText(footRight, { x: pageWidth - margin - frW, y: footerY, size: 8, font: helvetica, color: grey });
+  // ── Helper: footer ──
+  function drawFooter(p: PDFPage) {
+    const footerY = 32;
+    p.drawLine({
+      start: { x: margin, y: footerY + 14 },
+      end: { x: pageWidth - margin, y: footerY + 14 },
+      thickness: 0.5,
+      color: greyLight,
+    });
+    p.drawText("Nodi Star s.r.o.  |  IČO: 21300101  |  Hradecká 2526/3, 130 00 Praha 3", {
+      x: margin,
+      y: footerY,
+      size: 8,
+      font: fontRegular,
+      color: grey,
+    });
+    const footRight = "Smlouva o zápůjčce";
+    const frW = fontRegular.widthOfTextAtSize(footRight, 8);
+    p.drawText(footRight, {
+      x: pageWidth - margin - frW,
+      y: footerY,
+      size: 8,
+      font: fontRegular,
+      color: grey,
+    });
   }
 
   // ── SECTION 1: SMLUVNÍ STRANY ──
-  page.drawText("1. Smluvni strany", { x: margin, y, size: 15, font: helveticaBold, color: navy });
-  y -= 5;
-  page.drawRectangle({ x: margin, y, width: 140, height: 2.5, color: rgb(0.75, 0.22, 0.17) });
-  y -= 22;
+  page.drawText("ČLÁNEK I", {
+    x: margin,
+    y,
+    size: 9,
+    font: fontBold,
+    color: gold,
+  });
+  y -= 20;
+  page.drawText("Smluvní strany", {
+    x: margin,
+    y,
+    size: 17,
+    font: fontBold,
+    color: navy,
+  });
+  y -= 32;
 
-  drawPartyBox("VERITEL", [
-    ["Jmeno a prijmeni:", data.clientName || "______________________________"],
-    ["RC / datum narozeni:", "______________________________"],
-    ["Bytem:", "______________________________"],
-    ["Bankovni spojeni:", "______________________________"],
-  ], !!data.clientName);
+  drawPartyBox(
+    "VĚŘITEL",
+    [
+      ["Jméno a příjmení:", data.clientName || "_______________________________"],
+      ["RČ / datum narození:", "_______________________________"],
+      ["Bytem:", "_______________________________"],
+      ["Bankovní spojení:", "_______________________________"],
+    ],
+    !!data.clientName,
+  );
 
-  drawPartyBox("DLUZNIK", [
-    ["Spolecnost:", "Nodi Star s.r.o."],
-    ["Sidlo:", "Hradecka 2526/3, Vinohrady, 130 00 Praha 3"],
-    ["ICO:", "21300101"],
-    ["Zastoupena:", "Miroslav Fencl, jednatel"],
-  ], true);
+  drawPartyBox(
+    "DLUŽNÍK",
+    [
+      ["Společnost:", "Nodi Star s.r.o."],
+      ["Sídlo:", "Hradecká 2526/3, Vinohrady, 130 00 Praha 3"],
+      ["IČO:", "21300101"],
+      ["Zastoupená:", "Miroslav Fencl, jednatel"],
+    ],
+    true,
+  );
 
   // ── ČLÁNEK II ──
-  ensureSpace(100);
-  drawSectionHeader("II", "Predmet smlouvy");
-  drawNumberedItem("2.1", `Predmetem teto smlouvy je poskytnuti penezni zapujcky ve vysi ${fmtAmount(data.amount)}.`);
-  drawNumberedItem("2.2", "Ucelem zapujcky je financovani podnikatelske cinnosti Dluznika.");
-  drawNumberedItem("2.3", "Penezni zapujcku vyplati Veritel Dluznikovi bezhotovostne na cislo uctu: 4829670004/5500.");
+  ensureSpace(120);
+  drawSectionHeader("II", "Předmět smlouvy");
+  drawNumberedItem("2.1", `Předmětem této smlouvy je poskytnutí peněžní zápůjčky ve výši ${fmtAmount(data.amount)}.`);
+  drawNumberedItem("2.2", "Účelem zápůjčky je financování podnikatelské činnosti Dlužníka.");
+  drawNumberedItem("2.3", "Peněžní zápůjčku vyplatí Věřitel Dlužníkovi bezhotovostně na číslo účtu: 4829670004/5500.");
 
   // ── ČLÁNEK III ──
-  ensureSpace(80);
-  drawSectionHeader("III", "Doba trvani smlouvy");
-  drawNumberedItem("3.1", `Tato smlouva se uzavira na dobu urcitou ${fmtDuration(data.duration)} ode dne poskytnuti zapujcky.`);
-  drawNumberedItem("3.2", "Smluvni strany se mohou pisemne dohodnout na prodlouzeni (prolongaci) smlouvy, a to nejpozdeji 30 dnu pred uplynutim sjednane doby.");
+  ensureSpace(100);
+  drawSectionHeader("III", "Doba trvání smlouvy");
+  drawNumberedItem("3.1", `Tato smlouva se uzavírá na dobu určitou ${fmtDuration(data.duration)} ode dne poskytnutí zápůjčky.`);
+  drawNumberedItem("3.2", "Smluvní strany se mohou písemně dohodnout na prodloužení (prolongaci) smlouvy, a to nejpozději 30 dnů před uplynutím sjednané doby.");
 
   // ── ČLÁNEK IV ──
-  ensureSpace(120);
-  drawSectionHeader("IV", "Urok a vyplata vynosu");
-  drawNumberedItem("4.1", `Zapujcka je urocena pevnou sazbou ve vysi ${fmtRate(data.interestRate)} mesicne z jistiny.`);
-  drawNumberedItem("4.2", `Urok je splatny ${fmtFrequency(data.payoutFrequency)}, vzdy k 15. dni prislusneho kalendarniho obdobi.`);
-  drawNumberedItem("4.3", "Prvni urokova platba bude vyplacena k nejblizsimu 15. dni nasledujicimu po podpisu smlouvy.");
-  drawNumberedItem("4.4", "Jistina je splatna nejpozdeji posledni den sjednane doby trvani smlouvy, pokud nebude sjednana jeji prolongace.");
+  ensureSpace(140);
+  drawSectionHeader("IV", "Úrok a výplata výnosu");
+  drawNumberedItem("4.1", `Zápůjčka je úročena pevnou sazbou ve výši ${fmtRate(data.interestRate)} měsíčně z jistiny.`);
+  drawNumberedItem("4.2", `Úrok je splatný ${fmtFrequency(data.payoutFrequency)}, vždy k 15. dni příslušného kalendářního období.`);
+  drawNumberedItem("4.3", "První úroková platba bude vyplacena k nejbližšímu 15. dni následujícímu po podpisu smlouvy.");
+  drawNumberedItem("4.4", "Jistina je splatná nejpozději poslední den sjednané doby trvání smlouvy, pokud nebude sjednána její prolongace.");
 
   // ── ČLÁNEK V ──
-  ensureSpace(80);
-  drawSectionHeader("V", "Prodleni a sankce");
-  drawNumberedItem("5.1", "V pripade prodleni Dluznika delsiho nez 5 kalendarnich dnu s uhradou uroku nebo vracenim jistiny vznika Veriteli pravo pozadovat smluvni urok z prodleni ve vysi 12 % rocne z dluzne castky.");
-  drawNumberedItem("5.2", "V pripade prodleni delsiho nez 30 dnu je Veritel opravnen zesplatnit cely zavazek a pozadovat okamzite splaceni jistiny.");
+  ensureSpace(100);
+  drawSectionHeader("V", "Prodlení a sankce");
+  drawNumberedItem("5.1", "V případě prodlení Dlužníka delšího než 5 kalendářních dnů s úhradou úroku nebo vrácením jistiny vzniká Věřiteli právo požadovat smluvní úrok z prodlení ve výši 12 % ročně z dlužné částky.");
+  drawNumberedItem("5.2", "V případě prodlení delšího než 30 dnů je Věřitel oprávněn zesplatnit celý závazek a požadovat okamžité splacení jistiny.");
 
   // ── ČLÁNEK VI ──
-  ensureSpace(60);
-  drawSectionHeader("VI", "Prohlaseni Dluznika");
-  drawNumberedItem("6.1", "Dluznik prohlasuje, ze neni v upadku ani mu upadek nehrozi, neni proti nemu vedeno insolvencni rizeni, exekuce ani vykon rozhodnuti a je schopen dostat svym zavazkum.");
+  ensureSpace(70);
+  drawSectionHeader("VI", "Prohlášení Dlužníka");
+  drawNumberedItem("6.1", "Dlužník prohlašuje, že není v úpadku ani mu úpadek nehrozí, není proti němu vedeno insolvenční řízení, exekuce ani výkon rozhodnutí a je schopen dostát svým závazkům.");
 
   // ── ČLÁNEK VII ──
-  ensureSpace(100);
-  drawSectionHeader("VII", "Zaverecna ustanoveni");
-  drawNumberedItem("7.1", "Jakekoli zmeny teto smlouvy lze provadet pouze pisemnou formou cislovanych dodatku.");
-  drawNumberedItem("7.2", "Pokud by nektere ustanoveni bylo neplatne, ostatni ustanoveni zustavaji nedotcena.");
-  drawNumberedItem("7.3", "Smlouva je vyhotovena ve dvou stejnopisech, z nichz kazda strana obdrzi jedno vyhotoveni.");
-  drawNumberedItem("7.4", "Smlouva nabyva ucinnosti dnem podpisu obema smluvnimi stranami.");
+  ensureSpace(120);
+  drawSectionHeader("VII", "Závěrečná ustanovení");
+  drawNumberedItem("7.1", "Jakékoli změny této smlouvy lze provádět pouze písemnou formou číslovaných dodatků.");
+  drawNumberedItem("7.2", "Pokud by některé ustanovení bylo neplatné, ostatní ustanovení zůstávají nedotčena.");
+  drawNumberedItem("7.3", "Smlouva je vyhotovena ve dvou stejnopisech, z nichž každá strana obdrží jedno vyhotovení.");
+  drawNumberedItem("7.4", "Smlouva nabývá účinnosti dnem podpisu oběma smluvními stranami.");
 
   // ── SIGNATURES ──
-  ensureSpace(160);
-  y -= 20;
-  page.drawLine({ start: { x: margin, y }, end: { x: pageWidth - margin, y }, thickness: 1, color: rgb(0.82, 0.82, 0.82) });
-  y -= 30;
+  ensureSpace(180);
+  y -= 24;
+  page.drawLine({
+    start: { x: margin, y },
+    end: { x: pageWidth - margin, y },
+    thickness: 1,
+    color: greyLight,
+  });
+  y -= 32;
 
   // Column positions
-  const leftCol = margin + 15;
-  const rightCol = pageWidth / 2 + 15;
-  const leftLineEnd = pageWidth / 2 - 35;
-  const rightLineEnd = pageWidth - margin - 15;
+  const leftCol = margin + 20;
+  const rightCol = pageWidth / 2 + 20;
+  const leftLineEnd = pageWidth / 2 - 30;
+  const rightLineEnd = pageWidth - margin - 20;
 
   // Headers
-  page.drawText("VERITEL", { x: leftCol, y, size: 11, font: helveticaBold, color: navy });
-  page.drawText("DLUZNIK", { x: rightCol, y, size: 11, font: helveticaBold, color: navy });
+  page.drawText("VĚŘITEL", {
+    x: leftCol,
+    y,
+    size: 11,
+    font: fontBold,
+    color: gold,
+  });
+  page.drawText("DLUŽNÍK", {
+    x: rightCol,
+    y,
+    size: 11,
+    font: fontBold,
+    color: gold,
+  });
 
   // Signature space
-  y -= 70;
+  y -= 75;
 
   // Signature lines
-  page.drawLine({ start: { x: leftCol, y }, end: { x: leftLineEnd, y }, thickness: 0.7, color: navy });
-  page.drawLine({ start: { x: rightCol, y }, end: { x: rightLineEnd, y }, thickness: 0.7, color: navy });
+  page.drawLine({
+    start: { x: leftCol, y },
+    end: { x: leftLineEnd, y },
+    thickness: 0.7,
+    color: navy,
+  });
+  page.drawLine({
+    start: { x: rightCol, y },
+    end: { x: rightLineEnd, y },
+    thickness: 0.7,
+    color: navy,
+  });
 
-  // Left side — blank for client
-  y -= 16;
-  page.drawText("V Praze dne _____________", { x: leftCol, y, size: 10, font: helvetica, color: grey });
+  // Right side — Miroslav Fencl name
+  page.drawText("Miroslav Fencl, jednatel", {
+    x: rightCol,
+    y: y - 14,
+    size: 10,
+    font: fontSemi,
+    color: black,
+  });
 
-  // Right side — Miroslav Fencl
-  page.drawText("Miroslav Fencl, jednatel", { x: rightCol, y: y + 2, size: 10, font: helveticaBold, color: black });
-  y -= 14;
-  page.drawText("V Praze dne _____________", { x: rightCol, y, size: 10, font: helvetica, color: grey });
+  // Date lines
+  y -= 30;
+  page.drawText("V Praze dne _______________", {
+    x: leftCol,
+    y,
+    size: 9.5,
+    font: fontRegular,
+    color: grey,
+  });
+  page.drawText("V Praze dne _______________", {
+    x: rightCol,
+    y,
+    size: 9.5,
+    font: fontRegular,
+    color: grey,
+  });
 
   // ── FOOTER ──
-  drawFooter();
+  drawFooter(page);
 
   const pdfBytes = await doc.save();
   return Buffer.from(pdfBytes);

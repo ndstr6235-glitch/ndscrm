@@ -5,7 +5,10 @@ const nextConfig: NextConfig = {
     DATABASE_URL: process.env.DATABASE_URL || "file:./dev.db",
   },
   outputFileTracingIncludes: {
-    "/*": ["./public/prezentace-nodistar.pdf"],
+    "/*": [
+      "./public/prezentace-nodistar.pdf",
+      "./src/lib/fonts/*.ttf",
+    ],
   },
 };
 

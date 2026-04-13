@@ -43,13 +43,36 @@ function fmtFrequency(f?: string): string {
   return f;
 }
 
-// Load fonts once at module init — they're bundled with the app
-const FONTS_DIR = join(process.cwd(), "src/lib/fonts");
-const interRegularBytes = readFileSync(join(FONTS_DIR, "Inter-Regular.ttf"));
-const interBoldBytes = readFileSync(join(FONTS_DIR, "Inter-Bold.ttf"));
-const interSemiBoldBytes = readFileSync(join(FONTS_DIR, "Inter-SemiBold.ttf"));
+// Load fonts lazily on first use — public/ is always available on Vercel
+let interRegularBytes: Buffer;
+let interBoldBytes: Buffer;
+let interSemiBoldBytes: Buffer;
+let fontsLoaded = false;
+
+function loadFonts() {
+  if (fontsLoaded) return;
+  // Try public/fonts first (reliable on Vercel), fall back to src/lib/fonts (dev)
+  const dirs = [
+    join(process.cwd(), "public/fonts"),
+    join(process.cwd(), "src/lib/fonts"),
+  ];
+  for (const dir of dirs) {
+    try {
+      interRegularBytes = readFileSync(join(dir, "Inter-Regular.ttf"));
+      interBoldBytes = readFileSync(join(dir, "Inter-Bold.ttf"));
+      interSemiBoldBytes = readFileSync(join(dir, "Inter-SemiBold.ttf"));
+      fontsLoaded = true;
+      return;
+    } catch {
+      // try next directory
+    }
+  }
+  throw new Error("Inter font files not found in public/fonts or src/lib/fonts");
+}
 
 export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer> {
+  loadFonts();
+
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
 

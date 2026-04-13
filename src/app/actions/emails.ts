@@ -224,11 +224,11 @@ export async function sendEmail(
     const fromName = senderName || "Nodi Star s.r.o.";
     const from = `${fromName} <noreply@nodistar.cz>`;
 
-    // Always reply to the shared inbox — personal addresses are display-only
-    const effectiveReplyTo = "info@nodistar.cz";
+    // Reply-To goes to the team member's personal inbox; info@ is only shown in signature
+    const effectiveReplyTo = replyTo || "info@nodistar.cz";
 
     // Build attachments list — each template gets its own attachment
-    const attachments: { filename: string; content: Buffer | string; content_type?: string }[] = [];
+    const attachments: { filename: string; content: Buffer | string; contentType?: string }[] = [];
     const label = templateLabel?.toLowerCase() || "";
 
     if (label.includes("prezentace")) {
@@ -239,7 +239,7 @@ export async function sendEmail(
           attachments.push({
             filename: "Prezentace-Nodi-Star.pdf",
             content: PREZENTACE_PDF_BASE64,
-            content_type: "application/pdf",
+            contentType: "application/pdf",
           });
         }
       } catch {
@@ -266,7 +266,7 @@ export async function sendEmail(
         attachments.push({
           filename: "Navrh-smlouvy-Nodi-Star.pdf",
           content: pdfBuffer,
-          content_type: "application/pdf",
+          contentType: "application/pdf",
         });
       } catch (err) {
         console.error("Proposal PDF generation failed:", err);

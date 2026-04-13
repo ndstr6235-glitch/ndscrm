@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/*": [
       "./public/prezentace-nodistar.pdf",
+      "./public/fonts/*.ttf",
       "./src/lib/fonts/*.ttf",
     ],
   },

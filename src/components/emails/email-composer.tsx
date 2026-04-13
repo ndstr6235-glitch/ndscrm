@@ -265,7 +265,7 @@ export default function EmailComposer({
         to: recipientEmail,
         subject: subjectOverride || selectedTemplate.subject,
         body: finalBody,
-        replyTo: "info@nodistar.cz",
+        replyTo: selectedMember?.email || "info@nodistar.cz",
         senderName: selectedMember?.name || "Nodi Star s.r.o.",
         templateLabel: selectedTemplate.label,
         contractMeta,

@@ -3,8 +3,7 @@
 
 import { PDFDocument, PDFFont, PDFPage, rgb } from "pdf-lib";
 import * as fontkit from "@pdf-lib/fontkit";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { INTER_REGULAR_B64, INTER_BOLD_B64, INTER_SEMIBOLD_B64 } from "./fonts-data";
 
 export interface ProposalPdfData {
   clientName?: string;
@@ -43,36 +42,12 @@ function fmtFrequency(f?: string): string {
   return f;
 }
 
-// Load fonts lazily on first use — public/ is always available on Vercel
-let interRegularBytes: Buffer;
-let interBoldBytes: Buffer;
-let interSemiBoldBytes: Buffer;
-let fontsLoaded = false;
-
-function loadFonts() {
-  if (fontsLoaded) return;
-  // Try public/fonts first (reliable on Vercel), fall back to src/lib/fonts (dev)
-  const dirs = [
-    join(process.cwd(), "public/fonts"),
-    join(process.cwd(), "src/lib/fonts"),
-  ];
-  for (const dir of dirs) {
-    try {
-      interRegularBytes = readFileSync(join(dir, "Inter-Regular.ttf"));
-      interBoldBytes = readFileSync(join(dir, "Inter-Bold.ttf"));
-      interSemiBoldBytes = readFileSync(join(dir, "Inter-SemiBold.ttf"));
-      fontsLoaded = true;
-      return;
-    } catch {
-      // try next directory
-    }
-  }
-  throw new Error("Inter font files not found in public/fonts or src/lib/fonts");
-}
+// Decode fonts from embedded base64 — works everywhere including Vercel serverless
+const interRegularBytes = Buffer.from(INTER_REGULAR_B64, "base64");
+const interBoldBytes = Buffer.from(INTER_BOLD_B64, "base64");
+const interSemiBoldBytes = Buffer.from(INTER_SEMIBOLD_B64, "base64");
 
 export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer> {
-  loadFonts();
-
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
 

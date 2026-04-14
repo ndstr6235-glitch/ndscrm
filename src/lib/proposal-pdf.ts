@@ -337,7 +337,7 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
     "VĚŘITEL",
     [
       ["Jméno a příjmení:", data.clientName || "_______________________________"],
-      ["RČ / datum narození:", "_______________________________"],
+      ["Datum narození:", "_______________________________"],
       ["Bytem:", "_______________________________"],
       ["Bankovní spojení:", "_______________________________"],
     ],

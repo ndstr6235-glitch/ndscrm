@@ -204,12 +204,15 @@ export default function EmailComposer({
   const isSmlouvaTemplate =
     selectedTemplate?.label.toLowerCase().includes("smlouv") ?? false;
 
-  // "Návrh smlouvy" → blank proposal, no parameters to fill in
+  // "Návrh smlouvy" → only investment amount is needed; rest of PDF stays blank
   const isNavrhSmlouva =
     selectedTemplate?.label.toLowerCase().includes("návrh") ?? false;
 
-  // Show contract parameter fields only for "Smlouva finální" — návrh is sent blank
+  // Show ALL contract parameter fields only for "Smlouva finální"
   const showContractFields = isSmlouvaTemplate && !isNavrhSmlouva;
+
+  // For Návrh show only investment amount (client fills rest by hand)
+  const showNavrhAmount = isNavrhSmlouva;
 
   // Calculate payout amount based on contract fields
   const calculatedPayout = useMemo(() => {
@@ -253,7 +256,9 @@ export default function EmailComposer({
             startDate: startDate || undefined,
             payoutFrequency,
           }
-        : undefined;
+        : showNavrhAmount && investmentAmount
+          ? { investmentAmount: Number(investmentAmount) }
+          : undefined;
 
       // Get selected team member for sender name + replyTo
       const selectedMember =
@@ -403,7 +408,43 @@ export default function EmailComposer({
             </div>
           </div>
 
-          {/* Contract fields — shown only for "Smlouva finální" (návrh is sent blank) */}
+          {/* Návrh smlouvy — only investment amount (client fills rest by hand) */}
+          {showNavrhAmount && (
+            <div className="rounded-[10px] border-2 border-gold/30 bg-gold-pale p-3 space-y-3">
+              <div className="flex items-center gap-1.5">
+                <FileText size={14} className="text-gold" />
+                <label className="text-xs font-medium text-gold">
+                  Výše vkladu pro návrh
+                </label>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-text-mid mb-1">
+                  Částka, kterou chce klient investovat
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={investmentAmount}
+                    onChange={(e) =>
+                      setInvestmentAmount(
+                        e.target.value === "" ? "" : Number(e.target.value)
+                      )
+                    }
+                    placeholder="500 000"
+                    className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface-hover text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition pr-12"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-dim pointer-events-none">
+                    CZK
+                  </span>
+                </div>
+                <p className="mt-1.5 text-[11px] text-text-faint">
+                  Zbytek PDF (jméno, RČ, úrok, doba) zůstane prázdný — klient vyplní při podpisu.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Contract fields — shown only for "Smlouva finální" */}
           {showContractFields && (
             <div className="rounded-[10px] border-2 border-gold/30 bg-gold-pale p-3 space-y-3">
               <div className="flex items-center gap-1.5">

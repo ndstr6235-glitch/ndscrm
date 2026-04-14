@@ -246,14 +246,14 @@ export async function sendEmail(
         // PDF module not available
       }
     } else if (label.includes("smlouv")) {
-      // Návrh smlouvy → completely blank PDF (no client name, no amount, no rate, no duration)
-      // Smlouva finální → filled PDF with client data
+      // Návrh smlouvy → blank PDF except investment amount (client fills the rest by hand)
+      // Smlouva finální → filled PDF with all client data
       try {
         const { generateProposalPdf } = await import("@/lib/proposal-pdf");
         const isNavrh = label.includes("návrh") || label.includes("navrh");
         const pdfBuffer = await generateProposalPdf(
           isNavrh
-            ? {}
+            ? { amount: contractMeta?.investmentAmount }
             : {
                 clientName: clientName || undefined,
                 clientEmail: to,

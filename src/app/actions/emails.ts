@@ -164,20 +164,39 @@ export async function getEmailTemplates(): Promise<EmailTemplateRow[]> {
 
   const roleUpper = session.role.toUpperCase();
 
-  // One-time auto-repair: remove "Číslo občanského průkazu" from Návrh template
-  // if still present (legacy seed). Safe to run repeatedly — no-op once clean.
+  // Auto-repair Návrh template body: remove občanka + ensure "Výše vkladu" is asked.
+  // Safe to run repeatedly — no-op once clean.
   try {
     const navrh = await prisma.emailTemplate.findFirst({
       where: { label: "Návrh smlouvy" },
     });
-    if (navrh && navrh.body.includes("Číslo občanského průkazu")) {
-      const cleaned = navrh.body
-        .replace(/\n[–\-]\s*Číslo občanského průkazu\s*\n/g, "\n")
-        .replace(/[–\-]\s*Číslo občanského průkazu\s*\n?/g, "");
-      await prisma.emailTemplate.update({
-        where: { id: navrh.id },
-        data: { body: cleaned },
-      });
+    if (navrh) {
+      let body = navrh.body;
+      let changed = false;
+
+      // 1. Remove "Číslo občanského průkazu" if present
+      if (body.includes("Číslo občanského průkazu")) {
+        body = body
+          .replace(/\n[–\-]\s*Číslo občanského průkazu\s*\n/g, "\n")
+          .replace(/[–\-]\s*Číslo občanského průkazu\s*\n?/g, "");
+        changed = true;
+      }
+
+      // 2. Ensure "Výše vkladu" question is in the list (right after "Trvalé bydliště")
+      if (!body.includes("Výše vkladu") && body.includes("Trvalé bydliště")) {
+        body = body.replace(
+          /(– Trvalé bydliště\s*\n)/,
+          "$1– Výše vkladu (jakou částku chcete investovat)\n"
+        );
+        changed = true;
+      }
+
+      if (changed) {
+        await prisma.emailTemplate.update({
+          where: { id: navrh.id },
+          data: { body },
+        });
+      }
     }
   } catch {
     // non-fatal
@@ -268,6 +287,7 @@ export async function sendEmail(
     } else if (label.includes("smlouv")) {
       // Návrh smlouvy → completely blank PDF (vzor smlouvy, klient doplní)
       // Smlouva finální → filled PDF with all client data
+      // PDF is MANDATORY for smlouva templates — if it fails, don't send email
       try {
         const { generateProposalPdf } = await import("@/lib/proposal-pdf");
         const isNavrh = label.includes("návrh") || label.includes("navrh");
@@ -292,6 +312,10 @@ export async function sendEmail(
         });
       } catch (err) {
         console.error("Proposal PDF generation failed:", err);
+        return {
+          success: false,
+          error: `Nepodařilo se vygenerovat PDF smlouvy: ${err instanceof Error ? err.message : String(err)}`,
+        };
       }
     }
 

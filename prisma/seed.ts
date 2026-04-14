@@ -72,6 +72,7 @@ Zároveň Vás prosím o zaslání následujících údajů potřebných pro vyh
 – Jméno a příjmení
 – Datum narození
 – Trvalé bydliště
+– Výše vkladu (jakou částku chcete investovat)
 – Číslo bankovního účtu
 
 V případě jakýchkoli dotazů mě neváhejte kontaktovat.

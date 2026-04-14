@@ -85,13 +85,17 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
     color: navy,
   });
 
-  // Star icon
-  page.drawText("★", {
-    x: margin,
-    y: pageHeight - 44,
-    size: 24,
-    font: fontBold,
+  // Star icon — drawn as SVG path (doesn't rely on font glyph coverage)
+  // 5-pointed star, centered roughly at (margin+10, pageHeight-36)
+  const starPath =
+    "M 0 -10 L 2.94 -3.09 L 9.51 -3.09 L 4.29 1.18 L 5.88 8.09 L 0 3.82 L -5.88 8.09 L -4.29 1.18 L -9.51 -3.09 L -2.94 -3.09 Z";
+  page.drawSvgPath(starPath, {
+    x: margin + 10,
+    y: pageHeight - 36,
     color: gold,
+    borderColor: gold,
+    borderWidth: 0.5,
+    scale: 1.3,
   });
   // Brand
   page.drawText("Nodis Star", {

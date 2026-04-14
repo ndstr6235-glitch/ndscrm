@@ -241,10 +241,6 @@ export default function DrawerTabEmail({
         clientNote={client.note}
         brokerName={client.brokerName}
         clientId={client.id}
-        proposedAmount={client.proposedAmount}
-        proposedRate={client.proposedRate}
-        proposedDuration={client.proposedDuration}
-        proposedFrequency={client.proposedFrequency}
       />
     </div>
   );

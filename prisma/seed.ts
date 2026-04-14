@@ -65,13 +65,14 @@ async function main() {
       subject: "Návrh smlouvy – Nodis Star",
       body: `Vážený/á [OSLOVENÍ],
 
-v příloze Vám zasílám návrh smlouvy na vklad ve výši [VKLAD] k prostudování.
+zasílám Vám návrh smlouvy k prostudování.
 
 Zároveň Vás prosím o zaslání následujících údajů potřebných pro vyhotovení finální smlouvy:
 
 – Jméno a příjmení
 – Datum narození
 – Trvalé bydliště
+– Číslo občanského průkazu
 – Číslo bankovního účtu
 
 V případě jakýchkoli dotazů mě neváhejte kontaktovat.
@@ -83,19 +84,7 @@ V případě jakýchkoli dotazů mě neváhejte kontaktovat.
       id: "t3",
       label: "Smlouva finální",
       subject: "Smlouva – Nodis Star",
-      body: `Vážený/á [OSLOVENÍ],
-
-v příloze zasílám finální verzi smlouvy k podpisu.
-
-Parametry smlouvy:
-– Výše vkladu: [VKLAD]
-– Úrok: [ÚROK] p.a.
-– Doba trvání: [DOBA]
-– Výplata: [FREKVENCE]
-
-Prosím o prostudování, podpis a zaslání oskenované verze zpět.
-
-[PODPIS]`,
+      body: "Vážený/á [OSLOVENÍ],\n\nv příloze zasílám finální verzi smlouvy k podpisu.\n\nProsím o prostudování a zaslání podepsané verze zpět.\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR",
     },
     {

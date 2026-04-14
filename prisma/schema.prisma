@@ -53,11 +53,6 @@ model Client {
   paymentFreq     Int      @default(30)
   note            String   @default("")
   stage           String   @default("NEW")
-  bankAccount       String  @default("")
-  proposedAmount    Float?
-  proposedRate      Float?
-  proposedDuration  Int?
-  proposedFrequency String?
   assignedTo      String
   createdAt       DateTime @default(now())
 

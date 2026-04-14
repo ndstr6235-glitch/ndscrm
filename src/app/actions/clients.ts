@@ -30,6 +30,11 @@ export interface ClientDetail {
   totalDeposit: number;
   totalProfit: number;
   avgPercent: number;
+  bankAccount: string;
+  proposedAmount: number | null;
+  proposedRate: number | null;
+  proposedDuration: number | null;
+  proposedFrequency: string | null;
   payments: {
     id: string;
     amount: number;
@@ -115,6 +120,11 @@ export async function getClientDetail(
     totalDeposit,
     totalProfit,
     avgPercent: Math.round(avgPercent * 100) / 100,
+    bankAccount: client.bankAccount,
+    proposedAmount: client.proposedAmount,
+    proposedRate: client.proposedRate,
+    proposedDuration: client.proposedDuration,
+    proposedFrequency: client.proposedFrequency,
     payments: client.payments.map((p) => ({
       id: p.id,
       amount: p.amount,

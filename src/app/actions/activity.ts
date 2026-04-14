@@ -13,7 +13,8 @@ export type ActivityType =
   | "EMAIL_SENT"
   | "EVENT_CREATED"
   | "NOTE_CHANGED"
-  | "ASSIGNED_TO_CHANGED";
+  | "ASSIGNED_TO_CHANGED"
+  | "CONTRACT_SCHEDULED";
 
 export interface ActivityRow {
   id: string;

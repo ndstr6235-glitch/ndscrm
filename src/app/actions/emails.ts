@@ -330,6 +330,45 @@ export async function sendEmail(
           `Odeslán email: ${subject}`
         ),
       ]);
+
+      // Save proposed contract parameters on the client so they carry from
+      // Návrh → Smlouva finální (broker won't have to re-enter them)
+      if (contractMeta && label.includes("smlouv")) {
+        await prisma.client.update({
+          where: { id: clientId },
+          data: {
+            ...(contractMeta.investmentAmount ? { proposedAmount: contractMeta.investmentAmount } : {}),
+            ...(contractMeta.interestRate != null ? { proposedRate: contractMeta.interestRate } : {}),
+            ...(contractMeta.duration ? { proposedDuration: Number(contractMeta.duration) } : {}),
+            ...(contractMeta.payoutFrequency ? { proposedFrequency: contractMeta.payoutFrequency } : {}),
+          },
+        });
+      }
+
+      // When "Smlouva finální" is sent, schedule the interest payout events
+      // for the entire contract duration
+      const isFinalni = label.includes("smlouv") && !label.includes("návrh") && !label.includes("navrh");
+      if (
+        isFinalni &&
+        contractMeta?.investmentAmount &&
+        contractMeta?.interestRate != null &&
+        contractMeta?.duration
+      ) {
+        try {
+          const { scheduleInterestPayments } = await import("./interest-schedule");
+          await scheduleInterestPayments({
+            clientId,
+            clientName: clientName || "",
+            amount: contractMeta.investmentAmount,
+            interestRate: contractMeta.interestRate,
+            durationMonths: Number(contractMeta.duration),
+            startDate: contractMeta.startDate,
+            payoutFrequency: (contractMeta.payoutFrequency === "quarterly" ? "quarterly" : "monthly"),
+          });
+        } catch (err) {
+          console.error("scheduleInterestPayments failed (email still sent):", err);
+        }
+      }
     }
 
     return { success: true };

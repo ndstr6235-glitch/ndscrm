@@ -30,6 +30,11 @@ interface EmailComposerProps {
   brokerName?: string;
   /** Client ID for tracking sent emails */
   clientId?: string;
+  /** Previously-proposed contract parameters (carry Návrh → Finální) */
+  proposedAmount?: number | null;
+  proposedRate?: number | null;
+  proposedDuration?: number | null;
+  proposedFrequency?: string | null;
 }
 
 // Duration options for contract fields
@@ -95,6 +100,10 @@ export default function EmailComposer({
   clientNote,
   brokerName,
   clientId,
+  proposedAmount,
+  proposedRate,
+  proposedDuration,
+  proposedFrequency,
 }: EmailComposerProps) {
   const { toast } = useToast();
 
@@ -160,13 +169,14 @@ export default function EmailComposer({
       setSignature(buildTeamSignature(defaultMember));
       setRecipientEmail(clientEmail);
       setSubjectOverride("");
-      setInvestmentAmount("");
-      setInterestRate("");
-      setDuration("12");
+      // Pre-fill contract params from previously-saved proposed values (Návrh → Finální)
+      setInvestmentAmount(proposedAmount ?? "");
+      setInterestRate(proposedRate ?? "");
+      setDuration(proposedDuration ? String(proposedDuration) : "12");
       setStartDate("");
-      setPayoutFrequency("monthly");
+      setPayoutFrequency(proposedFrequency || "monthly");
     }
-  }, [open, initialTemplateId, allowedTemplates, clientEmail]);
+  }, [open, initialTemplateId, allowedTemplates, clientEmail, proposedAmount, proposedRate, proposedDuration, proposedFrequency]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const selectedTemplate = allowedTemplates.find(

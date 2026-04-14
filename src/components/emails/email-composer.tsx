@@ -206,7 +206,7 @@ export default function EmailComposer({
   const isSmlouvaTemplate =
     selectedTemplate?.label.toLowerCase().includes("smlouv") ?? false;
 
-  // "Návrh smlouvy" → completely blank PDF, no parameters
+  // "Návrh smlouvy" → blank PDF + data request email (no fields to fill)
   const isNavrhSmlouva =
     selectedTemplate?.label.toLowerCase().includes("návrh") ?? false;
 
@@ -406,11 +406,11 @@ export default function EmailComposer({
             </div>
           </div>
 
-          {/* Návrh smlouvy info box */}
+          {/* Návrh smlouvy info */}
           {isNavrhSmlouva && (
             <div className="rounded-[10px] border border-border bg-surface-hover p-3">
-              <p className="text-xs text-text-mid">
-                <strong className="text-text">Návrh smlouvy</strong> — klientovi se pošle prázdný vzor smlouvy (bez částky a údajů) spolu s žádostí o doplnění údajů. Konkrétní parametry se vyplní až ve Finální smlouvě.
+              <p className="text-xs text-text-mid leading-relaxed">
+                <strong className="text-text">Návrh smlouvy</strong> — klient dostane prázdný vzor smlouvy v PDF a emailem ho požádáme o údaje potřebné pro finální smlouvu. Částku ani parametry neznáme — vyplníš je až ve <strong className="text-text">Smlouvě finální</strong>.
               </p>
             </div>
           )}

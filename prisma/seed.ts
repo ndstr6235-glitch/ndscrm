@@ -72,7 +72,6 @@ Zároveň Vás prosím o zaslání následujících údajů potřebných pro vyh
 – Jméno a příjmení
 – Datum narození
 – Trvalé bydliště
-– Číslo občanského průkazu
 – Číslo bankovního účtu
 
 V případě jakýchkoli dotazů mě neváhejte kontaktovat.

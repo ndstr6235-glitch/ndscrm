@@ -164,6 +164,25 @@ export async function getEmailTemplates(): Promise<EmailTemplateRow[]> {
 
   const roleUpper = session.role.toUpperCase();
 
+  // One-time auto-repair: remove "Číslo občanského průkazu" from Návrh template
+  // if still present (legacy seed). Safe to run repeatedly — no-op once clean.
+  try {
+    const navrh = await prisma.emailTemplate.findFirst({
+      where: { label: "Návrh smlouvy" },
+    });
+    if (navrh && navrh.body.includes("Číslo občanského průkazu")) {
+      const cleaned = navrh.body
+        .replace(/\n[–\-]\s*Číslo občanského průkazu\s*\n/g, "\n")
+        .replace(/[–\-]\s*Číslo občanského průkazu\s*\n?/g, "");
+      await prisma.emailTemplate.update({
+        where: { id: navrh.id },
+        data: { body: cleaned },
+      });
+    }
+  } catch {
+    // non-fatal
+  }
+
   const rawTemplates = await prisma.emailTemplate.findMany({
     orderBy: { label: "asc" },
   });
@@ -247,7 +266,7 @@ export async function sendEmail(
         // PDF module not available
       }
     } else if (label.includes("smlouv")) {
-      // Návrh smlouvy → completely blank PDF (vzor smlouvy bez údajů)
+      // Návrh smlouvy → completely blank PDF (vzor smlouvy, klient doplní)
       // Smlouva finální → filled PDF with all client data
       try {
         const { generateProposalPdf } = await import("@/lib/proposal-pdf");

@@ -191,6 +191,7 @@ interface ContractMeta {
   duration?: string;
   startDate?: string;
   payoutFrequency?: string;
+  bankAccount?: string;
 }
 
 interface SendEmailInput {
@@ -246,14 +247,14 @@ export async function sendEmail(
         // PDF module not available
       }
     } else if (label.includes("smlouv")) {
-      // Návrh smlouvy → blank PDF except investment amount (client fills the rest by hand)
+      // Návrh smlouvy → completely blank PDF (vzor smlouvy bez údajů)
       // Smlouva finální → filled PDF with all client data
       try {
         const { generateProposalPdf } = await import("@/lib/proposal-pdf");
         const isNavrh = label.includes("návrh") || label.includes("navrh");
         const pdfBuffer = await generateProposalPdf(
           isNavrh
-            ? { amount: contractMeta?.investmentAmount }
+            ? {}
             : {
                 clientName: clientName || undefined,
                 clientEmail: to,
@@ -330,6 +331,34 @@ export async function sendEmail(
           `Odeslán email: ${subject}`
         ),
       ]);
+
+      // When "Smlouva finální" is sent, schedule interest payout events
+      // for the entire contract duration (creates Payment + CalEvent records)
+      const isFinalni =
+        label.includes("smlouv") && !label.includes("návrh") && !label.includes("navrh");
+      if (
+        isFinalni &&
+        contractMeta?.investmentAmount &&
+        contractMeta?.interestRate != null &&
+        contractMeta?.duration
+      ) {
+        try {
+          const { scheduleInterestPayments } = await import("./interest-schedule");
+          await scheduleInterestPayments({
+            clientId,
+            clientName: clientName || "",
+            amount: contractMeta.investmentAmount,
+            interestRate: contractMeta.interestRate,
+            durationMonths: Number(contractMeta.duration),
+            startDate: contractMeta.startDate,
+            payoutFrequency:
+              contractMeta.payoutFrequency === "quarterly" ? "quarterly" : "monthly",
+            bankAccount: contractMeta.bankAccount,
+          });
+        } catch (err) {
+          console.error("scheduleInterestPayments failed (email still sent):", err);
+        }
+      }
     }
 
     return { success: true };

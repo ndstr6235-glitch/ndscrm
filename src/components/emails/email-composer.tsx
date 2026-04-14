@@ -125,6 +125,7 @@ export default function EmailComposer({
   const [duration, setDuration] = useState("12");
   const [startDate, setStartDate] = useState("");
   const [payoutFrequency, setPayoutFrequency] = useState("monthly");
+  const [clientBankAccount, setClientBankAccount] = useState("");
 
   // Helper to build a signature string from a team member
   // Always shows the shared SIGNATURE_DISPLAY_EMAIL — personal email is only used as replyTo
@@ -165,6 +166,7 @@ export default function EmailComposer({
       setDuration("12");
       setStartDate("");
       setPayoutFrequency("monthly");
+      setClientBankAccount("");
     }
   }, [open, initialTemplateId, allowedTemplates, clientEmail]);
   /* eslint-enable react-hooks/set-state-in-effect */
@@ -204,15 +206,12 @@ export default function EmailComposer({
   const isSmlouvaTemplate =
     selectedTemplate?.label.toLowerCase().includes("smlouv") ?? false;
 
-  // "Návrh smlouvy" → only investment amount is needed; rest of PDF stays blank
+  // "Návrh smlouvy" → completely blank PDF, no parameters
   const isNavrhSmlouva =
     selectedTemplate?.label.toLowerCase().includes("návrh") ?? false;
 
   // Show ALL contract parameter fields only for "Smlouva finální"
   const showContractFields = isSmlouvaTemplate && !isNavrhSmlouva;
-
-  // For Návrh show only investment amount (client fills rest by hand)
-  const showNavrhAmount = isNavrhSmlouva;
 
   // Calculate payout amount based on contract fields
   const calculatedPayout = useMemo(() => {
@@ -255,10 +254,9 @@ export default function EmailComposer({
             duration,
             startDate: startDate || undefined,
             payoutFrequency,
+            bankAccount: clientBankAccount || undefined,
           }
-        : showNavrhAmount && investmentAmount
-          ? { investmentAmount: Number(investmentAmount) }
-          : undefined;
+        : undefined;
 
       // Get selected team member for sender name + replyTo
       const selectedMember =
@@ -408,39 +406,12 @@ export default function EmailComposer({
             </div>
           </div>
 
-          {/* Návrh smlouvy — only investment amount (client fills rest by hand) */}
-          {showNavrhAmount && (
-            <div className="rounded-[10px] border-2 border-gold/30 bg-gold-pale p-3 space-y-3">
-              <div className="flex items-center gap-1.5">
-                <FileText size={14} className="text-gold" />
-                <label className="text-xs font-medium text-gold">
-                  Výše vkladu pro návrh
-                </label>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-text-mid mb-1">
-                  Částka, kterou chce klient investovat
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={investmentAmount}
-                    onChange={(e) =>
-                      setInvestmentAmount(
-                        e.target.value === "" ? "" : Number(e.target.value)
-                      )
-                    }
-                    placeholder="500 000"
-                    className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface-hover text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition pr-12"
-                  />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-dim pointer-events-none">
-                    CZK
-                  </span>
-                </div>
-                <p className="mt-1.5 text-[11px] text-text-faint">
-                  Zbytek PDF (jméno, RČ, úrok, doba) zůstane prázdný — klient vyplní při podpisu.
-                </p>
-              </div>
+          {/* Návrh smlouvy info box */}
+          {isNavrhSmlouva && (
+            <div className="rounded-[10px] border border-border bg-surface-hover p-3">
+              <p className="text-xs text-text-mid">
+                <strong className="text-text">Návrh smlouvy</strong> — klientovi se pošle prázdný vzor smlouvy (bez částky a údajů) spolu s žádostí o doplnění údajů. Konkrétní parametry se vyplní až ve Finální smlouvě.
+              </p>
             </div>
           )}
 
@@ -548,6 +519,23 @@ export default function EmailComposer({
                       </option>
                     ))}
                   </select>
+                </div>
+
+                {/* Client bank account — for interest payout reminders */}
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-medium text-text-mid mb-1">
+                    Číslo účtu klienta (kam posílat úroky)
+                  </label>
+                  <input
+                    type="text"
+                    value={clientBankAccount}
+                    onChange={(e) => setClientBankAccount(e.target.value)}
+                    placeholder="např. 123456789/0300"
+                    className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface-hover text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
+                  />
+                  <p className="mt-1 text-[11px] text-text-faint">
+                    Číslo se uloží do každého upozornění na výplatu, abys viděl kam platbu poslat.
+                  </p>
                 </div>
 
                 {/* Calculated payout display */}

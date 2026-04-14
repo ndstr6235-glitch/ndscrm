@@ -221,7 +221,7 @@ export async function sendEmail(
 
   try {
     // Build sender name — use the team member name or default to company
-    const fromName = senderName || "Nodi Star s.r.o.";
+    const fromName = senderName || "Nodis Star s.r.o.";
     const from = `${fromName} <noreply@nodistar.cz>`;
 
     // Reply-To goes to the team member's personal inbox; info@ is only shown in signature
@@ -237,7 +237,7 @@ export async function sendEmail(
         const { PREZENTACE_PDF_BASE64 } = await import("@/lib/prezentace-pdf");
         if (PREZENTACE_PDF_BASE64) {
           attachments.push({
-            filename: "Prezentace-Nodi-Star.pdf",
+            filename: "Prezentace-Nodis-Star.pdf",
             content: PREZENTACE_PDF_BASE64,
             contentType: "application/pdf",
           });
@@ -264,7 +264,7 @@ export async function sendEmail(
               }
         );
         attachments.push({
-          filename: "Navrh-smlouvy-Nodi-Star.pdf",
+          filename: "Navrh-smlouvy-Nodis-Star.pdf",
           // Resend API serializes attachments via JSON.stringify — Buffer would
           // become {"type":"Buffer",...}, so we must pass a base64 string
           content: pdfBuffer.toString("base64"),

@@ -18,12 +18,12 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "Nodi Star CRM",
-  description: "CRM systém pro investiční call-centrum Nodi Star",
+  title: "Nodis Star CRM",
+  description: "CRM systém pro investiční call-centrum Nodis Star",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Nodi Star CRM",
+    title: "Nodis Star CRM",
   },
   other: {
     "mobile-web-app-capable": "yes",

@@ -76,7 +76,7 @@ export default function Sidebar({ user }: SidebarProps) {
         </div>
         {(isOverlay || !collapsed) && (
           <span className="font-display text-base font-bold text-white whitespace-nowrap">
-            Nodi Star CRM
+            Nodis Star CRM
           </span>
         )}
       </div>

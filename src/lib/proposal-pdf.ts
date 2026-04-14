@@ -61,7 +61,7 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
   const margin = 56;
   const contentWidth = pageWidth - 2 * margin;
 
-  // ── Color palette (matches Nodi Star brand) ──
+  // ── Color palette (matches Nodis Star brand) ──
   const navy = rgb(0.102, 0.153, 0.267); // #1a2744
   const navyLight = rgb(0.18, 0.24, 0.36);
   const gold = rgb(0.831, 0.659, 0.149); // #d4a826
@@ -94,7 +94,7 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
     color: gold,
   });
   // Brand
-  page.drawText("Nodi Star", {
+  page.drawText("Nodis Star", {
     x: margin + 30,
     y: pageHeight - 42,
     size: 19,
@@ -104,7 +104,7 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
 
   // Right side company info
   const headerRight = [
-    { text: "Nodi Star s.r.o.", size: 9.5, font: fontSemi, color: rgb(1, 1, 1) },
+    { text: "Nodis Star s.r.o.", size: 9.5, font: fontSemi, color: rgb(1, 1, 1) },
     { text: "IČO: 21300101  |  DS: 3tduri7", size: 8.5, font: fontRegular, color: rgb(0.78, 0.81, 0.86) },
     { text: "Hradecká 2526/3, 130 00 Praha 3", size: 8.5, font: fontRegular, color: rgb(0.78, 0.81, 0.86) },
   ];
@@ -297,7 +297,7 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
       thickness: 0.5,
       color: greyLight,
     });
-    p.drawText("Nodi Star s.r.o.  |  IČO: 21300101  |  Hradecká 2526/3, 130 00 Praha 3", {
+    p.drawText("Nodis Star s.r.o.  |  IČO: 21300101  |  Hradecká 2526/3, 130 00 Praha 3", {
       x: margin,
       y: footerY,
       size: 8,
@@ -347,7 +347,7 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
   drawPartyBox(
     "DLUŽNÍK",
     [
-      ["Společnost:", "Nodi Star s.r.o."],
+      ["Společnost:", "Nodis Star s.r.o."],
       ["Sídlo:", "Hradecká 2526/3, Vinohrady, 130 00 Praha 3"],
       ["IČO:", "21300101"],
       ["Zastoupená:", "Miroslav Fencl, jednatel"],
@@ -371,8 +371,8 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
   // ── ČLÁNEK IV ──
   ensureSpace(140);
   drawSectionHeader("IV", "Úrok a výplata výnosu");
-  drawNumberedItem("4.1", `Zápůjčka je úročena pevnou sazbou ve výši ${fmtRate(data.interestRate)} měsíčně z jistiny.`);
-  drawNumberedItem("4.2", `Úrok je splatný ${fmtFrequency(data.payoutFrequency)}, vždy k 15. dni příslušného kalendářního období.`);
+  drawNumberedItem("4.1", `Zápůjčka je úročena pevnou sazbou ve výši ${fmtRate(data.interestRate)} p.a. (ročně) z jistiny.`);
+  drawNumberedItem("4.2", `Úrok je vyplácen ${fmtFrequency(data.payoutFrequency)}, vždy k 15. dni příslušného kalendářního období, v poměrné výši odpovídající délce výplatního období.`);
   drawNumberedItem("4.3", "První úroková platba bude vyplacena k nejbližšímu 15. dni následujícímu po podpisu smlouvy.");
   drawNumberedItem("4.4", "Jistina je splatná nejpozději poslední den sjednané doby trvání smlouvy, pokud nebude sjednána její prolongace.");
 

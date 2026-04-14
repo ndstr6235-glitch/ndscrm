@@ -48,7 +48,7 @@ export async function generateEmailDraft(context: {
   try {
     const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-    const prompt = `Pomáháš psát profesionální obchodní emaily v češtině pro firmu Nodi Star s.r.o.
+    const prompt = `Pomáháš psát profesionální obchodní emaily v češtině pro firmu Nodis Star s.r.o.
 
 DŮLEŽITÉ PRAVIDLA:
 - Piš profesionálně ale přátelsky, v češtině, vykej

@@ -68,7 +68,7 @@ export function generateContractHTML(data: ContractData): string {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smlouva o zápůjčce – Nodi Star</title>
+<title>Smlouva o zápůjčce – Nodis Star</title>
 <style>
   @media print {
     body { margin: 0; padding: 0; }
@@ -88,12 +88,12 @@ export function generateContractHTML(data: ContractData): string {
         <polygon points="22,8 25,17 35,17 27,23 30,33 22,27 14,33 17,23 9,17 19,17" fill="#ffffff" opacity="0.2"/>
       </svg>
       <div>
-        <div style="font-size:22px; font-weight:700; color:#ffffff; letter-spacing:1px;">Nodi Star</div>
+        <div style="font-size:22px; font-weight:700; color:#ffffff; letter-spacing:1px;">Nodis Star</div>
         <div style="font-size:11px; color:rgba(212,175,55,0.8); letter-spacing:2px; text-transform:uppercase; margin-top:2px;">Investment Group</div>
       </div>
     </div>
     <div style="text-align:right; color:rgba(255,255,255,0.6); font-size:12px; line-height:1.6;">
-      <div>Nodi Star s.r.o.</div>
+      <div>Nodis Star s.r.o.</div>
       <div>IČO: 21610975</div>
       <div>info@nodistar.cz</div>
     </div>
@@ -131,7 +131,7 @@ export function generateContractHTML(data: ContractData): string {
       <div style="background:#f8f9fc; border-radius:10px; padding:20px 24px; border-left:3px solid #1a2f4a;">
         <div style="font-size:13px; font-weight:600; color:#1a2f4a; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Dlužník</div>
         <table style="width:100%; font-size:14px; color:#1a1f2e; border-collapse:collapse;">
-          <tr><td style="padding:3px 0; width:180px; color:#556073;">Obchodní firma:</td><td style="padding:3px 0; font-weight:600;">Nodi Star s.r.o.</td></tr>
+          <tr><td style="padding:3px 0; width:180px; color:#556073;">Obchodní firma:</td><td style="padding:3px 0; font-weight:600;">Nodis Star s.r.o.</td></tr>
           <tr><td style="padding:3px 0; color:#556073;">IČO:</td><td style="padding:3px 0;">21610975</td></tr>
           <tr><td style="padding:3px 0; color:#556073;">Sídlo:</td><td style="padding:3px 0;">Na Florenci 2116/15, Nové Město, 110 00 Praha 1</td></tr>
           <tr><td style="padding:3px 0; color:#556073;">Jednající:</td><td style="padding:3px 0;">Miroslav Fencl, jednatel</td></tr>
@@ -261,7 +261,7 @@ export function generateContractHTML(data: ContractData): string {
         <p style="font-size:13px; color:#556073; margin:0 0 6px 0;">V Praze dne ${today}</p>
         <div style="border-top:2px solid #dfe3ea; margin:40px 20px 12px 20px; padding-top:12px;">
           <p style="font-size:14px; font-weight:600; color:#1a2f4a; margin:0;">Miroslav Fencl</p>
-          <p style="font-size:12px; color:#556073; margin:4px 0 0 0;">Dlužník – Nodi Star s.r.o., jednatel</p>
+          <p style="font-size:12px; color:#556073; margin:4px 0 0 0;">Dlužník – Nodis Star s.r.o., jednatel</p>
         </div>
       </div>
     </div>
@@ -271,7 +271,7 @@ export function generateContractHTML(data: ContractData): string {
   <!-- Footer -->
   <div style="background:#f8f9fc; border-top:1px solid #dfe3ea; padding:16px 44px; text-align:center;">
     <p style="font-size:11px; color:#556073; margin:0;">
-      Nodi Star s.r.o. | IČO: 21610975 | Na Florenci 2116/15, 110 00 Praha 1 | info@nodistar.cz
+      Nodis Star s.r.o. | IČO: 21610975 | Na Florenci 2116/15, 110 00 Praha 1 | info@nodistar.cz
     </p>
   </div>
 

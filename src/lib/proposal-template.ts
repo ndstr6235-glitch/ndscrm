@@ -1,4 +1,4 @@
-// Generates the contract proposal HTML matching the Nodi Star PDF design.
+// Generates the contract proposal HTML matching the Nodis Star PDF design.
 // Used server-side to generate a PDF attachment for "Návrh smlouvy" emails.
 
 export interface ProposalData {
@@ -52,7 +52,7 @@ export function generateProposalHTML(data: ProposalData): string {
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<title>Smlouva o zápůjčce – Nodi Star</title>
+<title>Smlouva o zápůjčce – Nodis Star</title>
 <style>
   @page { size: A4; margin: 0; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -69,10 +69,10 @@ export function generateProposalHTML(data: ProposalData): string {
   <div style="background:#1a2744; padding:22px 44px; display:flex; align-items:center; justify-content:space-between;">
     <div style="display:flex; align-items:center; gap:12px;">
       <span style="font-size:28px; color:#d4a826;">&#9733;</span>
-      <span style="font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.5px;">Nodi Star</span>
+      <span style="font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.5px;">Nodis Star</span>
     </div>
     <div style="text-align:right; color:rgba(255,255,255,0.6); font-size:11px; line-height:1.7;">
-      <div>Nodi Star s.r.o.</div>
+      <div>Nodis Star s.r.o.</div>
       <div>IČO: 21300101 | DS: 3tduri7</div>
       <div>Hradecká 2526/3, 130 00 Praha 3</div>
     </div>
@@ -125,7 +125,7 @@ export function generateProposalHTML(data: ProposalData): string {
         <table style="width:100%; font-size:14px; color:#1a1f2e; border-collapse:collapse;">
           <tr>
             <td style="padding:5px 0; width:180px; color:#6b7280;">Společnost:</td>
-            <td style="padding:5px 0; font-weight:600;">Nodi Star s.r.o.</td>
+            <td style="padding:5px 0; font-weight:600;">Nodis Star s.r.o.</td>
           </tr>
           <tr>
             <td style="padding:5px 0; color:#6b7280;">Sídlo:</td>
@@ -278,7 +278,7 @@ export function generateProposalHTML(data: ProposalData): string {
 
   <!-- FOOTER -->
   <div style="position:absolute; bottom:0; left:0; right:0; border-top:1px solid #d1d5db; padding:14px 52px; display:flex; justify-content:space-between; font-size:11px; color:#9ca3af;">
-    <span>Nodi Star s.r.o. | IČO: 21300101 | Hradecká 2526/3, 130 00 Praha 3</span>
+    <span>Nodis Star s.r.o. | IČO: 21300101 | Hradecká 2526/3, 130 00 Praha 3</span>
     <span>Smlouva o zápůjčce</span>
   </div>
 

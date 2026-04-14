@@ -75,7 +75,7 @@ export async function sendContractEmail(
     const safeName = clientName.replace(/\s+/g, "-").replace(/[^\w-]/g, "");
 
     const { error } = await resend.emails.send({
-      from: "Nodi Star s.r.o. <noreply@nodistar.cz>",
+      from: "Nodis Star s.r.o. <noreply@nodistar.cz>",
       to: [to],
       subject: `Smlouva o zápůjčce – ${clientName}`,
       html: contractHtml,

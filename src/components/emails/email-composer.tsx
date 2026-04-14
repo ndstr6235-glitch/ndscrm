@@ -129,7 +129,7 @@ export default function EmailComposer({
   // Helper to build a signature string from a team member
   // Always shows the shared SIGNATURE_DISPLAY_EMAIL — personal email is only used as replyTo
   function buildTeamSignature(member: typeof TEAM_SIGNATURES[number]) {
-    const lines = ["S pozdravem,", "", member.name, member.role, "Nodi Star s.r.o.", SIGNATURE_DISPLAY_EMAIL];
+    const lines = ["S pozdravem,", "", member.name, member.role, "Nodis Star s.r.o.", SIGNATURE_DISPLAY_EMAIL];
     if (member.phone) lines.push(member.phone);
     lines.push("www.nodistar.cz");
     return lines.join("\n");
@@ -178,7 +178,7 @@ export default function EmailComposer({
     const parts = templateSubject.split(" – ");
     if (parts.length >= 2) {
       // Insert client name before the last segment
-      // e.g. "Investiční smlouva – Nodi Star" → "Investiční smlouva – Ondřej Šrutek – Nodi Star"
+      // e.g. "Investiční smlouva – Nodis Star" → "Investiční smlouva – Ondřej Šrutek – Nodis Star"
       const last = parts.pop()!;
       return [...parts, clientName, last].join(" – ");
     }
@@ -266,7 +266,7 @@ export default function EmailComposer({
         subject: subjectOverride || selectedTemplate.subject,
         body: finalBody,
         replyTo: selectedMember?.email || "info@nodistar.cz",
-        senderName: selectedMember?.name || "Nodi Star s.r.o.",
+        senderName: selectedMember?.name || "Nodis Star s.r.o.",
         templateLabel: selectedTemplate.label,
         contractMeta,
         clientId,
@@ -439,7 +439,7 @@ export default function EmailComposer({
                 {/* Interest rate */}
                 <div>
                   <label className="block text-xs font-medium text-text-mid mb-1">
-                    Úroková sazba
+                    Úroková sazba (% p.a. — ročně)
                   </label>
                   <div className="relative">
                     <input
@@ -452,10 +452,10 @@ export default function EmailComposer({
                       }
                       placeholder="8"
                       step="0.1"
-                      className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface-hover text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition pr-8"
+                      className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface-hover text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition pr-12"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-dim pointer-events-none">
-                      %
+                      % p.a.
                     </span>
                   </div>
                 </div>
@@ -511,13 +511,18 @@ export default function EmailComposer({
 
                 {/* Calculated payout display */}
                 {calculatedPayout > 0 && (
-                  <div className="md:col-span-2 flex items-center gap-2 p-2.5 rounded-[8px] bg-surface border border-gold/20">
-                    <span className="text-xs text-text-mid">
-                      Vypočtená výplata ({frequencyLabel}):
-                    </span>
-                    <span className="text-sm font-semibold text-emerald">
-                      {fmtCZK(calculatedPayout)}
-                    </span>
+                  <div className="md:col-span-2 p-2.5 rounded-[8px] bg-surface border border-gold/20 space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-text-mid">
+                        Výplata {frequencyLabel}:
+                      </span>
+                      <span className="text-sm font-semibold text-emerald">
+                        {fmtCZK(calculatedPayout)}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-text-faint">
+                      {fmtCZK(Number(investmentAmount))} × {interestRate}% p.a. ÷ {payoutFrequency === "quarterly" ? "4" : "12"}
+                    </div>
                   </div>
                 )}
               </div>

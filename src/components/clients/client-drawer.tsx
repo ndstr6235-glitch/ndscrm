@@ -168,6 +168,7 @@ export default function ClientDrawer({
                 <DrawerTabPayments
                   client={client}
                   onAddPayment={() => setShowPaymentForm(true)}
+                  onRefresh={handleFormSuccess}
                 />
               )}
               {activeTab === "events" && (

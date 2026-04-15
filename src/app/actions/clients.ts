@@ -381,6 +381,40 @@ export async function createPayment(data: {
 }
 
 // ---------------------------------------------------------------------------
+// Update bank account on existing Payment
+// ---------------------------------------------------------------------------
+export async function updatePaymentBankAccount(
+  paymentId: string,
+  bankAccount: string
+): Promise<{ success: boolean; error?: string }> {
+  const session = await getSession();
+  if (!session) return { success: false, error: "Nepřihlášen" };
+
+  const payment = await prisma.payment.findUnique({
+    where: { id: paymentId },
+    include: { client: { select: { assignedTo: true } } },
+  });
+  if (!payment) return { success: false, error: "Platba nenalezena" };
+
+  if (session.role === "broker" && payment.client.assignedTo !== session.id) {
+    return { success: false, error: "Nemáte oprávnění" };
+  }
+
+  // Strip existing [Účet: ...] marker, then prepend the new one (or remove)
+  const stripped = payment.note.replace(/^\[Účet:[^\]]+\]\s*/, "");
+  const trimmed = bankAccount.trim();
+  const newNote = trimmed ? `[Účet: ${trimmed}] ${stripped}`.trim() : stripped;
+
+  await prisma.payment.update({
+    where: { id: paymentId },
+    data: { note: newNote },
+  });
+
+  revalidatePath("/clients");
+  return { success: true };
+}
+
+// ---------------------------------------------------------------------------
 // Update Client Stage (for pipeline drag & drop)
 // ---------------------------------------------------------------------------
 export async function updateClientStage(

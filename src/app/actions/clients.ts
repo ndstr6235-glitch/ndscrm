@@ -313,6 +313,7 @@ export async function createPayment(data: {
   payoutFrequency?: string;
   date: string;
   note: string;
+  bankAccount?: string;
 }): Promise<{ success: boolean; error?: string }> {
   const session = await getSession();
   if (!session) return { success: false, error: "Nepřihlášen" };
@@ -341,6 +342,8 @@ export async function createPayment(data: {
       ? (data.amount * (data.percent / 100)) / 12
       : (data.amount * (data.percent / 100)) / 4;
 
+  // Bank account uložíme do note s markerem, aby šlo vyparsovat zpět
+  const bankPart = data.bankAccount?.trim() ? `[Účet: ${data.bankAccount.trim()}] ` : "";
   await prisma.payment.create({
     data: {
       clientId: data.clientId,
@@ -351,9 +354,17 @@ export async function createPayment(data: {
       monthlyPayout,
       payoutFrequency,
       date: data.date || new Date().toISOString().split("T")[0],
-      note: data.note.trim(),
+      note: bankPart + data.note.trim(),
     },
   });
+
+  // Klient se po vyplnění platby automaticky stává INVESTOREM
+  if (client.stage !== "INVESTOR" && client.stage !== "VIP") {
+    await prisma.client.update({
+      where: { id: data.clientId },
+      data: { stage: "INVESTOR" },
+    });
+  }
 
   const fmtAmount = new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK", maximumFractionDigits: 0 }).format(data.amount);
   const fmtProfit = new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK", maximumFractionDigits: 0 }).format(profit);

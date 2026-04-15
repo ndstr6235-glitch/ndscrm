@@ -28,6 +28,7 @@ export default function PaymentForm({
   const [duration, setDuration] = useState("12");
   const [payoutFrequency, setPayoutFrequency] = useState("monthly");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [bankAccount, setBankAccount] = useState("");
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -65,6 +66,7 @@ export default function PaymentForm({
       payoutFrequency,
       date,
       note,
+      bankAccount,
     });
 
     setSubmitting(false);
@@ -76,6 +78,7 @@ export default function PaymentForm({
       setDuration("12");
       setPayoutFrequency("monthly");
       setNote("");
+      setBankAccount("");
       onSuccess();
       onClose();
     } else {
@@ -183,13 +186,27 @@ export default function PaymentForm({
         {/* Date */}
         <div>
           <label className="block text-xs font-medium text-text-mid mb-1">
-            Datum platby
+            Datum vkladu (kdy klient zaplatil)
           </label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
+          />
+        </div>
+
+        {/* Bank account */}
+        <div>
+          <label className="block text-xs font-medium text-text-mid mb-1">
+            Číslo účtu klienta (kam posílat úroky)
+          </label>
+          <input
+            type="text"
+            value={bankAccount}
+            onChange={(e) => setBankAccount(e.target.value)}
+            placeholder="např. 123456789/0300"
+            className="w-full px-3 py-2.5 min-h-[44px] rounded-[10px] border border-border bg-surface text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition"
           />
         </div>
 

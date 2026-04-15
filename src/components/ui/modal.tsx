@@ -52,7 +52,13 @@ export default function Modal({ open, onClose, title, children }: ModalProps) {
         }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
+        <div
+          className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0"
+          style={{
+            paddingRight: "max(1.25rem, env(safe-area-inset-right))",
+            paddingLeft: "max(1.25rem, env(safe-area-inset-left))",
+          }}
+        >
           <h2 className="font-display text-lg font-bold text-text">{title}</h2>
           <button
             onClick={onClose}

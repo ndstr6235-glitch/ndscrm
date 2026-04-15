@@ -275,15 +275,17 @@ export default function ClientForm({
           </p>
         )}
 
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-[10px] bg-gradient-to-r from-gold to-gold-light text-white text-sm font-semibold shadow-md hover:shadow-lg transition-shadow disabled:opacity-60"
-        >
-          {submitting && <Loader2 size={16} className="animate-spin" />}
-          {isEdit ? "Uložit změny" : "Vytvořit klienta"}
-        </button>
+        {/* Submit — sticky at bottom of modal body for always-visible access */}
+        <div className="sticky bottom-[-1rem] -mx-5 px-5 pt-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] bg-surface border-t border-border">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-[10px] bg-gradient-to-r from-gold to-gold-light text-white text-sm font-semibold shadow-md hover:shadow-lg transition-shadow disabled:opacity-60"
+          >
+            {submitting && <Loader2 size={16} className="animate-spin" />}
+            {isEdit ? "Uložit změny" : "Vytvořit klienta"}
+          </button>
+        </div>
       </form>
     </Modal>
   );

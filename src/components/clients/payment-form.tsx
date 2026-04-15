@@ -89,7 +89,7 @@ export default function PaymentForm({
 
   return (
     <Modal open={open} onClose={onClose} title={`Platba — ${clientName}`}>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 pb-2">
         {/* Amount */}
         <div>
           <label className="block text-xs font-medium text-text-mid mb-1">
@@ -230,15 +230,17 @@ export default function PaymentForm({
           </p>
         )}
 
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-[10px] bg-emerald text-white text-sm font-semibold hover:bg-emerald/90 transition-colors disabled:opacity-60"
-        >
-          {submitting && <Loader2 size={16} className="animate-spin" />}
-          Přidat platbu
-        </button>
+        {/* Submit — sticky at bottom of modal body for always-visible access */}
+        <div className="sticky bottom-[-1rem] -mx-5 px-5 pt-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] bg-surface border-t border-border mt-auto">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-[10px] bg-emerald text-white text-sm font-semibold hover:bg-emerald/90 transition-colors disabled:opacity-60"
+          >
+            {submitting && <Loader2 size={16} className="animate-spin" />}
+            Přidat platbu
+          </button>
+        </div>
       </form>
     </Modal>
   );

@@ -50,35 +50,35 @@ export default function DrawerHeader({ client, onClose }: DrawerHeaderProps) {
         </button>
       </div>
 
-      {/* KPI row */}
-      <div className="flex gap-3 mt-4 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-        <div className="flex-1 min-w-[100px] bg-white/[0.06] rounded-[10px] p-3">
+      {/* KPI row — snap scroll for smooth iOS behavior */}
+      <div className="flex gap-2.5 mt-4 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory scrollbar-none">
+        <div className="flex-1 min-w-[110px] snap-start bg-white/[0.06] rounded-[10px] p-2.5 md:p-3">
           <div className="flex items-center gap-1.5 mb-1">
-            <Landmark size={12} className="text-emerald" />
-            <span className="text-[10px] uppercase tracking-wider text-white/40">
+            <Landmark size={12} className="text-emerald shrink-0" />
+            <span className="text-[10px] uppercase tracking-wider text-white/40 truncate">
               Vklad
             </span>
           </div>
-          <p className="text-sm font-semibold text-emerald">
+          <p className="text-sm font-semibold text-emerald truncate">
             {fmtCZK(client.totalDeposit)}
           </p>
         </div>
-        <div className="flex-1 min-w-[100px] bg-white/[0.06] rounded-[10px] p-3">
+        <div className="flex-1 min-w-[110px] snap-start bg-white/[0.06] rounded-[10px] p-2.5 md:p-3">
           <div className="flex items-center gap-1.5 mb-1">
-            <TrendingUp size={12} className="text-gold" />
-            <span className="text-[10px] uppercase tracking-wider text-white/40">
+            <TrendingUp size={12} className="text-gold shrink-0" />
+            <span className="text-[10px] uppercase tracking-wider text-white/40 truncate">
               Výdělek
             </span>
           </div>
-          <p className="text-sm font-semibold text-gold">
+          <p className="text-sm font-semibold text-gold truncate">
             {fmtCZK(client.totalProfit)}
           </p>
         </div>
-        <div className="flex-1 min-w-[100px] bg-white/[0.06] rounded-[10px] p-3">
+        <div className="flex-1 min-w-[100px] snap-start bg-white/[0.06] rounded-[10px] p-2.5 md:p-3">
           <div className="flex items-center gap-1.5 mb-1">
-            <Percent size={12} className="text-sapphire" />
-            <span className="text-[10px] uppercase tracking-wider text-white/40">
-              Průměr %
+            <Percent size={12} className="text-sapphire shrink-0" />
+            <span className="text-[10px] uppercase tracking-wider text-white/40 truncate">
+              Průměr
             </span>
           </div>
           <p className="text-sm font-semibold text-sapphire">

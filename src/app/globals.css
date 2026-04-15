@@ -313,6 +313,15 @@ html {
   background: var(--color-text-dim);
 }
 
+/* Utility: hide scrollbar but keep scroll behavior (for horizontal snap rails) */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* ------------------------------------------------------------------ */
 /* Mobile touch optimizations                                         */
 /* ------------------------------------------------------------------ */

@@ -147,7 +147,7 @@ export default async function DashboardPage() {
       />
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4 lg:gap-6">
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:gap-4 lg:grid-cols-4 lg:gap-6">
         <StatCard
           label="Klientů"
           value={clientCount.toString()}

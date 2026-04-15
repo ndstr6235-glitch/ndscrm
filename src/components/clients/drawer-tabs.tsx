@@ -32,7 +32,7 @@ export default function DrawerTabs({
   const visibleTabs = TABS.filter((tab) => !tab.requireDocuments || showDocuments);
 
   return (
-    <div className="border-b border-border overflow-x-auto shrink-0">
+    <div className="border-b border-border overflow-x-auto shrink-0 snap-x snap-mandatory scrollbar-none">
       <div className="flex min-w-max">
         {visibleTabs.map((tab) => {
           const isActive = activeTab === tab.key;
@@ -43,7 +43,7 @@ export default function DrawerTabs({
               key={tab.key}
               onClick={() => onTabChange(tab.key)}
               className={cn(
-                "px-4 py-3 min-h-[44px] text-sm font-medium whitespace-nowrap transition-colors relative",
+                "px-4 py-3 min-h-[44px] text-sm font-medium whitespace-nowrap transition-colors relative snap-start",
                 isActive
                   ? "text-gold font-semibold"
                   : "text-text-mid hover:text-text"

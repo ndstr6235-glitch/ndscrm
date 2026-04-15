@@ -207,7 +207,14 @@
 /* ------------------------------------------------------------------ */
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  /* `clip` is stronger than `hidden`: viewport CANNOT scroll horizontally
+     even if a child overflows. `hidden` still allows scroll programmatically. */
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+  /* No horizontal rubber-band on iOS */
+  overscroll-behavior-x: none;
+  overscroll-behavior: none;
 }
 
 body {
@@ -215,18 +222,16 @@ body {
   color: var(--color-text);
   font-family: var(--font-sans);
   transition: background-color 0.2s ease, color 0.2s ease;
-  /* Prevent horizontal scroll on mobile */
-  overflow-x: hidden;
+  /* Prevent horizontal scroll on mobile (double belt + suspenders) */
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
   /* Prevent tap highlight on mobile */
   -webkit-tap-highlight-color: transparent;
   /* Prevent text size adjust on orientation change */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-}
-
-/* Prevent pull-to-refresh on PWA */
-html {
-  overscroll-behavior: none;
 }
 
 /* Standalone PWA — hide content behind status bar */

@@ -37,7 +37,13 @@ export async function GET(req: NextRequest) {
           firstName: true,
           lastName: true,
           payments: {
-            select: { note: true, monthlyPayout: true, payoutFrequency: true },
+            select: {
+              note: true,
+              amount: true,
+              percent: true,
+              monthlyPayout: true,
+              payoutFrequency: true,
+            },
             orderBy: { date: "desc" },
             take: 1,
           },
@@ -51,18 +57,37 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: true, message: "Žádné nadcházející úroky", count: 0 });
   }
 
-  // Build summary lines
+  const fmtCZK = (n: number) =>
+    new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK", maximumFractionDigits: 0 }).format(n);
+
+  // Build summary lines: dátum — jméno — částka k výplatě (vklad × %) — účet
   const lines: string[] = [];
+  let totalToPay = 0;
   for (const e of events) {
     const clientName = e.client
       ? `${e.client.firstName} ${e.client.lastName}`
       : "(neznámý)";
-    // Try to extract bank account from latest payment note ([Účet: XXX])
-    const note = e.client?.payments[0]?.note || "";
+    const payment = e.client?.payments[0];
+    const note = payment?.note || "";
     const bankMatch = note.match(/\[Účet:\s*([^\]]+)\]/);
     const bank = bankMatch ? bankMatch[1].trim() : "(účet nezadán)";
-    lines.push(`• ${e.date} — ${clientName} — ${e.title.replace("Výplata úroku — ", "").split(" — ").pop()} — účet: ${bank}`);
+
+    const payoutAmount = payment?.monthlyPayout || 0;
+    const principal = payment?.amount || 0;
+    const percent = payment?.percent || 0;
+    totalToPay += payoutAmount;
+
+    const breakdown = principal && percent
+      ? ` (vklad ${fmtCZK(principal)} × ${percent}% p.a.)`
+      : "";
+
+    lines.push(
+      `• ${e.date} — ${clientName} — ${fmtCZK(payoutAmount)}${breakdown} — účet: ${bank}`
+    );
   }
+
+  lines.push("");
+  lines.push(`CELKEM K VÝPLATĚ: ${fmtCZK(totalToPay)} (${events.length} výplat)`);
 
   const summary = lines.join("\n");
   const subject = `Připomínka výplaty úroků — ${events.length} klient(ů) tento měsíc`;

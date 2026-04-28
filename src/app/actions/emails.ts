@@ -261,10 +261,10 @@ export async function sendEmail(
   try {
     // Build sender name — use the team member name or default to company
     const fromName = senderName || "Nodis Star s.r.o.";
-    const from = `${fromName} <noreply@nodistar.cz>`;
+    const from = `${fromName} <info@nodistar.cz>`;
 
-    // Reply-To goes to the team member's personal inbox; info@ is only shown in signature
-    const effectiveReplyTo = replyTo || "info@nodistar.cz";
+    // All replies always route to the shared info@ inbox
+    const effectiveReplyTo = "info@nodistar.cz";
 
     // Build attachments list — each template gets its own attachment
     const attachments: { filename: string; content: Buffer | string; contentType?: string }[] = [];

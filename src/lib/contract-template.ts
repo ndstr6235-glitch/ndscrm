@@ -68,7 +68,7 @@ export function generateContractHTML(data: ContractData): string {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smlouva o zápůjčce – Nodis Star</title>
+<title>Smlouva o zápůjčce – Nodis Star s.r.o.</title>
 <style>
   @media print {
     body { margin: 0; padding: 0; }
@@ -88,7 +88,7 @@ export function generateContractHTML(data: ContractData): string {
         <polygon points="22,8 25,17 35,17 27,23 30,33 22,27 14,33 17,23 9,17 19,17" fill="#ffffff" opacity="0.2"/>
       </svg>
       <div>
-        <div style="font-size:22px; font-weight:700; color:#ffffff; letter-spacing:1px;">Nodis Star</div>
+        <div style="font-size:22px; font-weight:700; color:#ffffff; letter-spacing:1px;">Nodis Star s.r.o.</div>
         <div style="font-size:11px; color:rgba(212,175,55,0.8); letter-spacing:2px; text-transform:uppercase; margin-top:2px;">Investment Group</div>
       </div>
     </div>

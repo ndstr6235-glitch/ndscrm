@@ -43,7 +43,7 @@ async function main() {
       role: "ADMINISTRATOR",
       active: true,
       signature:
-        "S pozdravem,\nPetr | Nodis Star\nwww.nodistar.cz",
+        "S pozdravem,\nPetr | Nodis Star s.r.o.\nwww.nodistar.cz",
     },
   });
   console.log("  Petr user seeded.");
@@ -55,14 +55,14 @@ async function main() {
     {
       id: "t1",
       label: "Prezentace",
-      subject: "Představení společnosti – Nodis Star",
+      subject: "Představení společnosti – Nodis Star s.r.o.",
       body: "Vážený/á [OSLOVENÍ],\n\nna základě našeho hovoru si Vám dovoluji zaslat prezentaci společnosti Nodis Star s.r.o.\n\nV příloze naleznete podrobné informace o naší společnosti a podmínkách spolupráce.\n\nV případě jakýchkoli dotazů mě neváhejte kontaktovat.\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",
     },
     {
       id: "t2",
       label: "Návrh smlouvy",
-      subject: "Návrh smlouvy – Nodis Star",
+      subject: "Návrh smlouvy – Nodis Star s.r.o.",
       body: `Vážený/á [OSLOVENÍ],
 
 zasílám Vám návrh smlouvy k prostudování.
@@ -83,28 +83,28 @@ V případě jakýchkoli dotazů mě neváhejte kontaktovat.
     {
       id: "t3",
       label: "Smlouva finální",
-      subject: "Smlouva – Nodis Star",
+      subject: "Smlouva – Nodis Star s.r.o.",
       body: "Vážený/á [OSLOVENÍ],\n\nv příloze zasílám finální verzi smlouvy k podpisu.\n\nProsím o prostudování a zaslání podepsané verze zpět.\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR",
     },
     {
       id: "t4",
       label: "Měsíční výpis",
-      subject: "Měsíční výpis – Nodis Star",
+      subject: "Měsíční výpis – Nodis Star s.r.o.",
       body: "Vážený/á [OSLOVENÍ],\n\nzasílám měsíční přehled k Vaší smlouvě.\n\nPřipsaná částka: [CASTKA]\nCelková výše: [VKLAD]\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",
     },
     {
       id: "t5",
       label: "Follow-up",
-      subject: "Navazuji na náš hovor – Nodis Star",
+      subject: "Navazuji na náš hovor – Nodis Star s.r.o.",
       body: "Vážený/á [OSLOVENÍ],\n\nnavazuji na náš nedávný hovor. Rád/a bych domluvil/a schůzku.\n\nKdy by Vám vyhovovalo?\n\n[PODPIS]",
       allowedRoles: "ADMINISTRATOR,SUPERVISOR,BROKER",
     },
     {
       id: "t6",
       label: "Vyžádání údajů",
-      subject: "Vyžádání údajů k podpisu smlouvy – Nodis Star",
+      subject: "Vyžádání údajů k podpisu smlouvy – Nodis Star s.r.o.",
       body: `Vážený/á [OSLOVENÍ],
 
 děkujeme za Váš zájem o spolupráci s Nodis Star s.r.o. Abychom mohli připravit smlouvu o zápůjčce, potřebujeme od Vás následující údaje:

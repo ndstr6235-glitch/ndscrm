@@ -76,7 +76,7 @@ export default function Sidebar({ user }: SidebarProps) {
         </div>
         {(isOverlay || !collapsed) && (
           <span className="font-display text-base font-bold text-white whitespace-nowrap">
-            Nodis Star CRM
+            Nodis Star s.r.o.
           </span>
         )}
       </div>

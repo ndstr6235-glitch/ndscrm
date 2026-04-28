@@ -180,7 +180,7 @@ export default function EmailComposer({
     const parts = templateSubject.split(" – ");
     if (parts.length >= 2) {
       // Insert client name before the last segment
-      // e.g. "Investiční smlouva – Nodis Star" → "Investiční smlouva – Ondřej Šrutek – Nodis Star"
+      // e.g. "Investiční smlouva – Nodis Star s.r.o." → "Investiční smlouva – Ondřej Šrutek – Nodis Star s.r.o."
       const last = parts.pop()!;
       return [...parts, clientName, last].join(" – ");
     }
@@ -268,7 +268,7 @@ export default function EmailComposer({
         to: recipientEmail,
         subject: subjectOverride || selectedTemplate.subject,
         body: finalBody,
-        replyTo: selectedMember?.email || "info@nodistar.cz",
+        replyTo: "info@nodistar.cz",
         senderName: selectedMember?.name || "Nodis Star s.r.o.",
         templateLabel: selectedTemplate.label,
         contractMeta,

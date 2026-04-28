@@ -52,7 +52,7 @@ export function generateProposalHTML(data: ProposalData): string {
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<title>Smlouva o zápůjčce – Nodis Star</title>
+<title>Smlouva o zápůjčce – Nodis Star s.r.o.</title>
 <style>
   @page { size: A4; margin: 0; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -69,7 +69,7 @@ export function generateProposalHTML(data: ProposalData): string {
   <div style="background:#1a2744; padding:22px 44px; display:flex; align-items:center; justify-content:space-between;">
     <div style="display:flex; align-items:center; gap:12px;">
       <span style="font-size:28px; color:#d4a826;">&#9733;</span>
-      <span style="font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.5px;">Nodis Star</span>
+      <span style="font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.5px;">Nodis Star s.r.o.</span>
     </div>
     <div style="text-align:right; color:rgba(255,255,255,0.6); font-size:11px; line-height:1.7;">
       <div>Nodis Star s.r.o.</div>

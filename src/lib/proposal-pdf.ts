@@ -98,7 +98,7 @@ export async function generateProposalPdf(data: ProposalPdfData): Promise<Buffer
     scale: 1.3,
   });
   // Brand
-  page.drawText("Nodis Star", {
+  page.drawText("Nodis Star s.r.o.", {
     x: margin + 30,
     y: pageHeight - 42,
     size: 19,

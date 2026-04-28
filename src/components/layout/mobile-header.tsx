@@ -34,7 +34,7 @@ export default function MobileHeader({ firstName, lastName }: MobileHeaderProps)
       </button>
 
       <span className="font-display text-sm font-bold text-text">
-        Nodis Star
+        Nodis Star s.r.o.
       </span>
 
       <div className="flex items-center gap-1">
